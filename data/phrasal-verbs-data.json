@@ -24,9 +24,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "I need to look into this opportunity"
+        "I need to look into this opportunity",
+        "The manager promised to look into the missing invoice tomorrow.",
+        "The police are looking into the theft at the warehouse."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -73,9 +77,11 @@
       "examples": [
         "I want to find out what's causing this",
         "We only found out about the change on the day.",
-        "I want to find out who leaked the letter."
+        "I want to find out who leaked the letter.",
+        "We found out the truth from a colleague last week."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -195,9 +201,11 @@
       "examples": [
         "Get in the car",
         "Get in the car, it is pouring.",
-        "She got in the back and slammed the door."
+        "She got in the back and slammed the door.",
+        "The kids got in the taxi without saying goodbye."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -264,9 +272,11 @@
       "examples": [
         "Don't bring up that topic",
         "Don't bring that up in front of her mother.",
-        "Someone brought up the question of parking."
+        "Someone brought up the question of parking.",
+        "Nobody brought up the budget during the whole lunch."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -308,9 +318,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "You need to speak up"
+        "You need to speak up",
+        "Nobody spoke up when the manager asked for other ideas.",
+        "Please speak up at the meeting instead of complaining later."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -330,9 +344,11 @@
       "examples": [
         "He made up an excuse",
         "He made up a story about a flat tyre.",
-        "She made up an excuse and left early."
+        "She made up an excuse and left early.",
+        "The numbers in his report were completely made up."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -353,9 +369,11 @@
       "examples": [
         "Let me sum up the key points",
         "Let me sum up the argument in one sentence.",
-        "She summed up the whole meeting in three lines."
+        "She summed up the whole meeting in three lines.",
+        "One word sums up my feelings about Monday mornings."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -373,9 +391,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Let's clear up this confusion"
+        "Let's clear up this confusion",
+        "Her email cleared up my questions about the schedule.",
+        "The teacher cleared up our doubts with one simple example."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -391,9 +413,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Let's kick off the project"
+        "Let's kick off the project",
+        "The big match kicks off at three this Saturday afternoon.",
+        "Our team kicks off first after the coin toss."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "accepts": [
@@ -430,9 +456,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "They called off the event"
+        "They called off the event",
+        "The school called off the trip because of heavy snow.",
+        "Our boss called the picnic off at the very last minute.",
+        "The union called off the strike after a new pay offer."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -494,9 +526,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "The deal fell through"
+        "The deal fell through",
+        "The funding for the new library fell through in March.",
+        "The job offer fell through without any explanation at all."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -512,9 +548,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "I can't put up with this"
+        "I can't put up with this",
+        "I have put up with his bad jokes for years.",
+        "The neighbours put up with our barking dog all summer."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -530,9 +570,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "I really look up to her"
+        "I really look up to her",
+        "Many young players still look up to the team captain.",
+        "The whole class looks up to their kind history teacher.",
+        "We all looked up to our grandfather for his honesty."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -575,9 +621,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Don't let me down"
+        "Don't let me down",
+        "His old car let him down again on the way home.",
+        "She felt let down by her friends after the party.",
+        "The hotel let us down with dirty rooms and cold food."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -636,9 +688,11 @@
       "examples": [
         "Take off your shoes",
         "Take off your wet coat and hang it by the fire.",
-        "She took off her shoes at the door."
+        "She took off her shoes at the door.",
+        "Please take off your hat at the dinner table."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -731,9 +785,11 @@
       "examples": [
         "I put on 5 pounds",
         "He has put on a lot of weight this winter.",
-        "I put on two kilos over Christmas."
+        "I put on two kilos over Christmas.",
+        "The baby has put on nearly a kilo since her last checkup."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -751,9 +807,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "I'm looking for my keys"
+        "I'm looking for my keys",
+        "Grandma spent all morning looking for her reading glasses.",
+        "We looked for the TV remote under every cushion.",
+        "Dad is looking for his wallet in all his coat pockets."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -829,9 +891,11 @@
       "examples": [
         "It turned out to be true",
         "The whole story turned out to be completely false in the end.",
-        "He turned out to be her cousin."
+        "He turned out to be her cousin.",
+        "The noise turned out to be just the neighbour's cat."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -849,9 +913,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "We need to speed up"
+        "We need to speed up",
+        "The train speeds up a lot after the last stop.",
+        "A new printer would really speed up the monthly invoicing.",
+        "A sharper knife will speed up all the chopping."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -870,9 +940,11 @@
       "examples": [
         "Slow down a bit",
         "Slow down, the turning is just after the bridge.",
-        "You need to slow down and take a break."
+        "You need to slow down and take a break.",
+        "The bus slowed down just before the sharp bend."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -894,9 +966,11 @@
       "examples": [
         "Don't give up",
         "He gave up after the third attempt.",
-        "Don't give up when it starts to get hard."
+        "Don't give up when it starts to get hard.",
+        "She gave up on learning the piano after two lessons."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -918,9 +992,11 @@
       "examples": [
         "She turned down the offer",
         "She turned down the offer without thinking about it.",
-        "They turned down our planning application."
+        "They turned down our planning application.",
+        "The bank turned down my request for a small loan."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -938,9 +1014,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Turn on the computer"
+        "Turn on the computer",
+        "Turn on the tap and rinse the rice twice.",
+        "Turn on the gas and heat the soup slowly."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1020,9 +1100,11 @@
       "examples": [
         "We just moved in",
         "They moved in last week and are still unpacking.",
-        "We move in on the first of the month."
+        "We move in on the first of the month.",
+        "The new neighbours moved in with two dogs and a piano."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -1044,9 +1126,11 @@
       "examples": [
         "Break it down for me",
         "Break the cost down for me line by line.",
-        "He broke the plan down into four stages."
+        "He broke the plan down into four stages.",
+        "The manual breaks each task down into simple numbered steps."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -1067,9 +1151,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Can I try this on?"
+        "Can I try this on?",
+        "She tried on three dresses before choosing the blue one.",
+        "He tried the jacket on and asked for a bigger size.",
+        "Customers can try on five items in the changing room."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1085,9 +1175,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Time to cash in on this trend"
+        "Time to cash in on this trend",
+        "The shop cashed in on the heatwave by selling fans.",
+        "Hotels cashed in on the football final with higher prices.",
+        "He cashed in on his fame and wrote a cookbook."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1103,9 +1199,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "They covered up the truth"
+        "They covered up the truth",
+        "He covered up the stain on the carpet with a rug.",
+        "The manager covered up the mistake by changing the numbers.",
+        "She covered up her tattoo with a long-sleeved shirt."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1121,9 +1223,11 @@
       "correctCount": 0,
       "nextReview": null,
       "examples": [
-        "Take apart the argument"
+        "Take apart the argument",
+        "I took the printer apart and found a paper clip inside."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1157,9 +1261,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "You'll get the hang of it"
+        "You'll get the hang of it",
+        "My little brother quickly got the hang of eating with chopsticks.",
+        "The new intern got the hang of using the printer by lunchtime."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1195,9 +1303,11 @@
       "examples": [
         "He looks like his father in that photograph.",
         "The twins look like their mother.",
-        "That cloud looks like a whale."
+        "That cloud looks like a whale.",
+        "In that hat you look like a famous movie star."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -1220,9 +1330,13 @@
       "phave": 9,
       "bnc": 8,
       "examples": [
-        "She pointed out a mistake on the second page."
+        "She pointed out a mistake on the second page.",
+        "A customer pointed out the difference between the two prices.",
+        "Nobody pointed out the missing page until the meeting started."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1239,9 +1353,15 @@
       "wrongCount": 0,
       "phave": 75,
       "examples": [
-        "He hung up before I could finish the sentence."
+        "He hung up before I could finish the sentence.",
+        "Hang up and dial the number again, more slowly this time.",
+        "My mother always says goodbye twice before she hangs up.",
+        "Please don't hang up until I have your address."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1257,9 +1377,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "She takes after her mother — same laugh, same temper."
+        "She takes after her mother — same laugh, same temper.",
+        "Our son takes after his father with his terrible jokes.",
+        "In her stubbornness, she clearly takes after her dad.",
+        "When it comes to cooking, he takes after his mother."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "accepts": [
@@ -1278,9 +1404,15 @@
       "wrongCount": 0,
       "nextReview": null,
       "examples": [
-        "The campaign is aimed at young professionals"
+        "The campaign is aimed at young professionals",
+        "This cookbook is aimed at busy people with no time.",
+        "The store aims its discounts at students during September.",
+        "Those Saturday morning cartoons are aimed at children under five."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1296,9 +1428,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "She asked for a refund on the product"
+        "She asked for a refund on the product",
+        "The tourist asked for directions to the train station.",
+        "He asked for a glass of water with his meal.",
+        "The children asked for extra time to finish the game."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1314,9 +1452,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "He finally asked her out for dinner"
+        "He finally asked her out for dinner",
+        "My brother wants to ask the new neighbor out.",
+        "She was too shy to ask him out at the party.",
+        "A boy from my class asked me out last week."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1332,9 +1476,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "He refused to back down from his position"
+        "He refused to back down from his position",
+        "Neither side would back down in the argument about the fence.",
+        "The union backed down after the company offered more money.",
+        "My mother never backs down once she has said no."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "accepts": [
@@ -1408,9 +1558,11 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "We need to beef up our security system"
+        "We need to beef up our security system",
+        "Coach wants to beef up the team with two taller players."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1426,9 +1578,13 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "I believe in your ability to succeed"
+        "I believe in your ability to succeed",
+        "Nobody believed in our little shop at the start.",
+        "Her parents never believed in her plan to open a bakery."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1549,9 +1705,11 @@
       "examples": [
         "The scandal blew up overnight on social media",
         "The story blew up before we could respond.",
-        "The gas main blew up and took out half the street."
+        "The gas main blew up and took out half the street.",
+        "The demolition crew blew up the old chimney on Saturday."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -1599,9 +1757,13 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Someone broke in through the back door"
+        "Someone broke in through the back door",
+        "Burglars broke in last night by smashing the kitchen window.",
+        "According to the police, the thieves broke in around three."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1624,9 +1786,11 @@
       "examples": [
         "They broke off the engagement last week",
         "After the argument she broke off contact completely.",
-        "She broke off the engagement three weeks before the wedding."
+        "She broke off the engagement three weeks before the wedding.",
+        "After two years together, Tom broke off the relationship by text."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -1648,9 +1812,11 @@
       "examples": [
         "Fighting broke out near the border",
         "Fighting broke out near the border early on Sunday.",
-        "A fire broke out in the kitchen just after midnight."
+        "A fire broke out in the kitchen just after midnight.",
+        "Panic broke out in the shop during the sudden blackout."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -1762,9 +1928,13 @@
       "nextReview": null,
       "examples": [
         "I need to brush up on my Spanish before the trip",
-        "I should brush up on my presentation skills."
+        "I should brush up on my presentation skills.",
+        "Before the reunion, Grandpa brushed up on his old dance steps.",
+        "The nurse is brushing up on her first-aid rules this weekend."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -1836,9 +2006,13 @@
       "wrongCount": 0,
       "examples": [
         "The old factory burned down last night",
-        "The barn burned down in less than an hour."
+        "The barn burned down in less than an hour.",
+        "Vandals burned the old school down to the ground last summer.",
+        "The chip shop on our corner burned down to the ground."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -1858,9 +2032,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "She burned out after working 80-hour weeks"
+        "She burned out after working 80-hour weeks",
+        "Many young teachers burn out within their first five years.",
+        "Two of our accountants burned out during the busy tax season.",
+        "Without a proper holiday, you will burn out by Christmas."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "accepts": [
@@ -1911,9 +2091,13 @@
       "wrongCount": 0,
       "examples": [
         "She burst out laughing at the joke",
-        "He burst out crying in the middle of it."
+        "He burst out crying in the middle of it.",
+        "The kids burst out cheering at the final whistle.",
+        "My sister burst out screaming at the spider in the bath."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -1950,9 +2134,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "I'll call you back in five minutes"
+        "I'll call you back in five minutes",
+        "The doctor's office never called me back about my results.",
+        "Someone from the bank should call you back before lunch.",
+        "The plumber promised to call me back this afternoon."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -1969,9 +2159,11 @@
       "wrongCount": 0,
       "examples": [
         "They called in a specialist to fix it",
-        "They called in an auditor to check the books."
+        "They called in an auditor to check the books.",
+        "The head teacher called both parents in for a chat."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -2086,9 +2278,11 @@
       "examples": [
         "The team carried out the plan perfectly",
         "The team carried out the plan without a single mistake.",
-        "They carried out repairs on the roof."
+        "They carried out repairs on the roof.",
+        "The nurse carried out the blood test in ten minutes."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -2129,9 +2323,11 @@
       "examples": [
         "I need to catch up on my emails",
         "I need a quiet day to catch up on my emails.",
-        "She caught up with the rest of the class quickly."
+        "She caught up with the rest of the class quickly.",
+        "Our sales team caught up with last year's numbers by June."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -2149,9 +2345,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "He cheated on every exam in college"
+        "He cheated on every exam in college",
+        "He cheated on his wife with a woman from work.",
+        "My best friend would never cheat on her husband.",
+        "He accused his girlfriend of cheating on him last summer."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -2438,9 +2640,11 @@
       "examples": [
         "She came back from vacation refreshed",
         "She came back from Milan with two suitcases of samples.",
-        "He left in 2019 and never came back."
+        "He left in 2019 and never came back.",
+        "Please come back here tomorrow to collect your order."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -2538,9 +2742,11 @@
       "wrongCount": 0,
       "examples": [
         "Where does this tradition come from?",
-        "Where does the word come from?"
+        "Where does the word come from?",
+        "Most of our silk comes from a small mill in Italy."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -2958,9 +3164,13 @@
       "wrongCount": 0,
       "phave": 61,
       "examples": [
-        "The storm cut off power to the whole area"
+        "The storm cut off power to the whole area",
+        "The water company cut us off after three unpaid bills.",
+        "The phone company cut off our landline without any warning."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -2976,9 +3186,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Cut up the chicken before serving"
+        "Cut up the chicken before serving",
+        "Please cut up those cardboard boxes for the recycling bin.",
+        "He cut up his old credit card with the kitchen scissors."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -3056,9 +3270,13 @@
       "wrongCount": 0,
       "examples": [
         "The report was wrong, so I had to do it over",
-        "The whole page was wrong, so I did it over."
+        "The whole page was wrong, so I did it over.",
+        "Mum made me do my homework over in neat handwriting.",
+        "Our boss wants us to do the whole presentation over."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -3154,9 +3372,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Everyone dressed up for the gala"
+        "Everyone dressed up for the gala",
+        "We always dress up for dinner on Christmas Day.",
+        "He dressed up in a suit for the job interview.",
+        "Do I really have to dress up for this meeting?"
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -3213,9 +3437,13 @@
       "wrongCount": 0,
       "examples": [
         "I'll drop off the package on my way home",
-        "I will drop off the keys on my way home."
+        "I will drop off the keys on my way home.",
+        "Can you drop the kids off at school before work?",
+        "Dad dropped the cake off at Grandma's house this afternoon."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ]
@@ -3231,9 +3459,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "He dropped out of college after one year"
+        "He dropped out of college after one year",
+        "My brother dropped out of school at sixteen to work.",
+        "Most people drop out of the online course within a week.",
+        "Nobody dropped out of the evening class this term."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -3278,9 +3512,11 @@
       "examples": [
         "The soil dried out during the heatwave",
         "Leave the boots by the fire to dry out.",
-        "Leave the tent open so it can dry out properly."
+        "Leave the tent open so it can dry out properly.",
+        "My hands dry out every winter from the cold air."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -3303,9 +3539,11 @@
       "examples": [
         "Funding dried up after the scandal",
         "Orders dried up completely in January.",
-        "The well dried up in the second summer."
+        "The well dried up in the second summer.",
+        "Donations to the shelter dried up after the holidays."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -3344,9 +3582,13 @@
       "wrongCount": 0,
       "consecutiveMisses": 0,
       "examples": [
-        "Empty out your pockets before washing"
+        "Empty out your pockets before washing",
+        "Empty out the kettle before you fill it again.",
+        "Dad emptied out the paddling pool at the end of summer."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ]
     },
@@ -3410,9 +3652,11 @@
       "examples": [
         "Don't fall for that scam email",
         "Thousands fell for the same fake invoice.",
-        "Thousands of people fell for that scam email."
+        "Thousands of people fell for that scam email.",
+        "Nobody fell for his excuse about the broken alarm clock."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -3454,9 +3698,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "They fell out over money"
+        "They fell out over money",
+        "I fell out with my neighbour over the new fence.",
+        "The two sisters fell out after their mother's funeral.",
+        "Don't fall out with your boss over a small mistake."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -3512,9 +3762,13 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "The team fought back to win 3-2"
+        "The team fought back to win 3-2",
+        "The villagers fought back with sticks against the raiders.",
+        "The cornered cat fought back and scratched the dog's nose."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -3604,9 +3858,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Fill up the tank before the road trip"
+        "Fill up the tank before the road trip",
+        "She filled up the kettle for a pot of tea.",
+        "We filled up the kids' pool with the garden hose.",
+        "Fill up the bucket with warm water and some soap."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -3892,9 +4152,13 @@
       "phave": 19,
       "bnc": 20,
       "examples": [
-        "What time did you get back from the trip?"
+        "What time did you get back from the trip?",
+        "The bank helped me get my money back after the scam.",
+        "Did you ever get your deposit back from the landlord?"
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -3940,9 +4204,11 @@
       "consecutiveMisses": 0,
       "examples": [
         "Let me get back to you on that",
-        "Let me check the diary and get back to you."
+        "Let me check the diary and get back to you.",
+        "The plumber promised to get back to us by Friday."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ]
@@ -4026,9 +4292,11 @@
       "bnc": 66,
       "examples": [
         "We get off at the next stop",
-        "Get off at the third stop and turn left."
+        "Get off at the third stop and turn left.",
+        "Everyone has to get off the plane in Frankfurt."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -4047,9 +4315,11 @@
       "examples": [
         "He gets off on proving people wrong",
         "He gets off on proving people wrong.",
-        "He clearly gets off on proving other people wrong."
+        "He clearly gets off on proving other people wrong.",
+        "Some people clearly get off on driving far too fast."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -4070,9 +4340,13 @@
       "bnc": 35,
       "examples": [
         "We got on the train just in time",
-        "She got on the bus at the last stop."
+        "She got on the bus at the last stop.",
+        "You can't get on the plane without a passport.",
+        "People with small children can get on the ferry first."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -4122,9 +4396,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "He tried to get out of jury duty"
+        "He tried to get out of jury duty",
+        "She always finds a way to get out of cooking dinner.",
+        "Can I somehow get out of the early shift on Saturday?",
+        "My brother got out of the chores by faking illness."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -4140,9 +4420,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "It took months to get over the breakup"
+        "It took months to get over the breakup",
+        "He still hasn't got over losing his job last year.",
+        "Grandma needed two weeks to get over the operation.",
+        "She is slowly getting over the shock of the crash."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -4160,9 +4446,11 @@
       "examples": [
         "Let's get this meeting over with",
         "Let's get the paperwork over with.",
-        "Let's get the dentist over with."
+        "Let's get the dentist over with.",
+        "I just want to get the exam over with today."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -4216,9 +4504,11 @@
       "wrongCount": 0,
       "examples": [
         "Don't let his comments get to you",
-        "The constant noise is starting to get to me."
+        "The constant noise is starting to get to me.",
+        "The heat is really getting to everyone in the office."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -4274,9 +4564,11 @@
       "examples": [
         "I get up at 6 every morning",
         "I get up at six every morning, even at weekends.",
-        "She could not get up for three days."
+        "She could not get up for three days.",
+        "She reads in bed for an hour before getting up."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -4294,9 +4586,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "She gave away all her old clothes"
+        "She gave away all her old clothes",
+        "He gave away half his prize money to charity.",
+        "Instead of selling the bike, Dad just gave it away."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -4338,9 +4634,11 @@
       "phave": 143,
       "bnc": 88,
       "examples": [
-        "He finally gave in and agreed to the deal"
+        "He finally gave in and agreed to the deal",
+        "I gave in to temptation and ate the last slice."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -4562,9 +4860,13 @@
       "bnc": 5,
       "examples": [
         "I want to go back to that restaurant",
-        "I would rather not go back to that hotel."
+        "I would rather not go back to that hotel.",
+        "I went back to my old school to see the teachers.",
+        "My parents go back to their village every summer."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -4582,9 +4884,11 @@
       "examples": [
         "He went back on his word",
         "The company went back on its promise to raise our pay.",
-        "He went back on his word and sold the house to someone else."
+        "He went back on his word and sold the house to someone else.",
+        "The builder went back on our agreement and doubled the price."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -4608,9 +4912,11 @@
       "examples": [
         "The results went beyond our expectations",
         "The results went beyond anything we expected.",
-        "The damage went beyond anything the survey found."
+        "The damage went beyond anything the survey found.",
+        "The nurse's care went beyond her normal duties on the ward."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -4733,9 +5039,13 @@
       "wrongCount": 0,
       "examples": [
         "She goes in for extreme sports",
-        "She goes in for long-distance running at weekends."
+        "She goes in for long-distance running at weekends.",
+        "My uncle goes in for crosswords and pub quizzes every week.",
+        "Our neighbours go in for gardening in a big way."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -4756,9 +5066,11 @@
       "examples": [
         "The alarm went off at 3 AM",
         "The alarm went off at three in the morning.",
-        "A firework went off in the next street."
+        "A firework went off in the next street.",
+        "My phone went off loudly in the middle of the meeting."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -4939,9 +5251,11 @@
       "examples": [
         "He grew out of his childhood fears",
         "Most children grow out of fussy eating.",
-        "Most children grow out of their fear of the dark."
+        "Most children grow out of their fear of the dark.",
+        "My nephew grew out of his dinosaur phase last year."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -4978,9 +5292,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Hand in your essays by Friday"
+        "Hand in your essays by Friday",
+        "She handed in her notice after ten years at the bank.",
+        "I forgot to hand in my maths homework this morning.",
+        "Half the class handed their projects in late again."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "accepts": [
@@ -5113,9 +5433,11 @@
       "examples": [
         "She had on a beautiful red dress",
         "What did she have on at the party last night?",
-        "She had on jeans and an old jumper at work."
+        "She had on jeans and an old jumper at work.",
+        "Everyone had a silly hat on in the Christmas photo."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -5270,9 +5592,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Can you help out with the event?"
+        "Can you help out with the event?",
+        "My sister often helps out in the shop on Saturdays.",
+        "The neighbours helped us out after the flood last spring."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -5289,9 +5615,11 @@
       "examples": [
         "Don't hold it against me — I tried my best",
         "I hope she doesn't hold my late reply against me.",
-        "They still hold that old story against him at work."
+        "They still hold that old story against him at work.",
+        "Her parents never held the broken vase against me."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -5311,9 +5639,13 @@
       "wrongCount": 0,
       "examples": [
         "Let's hold off on the launch until Monday",
-        "Let's hold off the announcement until Friday."
+        "Let's hold off the announcement until Friday.",
+        "We should hold off on buying a new printer for now.",
+        "The doctor wants to hold off on surgery until spring."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -5443,9 +5775,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Hurry up or we'll miss the flight"
+        "Hurry up or we'll miss the flight",
+        "Please hurry up and eat your breakfast before school.",
+        "Dad keeps telling me to hurry up in the shower."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -5636,9 +5972,11 @@
       "examples": [
         "Let's keep to the original plan",
         "Even in the storm, the ferry kept to its published timetable.",
-        "Whatever the others say tonight, keep to your original story."
+        "Whatever the others say tonight, keep to your original story.",
+        "Every speaker kept to time at the meeting this morning."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -5659,9 +5997,13 @@
       "phave": 57,
       "examples": [
         "She walks so fast I can't keep up",
-        "The others cycled ahead and I couldn't keep up."
+        "The others cycled ahead and I couldn't keep up.",
+        "The new runner struggled to keep up on the hills.",
+        "The teacher spoke too quickly for anyone to keep up."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -5758,9 +6100,11 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "The dog knocked over the lamp"
+        "The dog knocked over the lamp",
+        "She knocked over a full glass of wine with her elbow."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -5958,9 +6302,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Let me in — it's freezing outside"
+        "Let me in — it's freezing outside",
+        "The cinema won't let children in after nine o'clock.",
+        "Please don't let the dog in with muddy paws.",
+        "Someone let a stranger in through the back door."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -6037,9 +6387,11 @@
       "correctCount": 0,
       "examples": [
         "School lets out at 3 PM",
-        "They let the dog out into the garden."
+        "They let the dog out into the garden.",
+        "Could you let the chickens out of the coop, please?"
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -6117,9 +6469,15 @@
       "wrongCount": 0,
       "consecutiveMisses": 0,
       "examples": [
-        "Her face lit up when she saw the gift"
+        "Her face lit up when she saw the gift",
+        "The fireworks lit up the whole sky above the harbour.",
+        "One small lamp lights up the entire kitchen at night.",
+        "The full moon lit up the garden path last night."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ]
     },
@@ -6329,9 +6687,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "She looks down on people without degrees"
+        "She looks down on people without degrees",
+        "The head chef looked down on cooks from the burger bar.",
+        "Some city people look down on our little farming village.",
+        "Never look down on the cleaners in your office building."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -6347,9 +6711,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "I'm looking forward to the weekend"
+        "I'm looking forward to the weekend",
+        "We are really looking forward to meeting your new baby.",
+        "Grandma always looks forward to hearing from you on Sundays.",
+        "I am not looking forward to cleaning the oven tonight."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -6423,9 +6793,11 @@
       "examples": [
         "Look up the definition online",
         "Look up the word if you are not sure.",
-        "I looked up her number in the old diary."
+        "I looked up her number in the old diary.",
+        "Dad looked the train times up on the station website."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -6838,9 +7210,11 @@
       "examples": [
         "I'll pick you up at the airport",
         "I'll pick the children up from school at three.",
-        "Can you pick up my suit from the dry cleaner?"
+        "Can you pick up my suit from the dry cleaner?",
+        "The courier will pick the boxes up from reception at noon."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -6891,9 +7265,11 @@
       "wrongCount": 0,
       "examples": [
         "We need to plan for the worst case",
-        "Nobody had planned for a strike in July."
+        "Nobody had planned for a strike in July.",
+        "My parents started planning for retirement in their forties."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -7036,9 +7412,11 @@
       "wrongCount": 0,
       "nextReview": null,
       "examples": [
-        "Somehow she pulled off the impossible"
+        "Somehow she pulled off the impossible",
+        "The goalkeeper pulled off a brilliant save in the last minute."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "accepts": [
@@ -7310,9 +7688,11 @@
       "wrongCount": 0,
       "examples": [
         "Let me put a question to you",
-        "I will put the idea to the board on Monday."
+        "I will put the idea to the board on Monday.",
+        "She put her request to the manager in writing."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -7329,9 +7709,13 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "We put together a great team"
+        "We put together a great team",
+        "My son put the model plane together without any help.",
+        "She put together a photo album for her grandmother's birthday."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -7348,9 +7732,11 @@
       "examples": [
         "Someone put him up to it",
         "Somebody put the boy up to breaking that window.",
-        "His older cousins put him up to the whole prank."
+        "His older cousins put him up to the whole prank.",
+        "Someone at work must have put her up to that complaint."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -7370,9 +7756,13 @@
       "wrongCount": 0,
       "examples": [
         "That restaurant totally ripped us off",
-        "That garage ripped me off on the brake pads."
+        "That garage ripped me off on the brake pads.",
+        "Tourists get ripped off at that market every summer.",
+        "Those airport cafes rip off hungry travellers with silly prices."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
@@ -7549,9 +7939,11 @@
       "phave": 103,
       "examples": [
         "We ran out of coffee this morning",
-        "We ran out of time before the last item."
+        "We ran out of time before the last item.",
+        "My phone ran out of battery halfway through the call."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ]
@@ -7569,9 +7961,11 @@
       "examples": [
         "The meeting ran over by thirty minutes",
         "The meeting ran over by half an hour.",
-        "The interview ran over and we missed the train."
+        "The interview ran over and we missed the train.",
+        "The dentist ran over by twenty minutes with the previous patient."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -7715,9 +8109,11 @@
       "examples": [
         "Settle down — class is starting",
         "They settled down in a village outside Plovdiv.",
-        "The children took an hour to settle down after the party."
+        "The children took an hour to settle down after the party.",
+        "My uncle never settled down, moving flats every few months."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -7736,9 +8132,11 @@
       "examples": [
         "Don't settle for less than you deserve",
         "No buyer appeared, so they settled for a lower price.",
-        "She refused to settle for the first offer they made."
+        "She refused to settle for the first offer they made.",
+        "With no window seats left, she settled for the aisle."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -7757,9 +8155,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "He's always showing off his new car"
+        "He's always showing off his new car",
+        "She couldn't wait to show off her engagement ring at work.",
+        "Dad showed the new kitchen off to all the neighbours.",
+        "The twins showed off their swimming medals at dinner tonight."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -7844,9 +8248,11 @@
       "examples": [
         "Please sit down — we need to talk",
         "Please sit down, this will take a few minutes.",
-        "He sat down at the back and said nothing."
+        "He sat down at the back and said nothing.",
+        "The waiter asked us to sit down at the corner table."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -7969,9 +8375,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "What does this acronym stand for?"
+        "What does this acronym stand for?",
+        "The letters on the badge stand for our company name.",
+        "The red circle on the map stands for a hospital.",
+        "The star next to a price stands for a special offer."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -8173,9 +8585,11 @@
       "examples": [
         "I stayed up until 3 AM finishing it",
         "The kids stayed up to watch the fireworks.",
-        "The children stayed up to see the fireworks."
+        "The children stayed up to see the fireworks.",
+        "The dog stayed up all night barking at the thunder."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -8192,9 +8606,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Don't step on the wet paint"
+        "Don't step on the wet paint",
+        "I stepped on a piece of glass in the kitchen.",
+        "The toddler kept stepping on my feet during the dance.",
+        "He stepped on a snail on the dark garden path."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -8531,9 +8951,11 @@
       "examples": [
         "Don't take your frustration out on me",
         "Don't take it out on the staff.",
-        "Don't take your frustration out on the people at the counter."
+        "Don't take your frustration out on the people at the counter.",
+        "After a rough shift he takes his stress out on everyone."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -8556,9 +8978,11 @@
       "examples": [
         "She took over as CEO in January",
         "She took over as head of sales in January.",
-        "A larger firm took over the business."
+        "A larger firm took over the business.",
+        "The night manager takes over the shop at six every evening."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -8574,9 +8998,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "I'll take you up on that lunch invite"
+        "I'll take you up on that lunch invite",
+        "We took the hotel up on its free breakfast offer.",
+        "She took her neighbour up on the offer of a lift.",
+        "I might take my sister up on her spare concert ticket."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -8592,9 +9022,13 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Don't talk down to me — I understand perfectly"
+        "Don't talk down to me — I understand perfectly",
+        "Please don't talk down to the customers on the phone.",
+        "The doctor talked down to my grandmother in a slow, loud voice."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -8613,9 +9047,11 @@
       "examples": [
         "She talked me into buying the expensive one",
         "They talked me into staying another week.",
-        "They talked us into staying for dinner."
+        "They talked us into staying for dinner.",
+        "My kids talked me into getting a puppy last spring."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -8632,9 +9068,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "I talked him out of quitting his job"
+        "I talked him out of quitting his job",
+        "Her friends talked her out of dyeing her hair green.",
+        "Nobody could talk him out of buying that old motorbike.",
+        "My wife talked me out of driving home in the snow."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -8652,9 +9094,11 @@
       "wrongCount": 0,
       "examples": [
         "The boss talked to him about being late",
-        "The head teacher talked to him about the smoking."
+        "The head teacher talked to him about the smoking.",
+        "The supervisor talked to her about leaving the till unlocked."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -8708,9 +9152,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "I can't tell the twins apart"
+        "I can't tell the twins apart",
+        "Even the breeder can't tell the grey puppies apart yet.",
+        "I can never tell salt and sugar apart in identical jars.",
+        "Nobody in the office can tell the new interns apart."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -8726,9 +9176,11 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "My sister always told on me"
+        "My sister always told on me",
+        "I'm going to tell Dad on you for breaking the lamp."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "nextReview": null,
@@ -8923,9 +9375,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "I traded in my old car for a new one"
+        "I traded in my old car for a new one",
+        "You can trade in your old laptop at that shop.",
+        "The dealer let us trade in the van last spring.",
+        "Many customers trade their old phones in for a small discount."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -9188,9 +9646,11 @@
       "examples": [
         "I wake up at dawn every day",
         "I woke up at four and could not sleep again.",
-        "Try not to wake the baby up."
+        "Try not to wake the baby up.",
+        "Grandpa woke up halfway through the film last night."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -9230,9 +9690,13 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Wash off that mud before coming inside"
+        "Wash off that mud before coming inside",
+        "Wash off the sunscreen with soap before bed tonight.",
+        "She washed the flour off her hands with warm soapy water."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -9316,9 +9780,11 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "The constant arguing wore her down"
+        "The constant arguing wore her down",
+        "The old pencil was worn down to a tiny stub."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "accepts": [
@@ -9338,9 +9804,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "The painkillers are wearing off"
+        "The painkillers are wearing off",
+        "The novelty of the new phone wore off within a week.",
+        "The numbness in my jaw should wear off by lunchtime.",
+        "The effect of the coffee wore off after about an hour."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -9390,9 +9862,11 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "Wipe off the table before setting it"
+        "Wipe off the table before setting it",
+        "He wiped off his glasses with the corner of his shirt."
       ],
       "exampleUses": [
+        0,
         0
       ],
       "nextReview": null,
@@ -9411,9 +9885,11 @@
       "examples": [
         "The flood wiped out the entire village",
         "The flood wiped out the entire village.",
-        "One flash flood wiped out the entire village in a night."
+        "One flash flood wiped out the entire village in a night.",
+        "One computer crash wiped out a month of my work."
       ],
       "exampleUses": [
+        0,
         0,
         0,
         0
@@ -9529,9 +10005,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "Zip up your jacket — it's cold out"
+        "Zip up your jacket — it's cold out",
+        "Zip up the tent door properly before bed tonight.",
+        "Could you zip me up at the back of this dress?",
+        "I can't zip up this suitcase with all these shoes inside."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -9573,9 +10055,13 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "How do you account for the missing funds?"
+        "How do you account for the missing funds?",
+        "The manager had to account for every hour on the timesheet.",
+        "He struggled to account for the gap in his CV."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -9643,9 +10129,15 @@
       "correctCount": 0,
       "wrongCount": 0,
       "examples": [
-        "I'll ask around and see if anyone knows"
+        "I'll ask around and see if anyone knows",
+        "She asked around the office for a good local plumber.",
+        "Dad asked around among the neighbours about a good dentist.",
+        "I asked around at the market about the best egg seller."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "nextReview": null,
@@ -9732,9 +10224,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "I need to brush up on my French before the trip"
+        "I need to brush up on my French before the trip",
+        "She spent a week brushing up on her rusty maths.",
+        "After ten years away, Grandpa brushed up on his driving."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -9783,9 +10279,11 @@
       "wrongCount": 0,
       "examples": [
         "We checked in at the hotel around noon",
-        "We checked in online the night before."
+        "We checked in online the night before.",
+        "Passengers check in at the desk and get their boarding passes."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -10026,9 +10524,13 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "We need to get rid of this old furniture"
+        "We need to get rid of this old furniture",
+        "I got rid of my old car by selling it online.",
+        "We donated the extra chairs just to get rid of them."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -10376,9 +10878,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "We almost ran out of avatar shots during the Andromeda shoot."
+        "We almost ran out of avatar shots during the Andromeda shoot.",
+        "We ran out of milk halfway through making the pancakes.",
+        "The printer ran out of paper right before the deadline.",
+        "My phone ran out of battery during the long train ride."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -10485,9 +10993,11 @@
       "bnc": 55,
       "examples": [
         "After the breakup she decided to move on and focus on her work.",
-        "After two years she was ready to move on."
+        "After two years she was ready to move on.",
+        "He never really moved on after losing the family shop."
       ],
       "exampleUses": [
+        0,
         0,
         0
       ],
@@ -10525,9 +11035,13 @@
       "phave": 101,
       "bnc": 46,
       "examples": [
-        "We set off at dawn to avoid the traffic."
+        "We set off at dawn to avoid the traffic.",
+        "The burnt toast set off the smoke alarm in the kitchen.",
+        "Her keys set off the metal detector at the airport."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "accepts": [
@@ -10578,9 +11092,13 @@
       "wrongCount": 0,
       "phave": 111,
       "examples": [
-        "The red coat stands out in every window display."
+        "The red coat stands out in every window display.",
+        "Her CV really stood out from the other fifty applications.",
+        "She stands out as the most careful cook in our family."
       ],
       "exampleUses": [
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -10596,9 +11114,15 @@
       "nextReview": null,
       "wrongCount": 0,
       "examples": [
-        "He put forward a bold new plan at the meeting."
+        "He put forward a bold new plan at the meeting.",
+        "My manager put my name forward for the training course.",
+        "She put forward two ideas to the board on Monday.",
+        "The tenants put forward a compromise to the landlord yesterday."
       ],
       "exampleUses": [
+        0,
+        0,
+        0,
         0
       ],
       "consecutiveMisses": 0
@@ -10615,9 +11139,13 @@
       "wrongCount": 0,
       "examples": [
         "The brand decided to branch out into handbags",
-        "The bakery branched out into catering."
+        "The bakery branched out into catering.",
+        "After ten years of selling only shoes, the shop finally branched out.",
+        "Our little farm branched out from eggs into homemade jam."
       ],
       "exampleUses": [
+        0,
+        0,
         0,
         0
       ],
