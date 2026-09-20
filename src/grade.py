@@ -20,7 +20,7 @@ Three verdicts, and the middle one is the important one:
 Accuracy is exact over decidable — synonyms are excluded from the denominator
 rather than counted against him.
 """
-import json, re, sys, importlib.util
+import json, re, sys, os, importlib.util
 
 spec = importlib.util.spec_from_file_location("rnd", "src/round.py")
 src = open('src/round.py').read().split("is_dragon =")[0]
@@ -31,7 +31,11 @@ forms = ns['forms']
 
 rnd = sys.argv[1]
 answers = json.load(open(sys.argv[2]))
-plan = json.load(open(f'/tmp/round{rnd}.json'))
+# /tmp се чисти, а в облака е друга машина — rounds/ е трайното копие
+path = f'/tmp/round{rnd}.json'
+if not os.path.exists(path):
+    path = f'rounds/round{rnd}.json'
+plan = json.load(open(path))
 Q = {q['n']: q for q in plan['questions']}
 d = json.load(open('data/phrasal-verbs-data.json'))
 byid = {v['id']: v for v in d['verbs']}
