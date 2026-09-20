@@ -274,6 +274,7 @@ input.stepper{width:80px;padding:7px 10px;border-radius:9px;border:1px solid var
 .sentence b,.drill .mis-ex b{color:var(--ink);font-weight:600}
 .drill .mis-ex div+div{margin-top:6px}
 .drill .verdict{width:100%;flex-wrap:wrap}
+.drill .verdict>span{flex:1 1 0;min-width:0}
 .session-bar .btn-icon{margin-left:4px}
 @media (max-width:860px){.session-foot{display:none}.drill{min-height:0}.sentence{font-size:18px}}
 </style>
@@ -684,6 +685,21 @@ function importFiles(e){
   e.target.value="";
 }
 
+/* what her answer means, when it is a verb the deck knows — the "hold up
+   means delay" half of the chat explanation. A chosen option always is; a
+   typed answer only sometimes. */
+function meaningOf(q,v){
+  if(!q.given)return null;
+  const g=q.type==="particle"?baseOf(v)+" "+q.given:q.given;
+  const hit=S.verbs.find(o=>o.id!==v.id&&(norm(o.phrasal)===norm(g)||(q.type==="type"&&sameVerb(g,o.phrasal))));
+  return hit?{label:hit.phrasal,formal:hit.formal}:null;
+}
+const youHTML=(q,v)=>{
+  if(!q.given)return "";
+  const m=meaningOf(q,v);
+  return 'Ти: <b>'+esc(m?m.label:q.given)+'</b>'+(m?' — '+esc(m.formal):'')+'. ';
+};
+
 /* ---- rendering ---- */
 const gapHTML=t=>'<span class="gap'+(t?' filled':'')+'">'+(t?esc(t):'&nbsp;')+'</span>';
 function sentenceHTML(text,v,mode){        /* mode: gap | particle | full */
@@ -728,7 +744,7 @@ function questionHTML(R){
     if(q.verdict==="ok")ctl+='<div class="verdict verdict-ok">'+ico("check",16)+'<span>Вярно.</span>'+moveHTML(q.move)+'</div>';
     else if(q.verdict==="syn")ctl+='<div class="verdict verdict-syn">'+ico("target",16)+'<span><b>'+esc(q.matched)+'</b> също пасва тук — но картата е за <b>'+esc(v.phrasal)+'</b>. Нищо не мърда.</span></div>';
     else{
-      ctl+='<div class="verdict verdict-no">'+ico("x",16)+'<span>'+(q.given?'Ти: <b>'+esc(q.given)+'</b>. ':"")+'Търсеше се <b>'+esc(v.phrasal)+'</b> — '+esc(v.formal)+'.</span>'+moveHTML(q.move)+'</div>';
+      ctl+='<div class="verdict verdict-no">'+ico("x",16)+'<span>'+youHTML(q,v)+'Търсеше се <b>'+esc(v.phrasal)+'</b> — '+esc(v.formal)+'.</span>'+moveHTML(q.move)+'</div>';
       const more=(v.examples||[v.example]).filter(e=>e!==q.ex).slice(0,3);
       if(more.length)ctl+='<div class="mis-ex" style="max-width:520px;margin:0 auto;width:100%;text-align:left">'+more.map(e=>'<div>'+sentenceHTML(e,v,"full")+'</div>').join("")+'</div>';
       if(need)ctl+='<div class="prompt-label" style="margin-top:4px">Напиши го веднъж, за да остане</div>'
@@ -747,7 +763,7 @@ function summaryHTML(s){
     const v=byId(r.id),ic=r.verdict==="ok"?"✅":r.verdict==="syn"?"🟰":"❌";
     return '<div class="mis"><div class="mis-n">'+(k+1)+'</div><div class="mis-body"><div class="mis-head">'+ic+' '+pvHTML(v)
       +' <span style="font-weight:400;color:var(--ink-3);font-size:12.5px">'+esc(v.formal)+'</span></div>'
-      +(r.verdict!=="ok"?'<div class="mis-you">ти: '+(r.given?esc(r.given):"празно")+(r.matched?' — '+esc(r.matched)+' е синоним, картата не мърда':"")+'</div>':"")
+      +(r.verdict!=="ok"?'<div class="mis-you">'+(r.given?youHTML(r,v).replace(/^Ти/,"ти").replace(/\. $/,""):"ти: празно")+(r.matched?' — '+esc(r.matched)+' е синоним, картата не мърда':"")+'</div>':"")
       +(r.verdict==="no"?'<div class="mis-ex">'+sentenceHTML(r.ex,v,"full")+'</div>':"")+'</div></div>';
   }).join("");
   return '<div class="card drill" style="min-height:0"><div class="drill-face" style="gap:10px"><div class="prompt-label">Рунд '+s.rnd+'</div>'
