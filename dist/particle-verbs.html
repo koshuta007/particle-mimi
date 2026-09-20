@@ -1,0 +1,983 @@
+<title>Particle — phrasal verbs on Leitner boxes</title>
+<style>
+:root{
+  --bg:#F4F4F2; --surface:#FFFFFF; --surface-2:#FAFAF9; --surface-3:#F1F1EE;
+  --border:#E6E6E1; --border-strong:#D7D7D1;
+  --ink:#18181B; --ink-2:#57575E; --ink-3:#8E8E96;
+  --accent:#6366F1; --accent-ink:#4F46E5; --accent-soft:#EEEFFE;
+  --c-series:#6366F1; --c-good:#0D9488; --c-bad:#E11D48;
+  --good-soft:#E4F4F2; --bad-soft:#FDEAEF; --warn:#B45309; --warn-soft:#FBF0DF;
+  --info:#2563EB; --info-soft:#E7EEFD;
+  /* Leitner ramp: one hue, light→dark, box 0 is the odd one out (not started) */
+  --b0:#C9C9C4; --b1:#C7CBF7; --b2:#A5ABF2; --b3:#818CF8; --b4:#6366F1; --b5:#0D9488;
+  --shadow-sm:0 1px 2px rgba(24,24,27,.05);
+  --shadow:0 1px 2px rgba(24,24,27,.05), 0 10px 26px -14px rgba(24,24,27,.18);
+  --r:10px; --r-lg:14px; --r-xl:18px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+  --font-display:"New York",ui-serif,Georgia,serif;
+  --font-mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sidebar:266px;
+}
+[data-theme="dark"]{
+  --bg:#0F0F12; --surface:#1C1C20; --surface-2:#232329; --surface-3:#2A2A31;
+  --border:#2C2C33; --border-strong:#3B3B44;
+  --ink:#F3F3F4; --ink-2:#A2A2AB; --ink-3:#75757F;
+  --accent:#818CF8; --accent-ink:#A5B4FC; --accent-soft:#25253A;
+  --c-series:#6366F1; --c-good:#11A897; --c-bad:#F43F5E;
+  --good-soft:#14312F; --bad-soft:#3A1723; --warn:#F0B23E; --warn-soft:#33270F;
+  --info:#60A5FA; --info-soft:#16233F;
+  --b0:#3A3A42; --b1:#3E4272; --b2:#4B51A8; --b3:#5A62D4; --b4:#6366F1; --b5:#11A897;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 26px -14px rgba(0,0,0,.6);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F0F12; --surface:#1C1C20; --surface-2:#232329; --surface-3:#2A2A31;
+  --border:#2C2C33; --border-strong:#3B3B44;
+  --ink:#F3F3F4; --ink-2:#A2A2AB; --ink-3:#75757F;
+  --accent:#818CF8; --accent-ink:#A5B4FC; --accent-soft:#25253A;
+  --c-series:#6366F1; --c-good:#11A897; --c-bad:#F43F5E;
+  --good-soft:#14312F; --bad-soft:#3A1723; --warn:#F0B23E; --warn-soft:#33270F;
+  --info:#60A5FA; --info-soft:#16233F;
+  --b0:#3A3A42; --b1:#3E4272; --b2:#4B51A8; --b3:#5A62D4; --b4:#6366F1; --b5:#11A897;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 26px -14px rgba(0,0,0,.6);
+}}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none;padding:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* the signature: verb and particle are always visibly separate */
+.pv{white-space:nowrap}
+.pv .stem{color:var(--ink)}
+.pv .part{color:var(--accent-ink);font-weight:600}
+[data-theme="dark"] .pv .part{color:var(--accent)}
+
+.app{display:flex;min-height:100vh;padding:10px;gap:10px}
+.sidebar{width:var(--sidebar);flex:0 0 var(--sidebar);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;position:sticky;top:10px;height:calc(100vh - 20px)}
+.brand{display:flex;align-items:center;gap:10px;padding:18px 18px 14px}
+.brand-mark{width:30px;height:30px;border-radius:9px;flex:0 0 30px;background:linear-gradient(145deg,#7C83F7,#4F46E5);display:grid;place-items:center;color:#fff;box-shadow:0 2px 6px rgba(79,70,229,.35)}
+.brand-name{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.brand-sub{font-size:11px;color:var(--ink-3);margin-top:-2px}
+.nav{flex:1;overflow-y:auto;padding:4px 10px 10px}
+.nav-label{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:14px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border-radius:7px;color:var(--ink-2);font-size:13.5px;font-weight:500;text-align:left;transition:background .12s,color .12s}
+.nav-item:hover{background:var(--surface-3);color:var(--ink)}
+.nav-item[aria-current="page"]{background:var(--surface-3);color:var(--ink);font-weight:600}
+.nav-item .ico{color:var(--ink-3);flex:0 0 18px}
+.nav-item[aria-current="page"] .ico{color:var(--accent-ink)}
+.nav-item .count{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);background:var(--surface-3);padding:1px 6px;border-radius:20px}
+.nav-item[aria-current="page"] .count{background:var(--surface);color:var(--ink-2)}
+.me{margin:10px;padding:9px 10px;border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:center;gap:10px;background:var(--surface-2)}
+.avatar{width:28px;height:28px;border-radius:8px;flex:0 0 28px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-ink);font-family:var(--font-mono);font-size:11px;font-weight:600}
+.me-name{font-size:13px;font-weight:600;line-height:1.2}
+.me-sub{font-size:11px;color:var(--ink-3)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.topbar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:12px;padding:11px 14px;position:sticky;top:10px;z-index:30}
+.page-icon{width:30px;height:30px;border-radius:9px;flex:0 0 30px;display:grid;place-items:center;background:var(--surface-3);color:var(--ink-2)}
+.page-title{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:9px;border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-2);font-size:13px;font-weight:500;white-space:nowrap;transition:background .12s,border-color .12s,color .12s}
+.btn:hover{background:var(--surface-3);color:var(--ink)}
+.btn .ico{color:var(--ink-3)}
+.btn-icon{padding:7px;width:32px;justify-content:center}
+.btn-primary{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff;font-weight:600}
+.btn-primary:hover{background:#4338CA;border-color:#4338CA;color:#fff}
+.btn-primary .ico{color:rgba(255,255,255,.85)}
+[data-theme="dark"] .btn-primary{background:#4F46E5;border-color:#4F46E5}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.content{padding:0 0 10px;display:flex;flex-direction:column;gap:10px}
+.view[hidden]{display:none}
+.grid{display:grid;gap:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm)}
+.card-head{display:flex;align-items:flex-start;gap:12px;padding:15px 17px 0}
+.card-title{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.card-sub{font-size:12px;color:var(--ink-3);margin-top:2px}
+.card-head-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:11.5px;font-weight:600;background:var(--surface-3);color:var(--ink-2);white-space:nowrap}
+.badge-good{background:var(--good-soft);color:var(--c-good)}
+.badge-bad{background:var(--bad-soft);color:var(--c-bad)}
+.badge-warn{background:var(--warn-soft);color:var(--warn)}
+.badge-info{background:var(--info-soft);color:var(--info)}
+.badge-accent{background:var(--accent-soft);color:var(--accent-ink)}
+
+.kpis{display:grid;grid-template-columns:repeat(7,1fr);overflow:hidden}
+.kpi{padding:15px 17px 16px;border-left:1px solid var(--border);min-width:0}
+.kpi:first-child{border-left:none}
+.kpi-top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.kpi-label{font-size:12.5px;color:var(--ink-2);font-weight:500}
+.kpi-chip{margin-left:auto;width:26px;height:26px;border-radius:8px;flex:0 0 26px;display:grid;place-items:center}
+.kpi-value{font-size:26px;font-weight:600;letter-spacing:-.025em;line-height:1.1;display:flex;align-items:baseline;gap:8px}
+.kpi-foot{font-size:11.5px;color:var(--ink-3);margin-top:5px}
+
+/* Leitner mastery bar */
+.mastery{display:flex;height:34px;border-radius:var(--r);overflow:hidden;margin:14px 17px 8px;gap:2px}
+.mastery span{display:grid;place-items:center;font-size:11.5px;font-weight:700;color:#fff;font-family:var(--font-mono);transition:flex-grow .5s cubic-bezier(.4,0,.2,1);min-width:0}
+.mastery span:first-child{border-radius:var(--r) 0 0 var(--r)}
+.mastery span:last-child{border-radius:0 var(--r) var(--r) 0}
+.mastery-legend{display:flex;flex-wrap:wrap;gap:14px;padding:0 17px 15px}
+.leg{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2);font-weight:500}
+.dot{width:9px;height:9px;border-radius:2.5px;flex:0 0 9px}
+
+.boxes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.boxcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.boxcard h4{margin:0;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+.boxcard .n{margin-left:auto;font-family:var(--font-mono);font-size:13px;font-weight:600}
+.boxcard .iv{font-size:11px;color:var(--ink-3);margin-top:-4px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip-v{font-size:11.5px;padding:3px 7px;border-radius:6px;background:var(--surface-3);color:var(--ink-2);white-space:nowrap}
+.chip-more{background:var(--accent-soft);color:var(--accent-ink);cursor:pointer;font-weight:600}
+
+.chart-wrap{position:relative;padding:6px 10px 12px}
+.chart-wrap svg{display:block;width:100%;overflow:visible}
+.tip{position:absolute;pointer-events:none;opacity:0;transform:translate(-50%,-100%);background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 10px;min-width:130px;z-index:20;transition:opacity .1s}
+.tip.on{opacity:1}
+.tip-title{font-size:11.5px;font-weight:600;margin-bottom:6px}
+.tip-row{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink-2);margin-top:3px}
+.tip-row b{margin-left:auto;font-family:var(--font-mono);font-weight:600;color:var(--ink)}
+.chart-empty{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.chart-empty span{font-size:12.5px;color:var(--ink-3);background:var(--surface);padding:6px 12px;border-radius:20px;border:1px solid var(--border)}
+
+.table-wrap{overflow-x:auto;padding:4px 6px 8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:10px 11px;white-space:nowrap;border-bottom:1px solid var(--border)}
+thead th.num,tbody td.num{text-align:right}
+tbody td{padding:11px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr.clickable{cursor:pointer}
+tbody tr.clickable:hover td{background:var(--surface-2)}
+td.num{font-family:var(--font-mono);font-size:12.5px}
+
+/* drill */
+.session{max-width:780px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:10px}
+.session-bar{display:flex;align-items:center;gap:12px;padding:13px 16px}
+.progress-track{flex:1;height:6px;border-radius:20px;background:var(--surface-3);overflow:hidden}
+.progress-fill{height:100%;background:var(--accent-ink);border-radius:20px;transition:width .3s}
+.session-count{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);white-space:nowrap}
+.drill{min-height:330px;display:flex;flex-direction:column;padding:28px 30px 24px;text-align:center;gap:18px}
+.drill-face{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px}
+.prompt-word{font-family:var(--font-display);font-size:clamp(32px,5vw,48px);font-weight:500;letter-spacing:-.02em;line-height:1.05}
+.prompt-label{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.sentence{font-size:19px;line-height:1.6;max-width:44ch;margin:0 auto;color:var(--ink-2)}
+.gap{display:inline-block;min-width:104px;border-bottom:2px solid var(--accent);color:var(--accent-ink);font-weight:600}
+.gap.filled{border-bottom-color:var(--border-strong)}
+.answer{width:100%;max-width:340px;margin:0 auto;display:block;padding:11px 14px;border-radius:var(--r);border:1px solid var(--border-strong);background:var(--surface-2);font-size:17px;text-align:center}
+.answer:focus{outline:none;border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px var(--accent-soft)}
+.verdict{display:flex;align-items:center;gap:9px;justify-content:center;padding:11px 15px;border-radius:var(--r);font-size:13.5px;font-weight:500;max-width:520px;margin:0 auto;text-align:left}
+.verdict-ok{background:var(--good-soft);color:var(--c-good)}
+.verdict-no{background:var(--bad-soft);color:var(--c-bad)}
+.verdict-syn{background:var(--warn-soft);color:var(--warn)}
+.movement{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:var(--font-mono);color:var(--ink-3);justify-content:center}
+.side-note{display:inline-flex;align-items:center;gap:7px;margin:0 auto;font-size:12px;color:var(--ink-2);background:var(--surface-3);padding:5px 11px;border-radius:20px}
+.drill-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.session-foot{display:flex;align-items:center;justify-content:center;gap:16px;padding:11px;font-size:11.5px;color:var(--ink-3)}
+.session-foot kbd,.drill kbd{font-family:var(--font-mono);font-size:10.5px;border:1px solid var(--border-strong);border-radius:5px;padding:1px 5px;background:var(--surface-2);color:var(--ink-2)}
+.mistakes{display:flex;flex-direction:column;gap:0}
+.mis{display:flex;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);text-align:left;align-items:flex-start}
+.mis:last-child{border-bottom:none}
+.mis-n{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);width:20px;flex:0 0 20px;padding-top:2px}
+.mis-body{flex:1;min-width:0}
+.mis-head{font-size:14px;font-weight:600;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.mis-you{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.mis-ex{font-size:13.5px;color:var(--ink-2);margin-top:7px;padding-left:11px;border-left:2px solid var(--border-strong);line-height:1.5}
+.mis-ex .pv .stem{color:var(--ink);font-weight:600}
+
+.filters{display:flex;align-items:center;gap:8px;padding:13px 15px;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:190px;max-width:330px}
+.search .ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
+.search input{width:100%;padding:8px 11px 8px 32px;border-radius:9px;border:1px solid var(--border-strong);background:var(--surface-2);font-size:13px}
+.search input:focus{outline:none;border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px var(--accent-soft)}
+.chip{padding:6px 11px;border-radius:20px;border:1px solid var(--border-strong);background:var(--surface);font-size:12.5px;font-weight:500;color:var(--ink-2)}
+.chip:hover{background:var(--surface-3);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+[data-theme="dark"] .chip[aria-pressed="true"]{color:#18181B}
+.detail{background:var(--surface-2)}
+.detail td{padding:0;border-bottom:1px solid var(--border)}
+.detail-inner{padding:4px 14px 16px;display:flex;flex-direction:column;gap:9px}
+.detail-ex{font-size:13.5px;color:var(--ink-2);line-height:1.5;padding-left:13px;border-left:2px solid var(--border-strong)}
+.detail-ex .pv .stem{color:var(--ink);font-weight:600}
+
+.empty{display:flex;flex-direction:column;align-items:center;gap:14px;padding:52px 24px;text-align:center}
+.empty-mark{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-ink)}
+.empty h3{margin:0;font-size:16px;font-weight:600}
+.empty p{margin:0;font-size:13.5px;color:var(--ink-3);max-width:44ch;line-height:1.5}
+.prose{padding:20px 24px 26px;max-width:68ch}
+.prose h3{font-size:14px;font-weight:600;margin:22px 0 7px}
+.prose h3:first-child{margin-top:0}
+.prose p{margin:0 0 10px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.prose ul{margin:0 0 10px;padding-left:18px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.prose li{margin-bottom:5px}
+.prose strong{color:var(--ink);font-weight:600}
+.set-row{display:flex;align-items:center;gap:16px;padding:15px 17px;border-bottom:1px solid var(--border)}
+.set-row:last-child{border-bottom:none}
+.set-body{flex:1;min-width:0}
+.set-title{font-size:13.5px;font-weight:600}
+.set-sub{font-size:12px;color:var(--ink-3);margin-top:2px;line-height:1.45}
+.set-row .btn,.set-row input{margin-left:auto;flex:0 0 auto}
+input.stepper{width:80px;padding:7px 10px;border-radius:9px;border:1px solid var(--border-strong);background:var(--surface-2);font-family:var(--font-mono);font-size:13px;text-align:center}
+.danger{color:var(--c-bad);border-color:var(--c-bad)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:13px;font-weight:500;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.2s;z-index:100}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.menu-btn{display:none}
+.dash-top{grid-template-columns:minmax(0,1fr) 372px}
+@media (max-width:1280px){.boxes{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1400px){.kpis{grid-template-columns:repeat(4,1fr)}.kpi:nth-child(5){border-left:none}.kpi:nth-child(n+5){border-top:1px solid var(--border)}}
+@media (max-width:1180px){
+  .dash-top{grid-template-columns:minmax(0,1fr)}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .kpi:nth-child(4){border-left:none}
+  .kpi:nth-child(n+4){border-top:1px solid var(--border)}
+}
+@media (max-width:860px){
+  .app{padding:8px;gap:8px}
+  .sidebar{position:fixed;left:8px;top:8px;z-index:60;transform:translateX(calc(-100% - 16px));transition:transform .22s ease}
+  .sidebar.open{transform:none;box-shadow:var(--shadow)}
+  .menu-btn{display:inline-flex}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi{border-left:none;border-top:1px solid var(--border)}
+  .kpi:nth-child(-n+2){border-top:none}
+  .kpi:nth-child(odd){border-right:1px solid var(--border)}
+  .boxes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hide-sm{display:none}
+  .drill{padding:22px 16px 20px}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:50}
+}
+@media (min-width:861px){.scrim{display:none}}
+@media (max-width:520px){.kpis{grid-template-columns:1fr}.kpi{border-right:none!important}.boxes{grid-template-columns:1fr}}
+</style>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V9a4 4 0 0 1 8 0v8"/><path d="M12 13h8"/><path d="m17 10 3 3-3 3"/></svg></div>
+      <div><div class="brand-name">Particle</div><div class="brand-sub" id="brandSub">Phrasal verb trainer</div></div>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item" data-view="dash"><span class="ico" data-ico="grid"></span>Dashboard</button>
+      <button class="nav-item" data-view="dragons"><span class="ico" data-ico="flame"></span>Dragons<span class="count" id="navDrag">0</span></button>
+      <div class="nav-label">Library</div>
+      <button class="nav-item" data-view="library" data-filter="all"><span class="ico" data-ico="book"></span><span id="navAllLabel">All verbs</span><span class="count" id="navAll">0</span></button>
+      <button class="nav-item" data-view="library" data-filter="due"><span class="ico" data-ico="clock"></span>Due now<span class="count" id="navDue2">0</span></button>
+      <button class="nav-item" data-view="library" data-filter="0"><span class="ico" data-ico="dot"></span>Not started<span class="count" id="navNew">0</span></button>
+      <button class="nav-item" data-view="library" data-filter="5"><span class="ico" data-ico="trophy"></span>Mastered<span class="count" id="navMast">0</span></button>
+      <div class="nav-label">The other deck</div>
+      <a class="nav-item" id="otherDeck" href="" target="_blank" rel="noopener"><span class="ico" data-ico="arrow"></span><span id="otherDeckName">—</span></a>
+
+      <div class="nav-label">Record</div>
+      <button class="nav-item" data-view="sessions"><span class="ico" data-ico="chart"></span>Sessions</button>
+      <button class="nav-item" data-view="settings"><span class="ico" data-ico="cog"></span>Settings</button>
+      <button class="nav-item" data-view="help"><span class="ico" data-ico="help"></span>How this works</button>
+    </nav>
+    <div class="me">
+      <div class="avatar" id="mePct">—</div>
+      <div style="min-width:0"><div class="me-name" id="meRank">—</div><div class="me-sub" id="meSub">—</div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="btn btn-icon menu-btn" id="menuBtn" aria-label="Menu"><span class="ico" data-ico="menu"></span></button>
+      <div class="page-icon" id="pageIcon"><span class="ico" data-ico="grid"></span></div>
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="btn hide-sm" id="exportBtn"><span class="ico" data-ico="export"></span>Export</button>
+        <button class="btn btn-icon" id="themeBtn" aria-label="Theme"><span class="ico" data-ico="moon"></span></button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- DASHBOARD -->
+      <section class="view" id="view-dash">
+        <div class="card" id="stampCard" style="padding:11px 17px;display:flex;align-items:center;gap:10px">
+          <span class="dot" style="background:var(--c-good);width:8px;height:8px;border-radius:50%"></span>
+          <span style="font-size:12.5px;color:var(--ink-2)" id="stamp">—</span>
+        </div>
+        <div class="card kpis" id="kpis"></div>
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Mastery progress</div><div class="card-sub" id="mastSub">—</div></div>
+            <div class="card-head-right"><span class="badge badge-accent" id="mastBadge">—</span></div>
+          </div>
+          <div class="mastery" id="mastery"></div>
+          <div class="mastery-legend" id="masteryLegend"></div>
+        </div>
+        <div class="grid dash-top">
+          <div class="card">
+            <div class="card-head">
+              <div><div class="card-title">Questions per session</div><div class="card-sub">Last 20 rounds · correct against missed</div></div>
+              <div class="card-head-right">
+                <span class="leg"><span class="dot" style="background:var(--c-good)"></span>Correct</span>
+                <span class="leg"><span class="dot" id="missDot"></span>Missed</span>
+              </div>
+            </div>
+            <div class="chart-wrap" id="barWrap"><svg id="barChart" role="img" aria-label="Correct and missed per session"></svg><div class="tip" id="barTip"></div></div>
+          </div>
+          <div class="card" style="display:flex;flex-direction:column">
+            <div class="card-head"><div><div class="card-title">Up next</div><div class="card-sub" id="queueSub">—</div></div></div>
+            <div id="queue" style="padding:6px 8px 8px"></div>
+          </div>
+        </div>
+        <div class="grid boxes" id="boxes"></div>
+      </section>
+
+      <!-- DRAGONS -->
+      <section class="view" id="view-dragons" hidden>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Dragons</div><div class="card-sub">Verbs you have missed more than once. They get their own round so they don't clog the main one.</div></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Verb</th><th>Means</th><th class="num">Missed</th><th class="num">Right</th><th>Box</th><th>Next</th></tr></thead><tbody id="dragBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- LIBRARY -->
+      <section class="view" id="view-library" hidden>
+        <div class="card">
+          <div class="filters">
+            <div class="search"><span class="ico" data-ico="search"></span><input type="search" id="libSearch" placeholder="Search a verb or a meaning" aria-label="Search"></div>
+            <button class="chip" data-lib="all" aria-pressed="true">All</button>
+            <button class="chip" data-lib="due" aria-pressed="false">Due</button>
+            <button class="chip" data-lib="core" aria-pressed="false">Core 150</button>
+            <button class="chip" data-lib="0" aria-pressed="false">Not started</button>
+            <button class="chip" data-lib="mid" aria-pressed="false">In progress</button>
+            <button class="chip" data-lib="5" aria-pressed="false">Mastered</button>
+            <button class="chip" data-lib="done" aria-pressed="false">Finished</button>
+            <button class="chip" data-lib="amb" aria-pressed="false">Shared prompt</button>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Verb</th><th>Means</th><th>Box</th><th class="num">Right</th><th class="num">Wrong</th><th>Next review</th></tr></thead><tbody id="libBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- SESSIONS -->
+      <section class="view" id="view-sessions" hidden>
+        <div class="card kpis" id="sessKpis"></div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Accuracy over time</div><div class="card-sub">Every logged round since 31 January</div></div></div>
+          <div class="chart-wrap" id="accWrap"><svg id="accChart" role="img" aria-label="Accuracy per session"></svg><div class="tip" id="accTip"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Round log</div><div class="card-sub" id="logSub">—</div></div></div>
+          <div class="table-wrap"><table><thead><tr><th class="num">#</th><th>Date</th><th class="num">Questions</th><th class="num">Correct</th><th class="num">%</th><th>Note</th></tr></thead><tbody id="logBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view" id="view-settings" hidden>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Round format</div><div class="card-sub">The rules Claude follows when running a round with you in chat. Kept here so they travel with the data.</div></div></div>
+          <div style="height:12px"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Verbs per round</div><div class="set-sub">Due reviews first, then Box 0 to fill up.</div></div><input type="number" class="stepper" id="setLen" min="5" max="60" step="5"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Side-drill after a miss</div><div class="set-sub">Extra goes at a verb you just missed, while it is still fresh. They never change the box.</div></div><input type="number" class="stepper" id="setSide" min="0" max="5" step="1"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Box 5 means finished</div><div class="set-sub" id="setFinalSub">—</div></div><input type="checkbox" id="setFinal" style="width:20px;height:20px"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Re-check mastered verbs every</div><div class="set-sub" id="setB5Sub">—</div></div><input type="number" class="stepper" id="setB5" min="0" max="365" step="15"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Accept valid synonyms</div><div class="set-sub">36 prompts in this deck have more than one correct answer. With this on, a valid alternative counts as correct and you are told which one was the target.</div></div><input type="checkbox" id="setSyn" style="width:20px;height:20px"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Your progress</div><div class="card-sub">This page shows a snapshot. Rounds are run in chat and the snapshot is rebuilt afterwards.</div></div></div>
+          <div style="height:12px"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Export the data</div><div class="set-sub">Downloads phrasal-verbs-data.json and progress-data.json, the same shape any other tool reads.</div></div><button class="btn" id="exportBtn2"><span class="ico" data-ico="export"></span>Export</button></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Reload the snapshot</div><div class="set-sub">Clears anything cached in this browser and re-reads the published data.</div></div><button class="btn danger" id="resetBtn"><span class="ico" data-ico="trash"></span>Reset</button></div>
+        </div>
+      </section>
+
+      <!-- HELP -->
+      <section class="view" id="view-help" hidden>
+        <div class="card"><div class="prose">
+          <h3>What this is</h3>
+          <p>Your knowledge-quest phrasal verb trainer, rebuilt as one file you own. Same 431 verbs, same Leitner boxes, same drill format — but the practice happens here instead of in Telegram, and the data is repaired.</p>
+          <h3>The boxes</h3>
+          <p>Every verb sits in a box, and the box decides how long until you see it again: <strong>Box 0</strong> new or missed (comes straight back), <strong>1</strong> after a day, <strong>2</strong> after three, <strong>3</strong> after a week, <strong>4</strong> after two weeks, <strong>5</strong> after a month. Answer right and the verb moves up one box. Answer wrong and it moves down one — not all the way to the floor. A verb you have carried to Box 4 and then fumble goes back to Box 3, so you see it in a week rather than starting it over.</p>
+          <h3>When is a verb finished?</h3>
+          <p><strong>When it reaches Box 5.</strong> That is the whole rule. A verb that climbs all the way to Box 5 counts as mastered, leaves the deck, and is never asked again. Nothing to re-prove, no maintenance cycle.</p>
+          <p>Getting there takes five correct answers in a row with the gaps widening each time — a day, three days, a week, a fortnight. Miss it anywhere along the way and it drops a box and has to climb again.</p>
+          <p>One thing worth knowing, because it is measurable in your own history: over six months, <strong>23% of the verbs that first reached Box 5 were missed the very next time they came up</strong>. Under the old cycling rule those got caught and sent back down. Under this rule they do not — once a verb is in, it is in. If you later want a safety net, turn off <strong>Box 5 means finished</strong> in Settings and set a re-check cycle; the verbs already finished come straight back into circulation.</p>
+          <h3>The round</h3>
+          <p>Rounds are run with Claude in chat, not on this page. This page is where you see where you stand; after each round the data is updated and the page is republished at the same link.</p>
+          <ul>
+            <li>Thirty verbs. Due reviews first, then Box 0 to fill up.</li>
+            <li>Never only Box 0 — that would waste the spacing.</li>
+            <li>Miss one and you get an immediate side-drill on it, while the memory is fresh. The side-drill does not change the box.</li>
+            <li>Verbs you keep missing become <strong>dragons</strong> and get their own round.</li>
+            <li>Every round ends with the full mistakes list and a fresh sentence for each one.</li>
+          </ul>
+          <p>The settings on this page record that format, and they travel with the exported data.</p>
+          <h3>Why the prompt shows a sentence</h3>
+          <p>Thirty-six of the prompts in this deck have more than one right answer — <em>return</em> alone fits <span class="pv"><span class="stem">bring</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">come</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">get</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">give</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">go</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">hand</span> <span class="part">back</span></span> and <span class="pv"><span class="stem">head</span> <span class="part">back</span></span>. Asking on the bare word marks you wrong for knowing a second answer. So the prompt is the meaning <em>and</em> a sentence with a hole in it — the sentence decides which one fits. If you type a different valid verb, it says so instead of failing you.</p>
+          <h3>Moving the data</h3>
+          <p><strong>Settings &rarr; Export</strong> writes <code>phrasal-verbs-data.json</code> and <code>progress-data.json</code> in the shape any other tool reads, so nothing is trapped here.</p>
+        </div></div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+const SEED = {"kind":"verbs","lastUpdated":"2026-09-20","settings":{"boxIntervals":[0,1,3,7,14,30],"masteredIsFinal":true,"masteredRecheckDays":0},"verbs":[{"id":1,"formal":"investigate","phrasal":"look into","example":"I need to look into this opportunity","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":2,"formal":"move it to a later date","phrasal":"put off","example":"Let's put off the meeting","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":146,"bnc":82,"accepts":["hold off"],"consecutiveMisses":0},{"id":3,"formal":"discover","phrasal":"find out","example":"I want to find out what's causing this","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":6,"bnc":9,"consecutiveMisses":0},{"id":4,"formal":"refuse to stop, stubbornly","phrasal":"keep on","example":"Keep on testing the ads","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":102,"accepts":["keep at"],"consecutiveMisses":0},{"id":5,"formal":"make first contact with someone","phrasal":"reach out to","example":"I'll reach out to him tomorrow","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":59,"consecutiveMisses":0},{"id":6,"formal":"arrive","phrasal":"show up","example":"He didn't show up to the meeting","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":27,"consecutiveMisses":0},{"id":7,"formal":"leave the house for good","phrasal":"head out","example":"I'm going to head out now","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["go out","set out"],"consecutiveMisses":0},{"id":8,"formal":"climb into a vehicle","phrasal":"get in","example":"Get in the car","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":98,"bnc":63,"consecutiveMisses":0},{"id":9,"formal":"pop round for five minutes","phrasal":"stop by","example":"I'll stop by the office later","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["stop off"],"consecutiveMisses":0},{"id":362,"formal":"carry it here again","phrasal":"bring back","example":"Bring back the book when you've finished it.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":44,"bnc":40,"consecutiveMisses":0},{"id":11,"formal":"mention","phrasal":"bring up","example":"Don't bring up that topic","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":45,"bnc":36,"consecutiveMisses":0},{"id":12,"formal":"walk through it step by step","phrasal":"go over","example":"Let me go over the details","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":74,"bnc":71,"consecutiveMisses":0},{"id":13,"formal":"express oneself","phrasal":"speak up","example":"You need to speak up","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":15,"formal":"fabricate","phrasal":"make up","example":"He made up an excuse","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":17,"bnc":11,"consecutiveMisses":0},{"id":16,"formal":"summarize","phrasal":"sum up","example":"Let me sum up the key points","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":130,"consecutiveMisses":0},{"id":17,"formal":"clarify","phrasal":"clear up","example":"Let's clear up this confusion","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":18,"formal":"open a match or event","phrasal":"kick off","example":"Let's kick off the project","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["start off"],"consecutiveMisses":0},{"id":19,"formal":"bring to a close","phrasal":"wrap up","example":"Let's wrap up this meeting","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":20,"formal":"cancel an event","phrasal":"call off","example":"They called off the event","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":360,"formal":"see to it","phrasal":"take care of","example":"Can you take care of the booking while I'm away?","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["deal with","see about"],"consecutiveMisses":0},{"id":22,"formal":"accept responsibility","phrasal":"take on","example":"She took on the new project","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":15,"bnc":23,"consecutiveMisses":0},{"id":27,"formal":"a plan collapses","phrasal":"fall through","example":"The deal fell through","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":28,"formal":"tolerate what cannot be changed","phrasal":"put up with","example":"I can't put up with this","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":29,"formal":"admire","phrasal":"look up to","example":"I really look up to her","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":30,"formal":"support someone in a dispute","phrasal":"back up","example":"I'll back you up","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":95,"consecutiveMisses":0},{"id":31,"formal":"disappoint","phrasal":"let down","example":"Don't let me down","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":36,"formal":"create/invent","phrasal":"come up with","example":"Come up with a solution","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["think up"],"consecutiveMisses":0},{"id":41,"formal":"a business fails","phrasal":"go under","example":"The company went under","box":0,"correctCount":0,"lastReview":null,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":42,"formal":"undress","phrasal":"take off","example":"Take off your shoes","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":28,"bnc":42,"consecutiveMisses":0},{"id":354,"formal":"reduce a habit","phrasal":"cut down","example":"The doctor told him to cut down on salt.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":45,"formal":"drop, plainly","phrasal":"go down","example":"Sales went down","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":26,"bnc":16,"accepts":["come down"],"consecutiveMisses":0},{"id":361,"formal":"eliminate from your diet","phrasal":"cut out","example":"She cut out sugar completely for a month.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":59,"formal":"gain weight","phrasal":"put on","example":"I put on 5 pounds","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":87,"bnc":53,"consecutiveMisses":0},{"id":62,"formal":"try to find something lost","phrasal":"look for","example":"I'm looking for my keys","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":64,"formal":"wait a moment","phrasal":"hold on","example":"Hold on a second","box":0,"correctCount":0,"lastReview":null,"nextReview":null,"wrongCount":0,"accepts":["hang on"],"phave":77,"bnc":74,"sharedPrompt":["hang on"],"consecutiveMisses":0},{"id":67,"formal":"finish somewhere unplanned","phrasal":"end up","example":"I ended up staying late","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":18,"accepts":["wind up"],"consecutiveMisses":0},{"id":69,"formal":"prove to be","phrasal":"turn out","example":"It turned out to be true","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":12,"bnc":22,"consecutiveMisses":0},{"id":74,"formal":"accelerate","phrasal":"speed up","example":"We need to speed up","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":75,"formal":"decelerate","phrasal":"slow down","example":"Slow down a bit","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":68,"consecutiveMisses":0},{"id":76,"formal":"abandon the attempt","phrasal":"give up","example":"Don't give up","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":16,"bnc":24,"consecutiveMisses":0},{"id":82,"formal":"reject","phrasal":"turn down","example":"She turned down the offer","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":94,"bnc":67,"consecutiveMisses":0},{"id":98,"formal":"activate","phrasal":"turn on","example":"Turn on the computer","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":102,"formal":"connect online","phrasal":"log in","example":"Log in to your account","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":103,"formal":"sign off an account","phrasal":"log out","example":"Remember to log out","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":111,"formal":"enter home","phrasal":"come in","example":"Come in and sit down","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":14,"bnc":15,"consecutiveMisses":0},{"id":114,"formal":"settle into a new home","phrasal":"move in","example":"We just moved in","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":90,"bnc":79,"consecutiveMisses":0},{"id":120,"formal":"simplify","phrasal":"break down","example":"Break it down for me","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"phave":55,"bnc":41,"accepts":["act up"],"consecutiveMisses":0},{"id":180,"formal":"test clothes for size","phrasal":"try on","example":"Can I try this on?","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":196,"formal":"profit","phrasal":"cash in","example":"Time to cash in on this trend","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":220,"formal":"hide","phrasal":"cover up","example":"They covered up the truth","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":236,"formal":"disassemble","phrasal":"take apart","example":"Take apart the argument","box":0,"lastReview":null,"wrongCount":0,"correctCount":0,"nextReview":null,"consecutiveMisses":0},{"id":245,"formal":"reach the end of a task","phrasal":"finish up","example":"Finish up the report","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":336,"formal":"grasp","phrasal":"get the hang of","example":"You'll get the hang of it","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":351,"formal":"find it by luck","phrasal":"stumble upon","example":"I stumbled upon an old photo of my grandmother.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":352,"formal":"resemble in appearance","phrasal":"look like","example":"He looks like his father in that photograph.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["take after"],"consecutiveMisses":0},{"id":357,"formal":"draw attention to a fact","phrasal":"point out","example":"She pointed out a mistake on the second page.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":9,"bnc":8,"consecutiveMisses":0},{"id":365,"formal":"end a call","phrasal":"hang up","example":"He hung up before I could finish the sentence.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":75,"consecutiveMisses":0},{"id":366,"formal":"inherit a parent's looks or manner","phrasal":"take after","example":"She takes after her mother — same laugh, same temper.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["look like"],"consecutiveMisses":0},{"id":368,"formal":"target","phrasal":"aim at","example":"The campaign is aimed at young professionals","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":369,"formal":"request","phrasal":"ask for","example":"She asked for a refund on the product","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":370,"formal":"invite on a date","phrasal":"ask out","example":"He finally asked her out for dinner","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":371,"formal":"retreat","phrasal":"back down","example":"He refused to back down from his position","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["back off"],"consecutiveMisses":0},{"id":372,"formal":"retreat from a confrontation","phrasal":"back off","example":"Back off — this is none of your business","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"accepts":["back down","back away"],"consecutiveMisses":0},{"id":373,"formal":"assault","phrasal":"beat up","example":"He got beaten up outside the club","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"accepts":["rough up"],"consecutiveMisses":0},{"id":374,"formal":"strengthen","phrasal":"beef up","example":"We need to beef up our security system","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":375,"formal":"trust","phrasal":"believe in","example":"I believe in your ability to succeed","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":376,"formal":"undertake","phrasal":"bite off","example":"She bit off more than she could chew","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":377,"formal":"impress greatly","phrasal":"blow away","example":"The presentation blew everyone away","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":378,"formal":"dismiss criticism casually","phrasal":"blow off","example":"He blew off the meeting to go surfing","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["brush off"],"consecutiveMisses":0},{"id":379,"formal":"extinguish a flame with breath","phrasal":"blow out","example":"She blew out the candles on the cake","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"consecutiveMisses":0,"accepts":["put out"]},{"id":380,"formal":"explode","phrasal":"blow up","example":"The scandal blew up overnight on social media","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":99,"consecutiveMisses":0,"accepts":["go off"]},{"id":381,"formal":"come to one single question","phrasal":"boil down to","example":"It all boils down to one question: trust","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["come down to"]},{"id":382,"formal":"intrude","phrasal":"break in","example":"Someone broke in through the back door","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":383,"formal":"end an engagement","phrasal":"break off","example":"They broke off the engagement last week","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["call off"],"phave":145,"bnc":92,"consecutiveMisses":0},{"id":384,"formal":"erupt","phrasal":"break out","example":"Fighting broke out near the border","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":114,"bnc":70,"consecutiveMisses":0},{"id":385,"formal":"overcome","phrasal":"break through","example":"She finally broke through the language barrier","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":386,"formal":"a couple parts ways","phrasal":"break up","example":"They broke up after three years together","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":80,"bnc":59,"consecutiveMisses":0},{"id":387,"formal":"carry it to where I am","phrasal":"bring over","example":"Can you bring over some plates from the kitchen?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":388,"formal":"shrug criticism aside","phrasal":"brush off","example":"He brushed off the criticism and kept going","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["blow off"],"consecutiveMisses":0},{"id":389,"formal":"polish a rusty skill","phrasal":"brush up","example":"I need to brush up on my Spanish before the trip","box":0,"lastReview":null,"wrongCount":0,"correctCount":0,"nextReview":null,"consecutiveMisses":0},{"id":390,"formal":"design it in from the start","phrasal":"build in","example":"They built in extra time for delays","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["factor in"]},{"id":391,"formal":"meet someone by chance","phrasal":"bump into","example":"I bumped into an old friend at the store","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["run into"],"consecutiveMisses":0},{"id":392,"formal":"destroy by fire","phrasal":"burn down","example":"The old factory burned down last night","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["burn up"]},{"id":393,"formal":"exhaust","phrasal":"burn out","example":"She burned out after working 80-hour weeks","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["wear down"],"consecutiveMisses":0},{"id":394,"formal":"be consumed entirely by heat","phrasal":"burn up","example":"The documents burned up in the fire","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["burn down"]},{"id":395,"formal":"exclaim suddenly","phrasal":"burst out","example":"She burst out laughing at the joke","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":396,"formal":"interrupt","phrasal":"butt in","example":"Stop butting in when I'm talking","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":397,"formal":"phone someone in return","phrasal":"call back","example":"I'll call you back in five minutes","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":398,"formal":"summon","phrasal":"call in","example":"They called in a specialist to fix it","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":399,"formal":"telephone","phrasal":"call up","example":"Call me up when you get to the hotel","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["ring up"]},{"id":400,"formal":"stop being upset","phrasal":"calm down","example":"Calm down — it's not the end of the world","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":401,"formal":"care for","phrasal":"look after","example":"She looked after her elderly mother","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"alsoKnownAs":["take care of"],"consecutiveMisses":0},{"id":402,"formal":"continue as before","phrasal":"carry on","example":"Carry on with what you were doing","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":100,"bnc":27,"consecutiveMisses":0},{"id":403,"formal":"execute","phrasal":"carry out","example":"The team carried out the plan perfectly","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"phave":36,"bnc":2,"consecutiveMisses":0},{"id":404,"formal":"understand","phrasal":"catch on","example":"It took a while, but he finally caught on","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"consecutiveMisses":0},{"id":405,"formal":"reach the same level","phrasal":"catch up","example":"I need to catch up on my emails","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"phave":53,"consecutiveMisses":0},{"id":406,"formal":"be unfaithful","phrasal":"cheat on","example":"He cheated on every exam in college","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":407,"formal":"go and try it","phrasal":"check out","example":"Check out this new restaurant downtown","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":49,"consecutiveMisses":0},{"id":408,"formal":"lose courage","phrasal":"chicken out","example":"He chickened out of the bungee jump","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":409,"formal":"cut into pieces","phrasal":"chop up","example":"Chop up the vegetables for the salad","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["cut up"]},{"id":410,"formal":"empty and scrub","phrasal":"clean out","example":"We cleaned out the entire garage","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["clear out"],"consecutiveMisses":0},{"id":411,"formal":"empty a place of people","phrasal":"clear out","example":"Everyone cleared out before the storm hit","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["get out"],"consecutiveMisses":0},{"id":412,"formal":"shut permanently","phrasal":"close down","example":"The factory closed down last year","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"phave":148},{"id":413,"formal":"happen with no one planning it","phrasal":"come about","example":"How did this situation come about?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"phave":147,"bnc":83,"accepts":["come up"]},{"id":414,"formal":"find it while doing something else","phrasal":"come across","example":"I came across an interesting article","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["run across","stumble upon"],"consecutiveMisses":0},{"id":415,"formal":"an object separates in your hands","phrasal":"come apart","example":"The cheap toy came apart in his hands","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["fall apart"]},{"id":416,"formal":"return in person","phrasal":"come back","example":"She came back from vacation refreshed","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":3,"bnc":6,"consecutiveMisses":0},{"id":417,"formal":"drop toward a lower level","phrasal":"come down","example":"Prices have come down since last month","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":31,"bnc":31,"accepts":["fall off","go down"],"consecutiveMisses":0},{"id":418,"formal":"rest on one single factor","phrasal":"come down to","example":"It comes down to how much you want it","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["boil down to"]},{"id":419,"formal":"become ill","phrasal":"come down with","example":"I'm coming down with a cold","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":420,"formal":"originate","phrasal":"come from","example":"Where does this tradition come from?","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":421,"formal":"succeed","phrasal":"come off","example":"The deal didn't come off as planned","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":132,"bnc":95,"accepts":["play out","pay off"],"consecutiveMisses":0},{"id":422,"formal":"hurry","phrasal":"come on","example":"Come on, we're going to be late!","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":25,"bnc":14,"consecutiveMisses":0},{"id":423,"formal":"be released","phrasal":"come out","example":"The new album comes out next Friday","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":7,"bnc":13,"consecutiveMisses":0},{"id":424,"formal":"visit my home","phrasal":"come over","example":"Why don't you come over for dinner?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["stop by"],"phave":89,"bnc":69,"consecutiveMisses":0,"twins":["come round"]},{"id":425,"formal":"survive an illness","phrasal":"come through","example":"She came through the surgery well","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["pull through"],"phave":138,"bnc":90,"consecutiveMisses":0},{"id":426,"formal":"arise","phrasal":"come up","example":"Something came up and I can't make it","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":4,"bnc":10,"accepts":["come about"],"consecutiveMisses":0},{"id":427,"formal":"deceive into","phrasal":"con into","example":"He conned her into signing the contract","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["take in","trick into"],"consecutiveMisses":0},{"id":428,"formal":"swindle money out of someone","phrasal":"con out of","example":"They conned him out of his savings","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["cheat out of"]},{"id":429,"formal":"let your temper settle","phrasal":"cool off","example":"Take a walk and cool off before we talk","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["calm down"]},{"id":430,"formal":"rely on","phrasal":"count on","example":"You can count on me to be there","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":431,"formal":"calculate total","phrasal":"count up","example":"Count up all the receipts from this month","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":432,"formal":"enforce strictly","phrasal":"crack down","example":"Police are cracking down on speeding","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":433,"formal":"remove from list","phrasal":"cross off","example":"Cross off milk — we already have it","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"consecutiveMisses":0},{"id":434,"formal":"reduce spending","phrasal":"cut back","example":"We need to cut back on spending","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["scale back","cut down"]},{"id":435,"formal":"disconnect a supply","phrasal":"cut off","example":"The storm cut off power to the whole area","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":61,"consecutiveMisses":0},{"id":436,"formal":"slice into pieces","phrasal":"cut up","example":"Cut up the chicken before serving","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":437,"formal":"handle a problem","phrasal":"deal with","example":"I'll deal with this problem tomorrow","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["take care of"],"consecutiveMisses":0},{"id":438,"formal":"abolish a rule or practice","phrasal":"do away with","example":"They want to do away with the old rules","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["get rid of","phase out"]},{"id":439,"formal":"redo","phrasal":"do over","example":"The report was wrong, so I had to do it over","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":440,"formal":"cope with a poor substitute","phrasal":"do with","example":"I could do with a cup of coffee right now","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":441,"formal":"manage without","phrasal":"do without","example":"We'll have to do without air conditioning","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["go without"]},{"id":443,"formal":"fall asleep","phrasal":"doze off","example":"He dozed off during the meeting","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":444,"formal":"wear formal clothes","phrasal":"dress up","example":"Everyone dressed up for the gala","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":445,"formal":"visit unexpectedly","phrasal":"drop in","example":"Feel free to drop in anytime","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["drop by"]},{"id":446,"formal":"deliver on the way past","phrasal":"drop off","example":"I'll drop off the package on my way home","box":0,"lastReview":null,"nextReview":null,"consecutiveMisses":0,"correctCount":0,"wrongCount":0},{"id":447,"formal":"quit partway through","phrasal":"drop out","example":"He dropped out of college after one year","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":448,"formal":"remove moisture","phrasal":"dry off","example":"Dry off before you sit on the couch","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":[],"consecutiveMisses":0},{"id":449,"formal":"dehydrate","phrasal":"dry out","example":"The soil dried out during the heatwave","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["dry off"]},{"id":450,"formal":"become depleted","phrasal":"dry up","example":"Funding dried up after the scandal","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"consecutiveMisses":0},{"id":451,"formal":"consume entirely","phrasal":"eat up","example":"The kids ate up all the cookies","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":452,"formal":"remove contents","phrasal":"empty out","example":"Empty out your pockets before washing","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":453,"formal":"lag","phrasal":"fall behind","example":"She fell behind on her mortgage payments","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":454,"formal":"collapse","phrasal":"fall down","example":"The old wall finally fell down","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":455,"formal":"be deceived by","phrasal":"fall for","example":"Don't fall for that scam email","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":456,"formal":"drop away sharply","phrasal":"fall off","example":"Sales fell off sharply in December","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["come down"],"consecutiveMisses":0},{"id":457,"formal":"quarrel","phrasal":"fall out","example":"They fell out over money","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":458,"formal":"topple by itself","phrasal":"fall over","example":"The vase fell over and smashed","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":459,"formal":"be well enough for","phrasal":"feel up to","example":"I don't feel up to going out tonight","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":460,"formal":"resist an attack","phrasal":"fight back","example":"The team fought back to win 3-2","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":461,"formal":"expect","phrasal":"figure on","example":"I didn't figure on it taking so long","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["plan for"],"consecutiveMisses":0},{"id":462,"formal":"solve","phrasal":"figure out","example":"I can't figure out how this works","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":21,"consecutiveMisses":0},{"id":463,"formal":"complete every field on a form","phrasal":"fill out","example":"Fill out the application and submit it","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":121,"accepts":["fill in"],"consecutiveMisses":0},{"id":464,"formal":"make full","phrasal":"fill up","example":"Fill up the tank before the road trip","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":465,"formal":"repair","phrasal":"fix up","example":"We fixed up the old house and sold it","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["do up"]},{"id":466,"formal":"lose composure","phrasal":"flip out","example":"She flipped out when she heard the news","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["freak out"],"consecutiveMisses":0},{"id":467,"formal":"a rumour going round","phrasal":"float around","example":"That rumor has been floating around for weeks","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["go around"],"consecutiveMisses":0},{"id":468,"formal":"pursue further","phrasal":"follow up","example":"I'll follow up with them next week","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":137,"consecutiveMisses":0,"accepts":["go after","take up","look into"]},{"id":469,"formal":"waste time instead of working","phrasal":"fool around","example":"Stop fooling around and get to work","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["goof around"]},{"id":470,"formal":"panic","phrasal":"freak out","example":"Don't freak out — everything will be fine","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["flip out"],"consecutiveMisses":0},{"id":471,"formal":"advance","phrasal":"get ahead","example":"You need connections to get ahead in this industry","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":472,"formal":"have good relations","phrasal":"get along","example":"She gets along well with everyone","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":473,"formal":"find time for","phrasal":"get around to","example":"I never got around to reading that book","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["come around to","come round to"]},{"id":474,"formal":"escape","phrasal":"get away","example":"The thieves got away before police arrived","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["get out"]},{"id":475,"formal":"return, or recover something lost","phrasal":"get back","example":"What time did you get back from the trip?","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":19,"bnc":20,"consecutiveMisses":0},{"id":476,"formal":"take revenge","phrasal":"get back at","example":"He got back at them by leaking the emails","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":477,"formal":"respond later","phrasal":"get back to","example":"Let me get back to you on that","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":478,"formal":"throw your weight behind an idea","phrasal":"get behind","example":"The whole team got behind the new plan","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["stand behind"],"consecutiveMisses":0},{"id":479,"formal":"depress","phrasal":"get down","example":"This weather is really getting me down","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"phave":88,"bnc":51,"consecutiveMisses":0,"accepts":["bring down","drag down"]},{"id":480,"formal":"exit a vehicle","phrasal":"get off","example":"We get off at the next stop","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":56,"bnc":66,"consecutiveMisses":0},{"id":481,"formal":"enjoy greatly","phrasal":"get off on","example":"He gets off on proving people wrong","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":482,"formal":"board","phrasal":"get on","example":"We got on the train just in time","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":127,"bnc":35,"consecutiveMisses":0},{"id":483,"formal":"leave before it is too late","phrasal":"get out","example":"Get out of here before they see you","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":13,"bnc":29,"accepts":["get away","go away","go out"],"consecutiveMisses":0},{"id":484,"formal":"wriggle free of a duty","phrasal":"get out of","example":"He tried to get out of jury duty","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":485,"formal":"recover from","phrasal":"get over","example":"It took months to get over the breakup","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":486,"formal":"finish unpleasant task","phrasal":"get over with","example":"Let's get this meeting over with","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":487,"formal":"endure","phrasal":"get through","example":"I don't know how she got through that year","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":117,"bnc":93,"consecutiveMisses":0,"accepts":["carry through","come through","go through"]},{"id":488,"formal":"annoy","phrasal":"get to","example":"Don't let his comments get to you","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":489,"formal":"arrange to see each other","phrasal":"get together","example":"Let's get together for lunch sometime","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["meet up"],"consecutiveMisses":0},{"id":490,"formal":"rise from bed","phrasal":"get up","example":"I get up at 6 every morning","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":23,"bnc":25,"consecutiveMisses":0},{"id":491,"formal":"donate","phrasal":"give away","example":"She gave away all her old clothes","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":492,"formal":"return it to its owner","phrasal":"give back","example":"Give back what you borrowed","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":128,"bnc":97,"consecutiveMisses":0},{"id":493,"formal":"stop resisting","phrasal":"give in","example":"He finally gave in and agreed to the deal","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":143,"bnc":88,"consecutiveMisses":0},{"id":494,"formal":"distribute","phrasal":"give out","example":"They gave out free samples at the store","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":142,"bnc":94,"consecutiveMisses":0,"accepts":["hand out"]},{"id":495,"formal":"approach","phrasal":"go about","example":"How should I go about finding a new job?","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["set about"],"consecutiveMisses":0,"nextReview":null},{"id":496,"formal":"pursue","phrasal":"go after","example":"She went after the promotion aggressively","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["follow up","go for"]},{"id":497,"formal":"agree with","phrasal":"go along with","example":"I'll go along with whatever you decide","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["back up","back"],"consecutiveMisses":0,"nextReview":null},{"id":498,"formal":"a bug going round","phrasal":"go around","example":"There's a flu going around the office","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["float around"],"phave":115,"bnc":58,"consecutiveMisses":0,"nextReview":null,"twins":["go round"]},{"id":499,"formal":"leave me alone","phrasal":"go away","example":"Go away — I need to concentrate","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["get out"],"consecutiveMisses":0},{"id":500,"formal":"return to a place you know","phrasal":"go back","example":"I want to go back to that restaurant","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":5,"bnc":5,"consecutiveMisses":0},{"id":501,"formal":"break a promise","phrasal":"go back on","example":"He went back on his word","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["take back"],"consecutiveMisses":0,"nextReview":null},{"id":502,"formal":"exceed","phrasal":"go beyond","example":"The results went beyond our expectations","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":503,"formal":"pass","phrasal":"go by","example":"Time goes by so fast when you're busy","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null,"accepts":["slip by"]},{"id":504,"formal":"settle on one from a menu or shortlist","phrasal":"go for","example":"I think I'll go for the steak","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["go with","pick out"],"consecutiveMisses":0},{"id":505,"formal":"walk in","phrasal":"go in","example":"Go in through the side door","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":54,"bnc":45,"twins":["come in","get in"],"consecutiveMisses":0,"nextReview":null,"accepts":["pop in"]},{"id":506,"formal":"enjoy regularly","phrasal":"go in for","example":"She goes in for extreme sports","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":507,"formal":"explode/ring","phrasal":"go off","example":"The alarm went off at 3 AM","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":60,"bnc":43,"accepts":["blow up"],"consecutiveMisses":0},{"id":508,"formal":"leave the house","phrasal":"go out","example":"We're going out for dinner tonight","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":8,"bnc":7,"accepts":["get out","head out"],"consecutiveMisses":0},{"id":509,"formal":"complete despite difficulty","phrasal":"go through with","example":"She went through with the surgery","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["pull off","go ahead with"],"consecutiveMisses":0,"nextReview":null},{"id":510,"formal":"increase","phrasal":"go up","example":"Gas prices went up again this week","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":33,"bnc":28,"consecutiveMisses":0,"accepts":["turn up"]},{"id":511,"formal":"match","phrasal":"go with","example":"That tie goes with your shirt perfectly","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["go for"],"consecutiveMisses":0,"nextReview":null},{"id":512,"formal":"waste time instead of working","phrasal":"goof around","example":"The kids were goofing around in the yard","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["fool around","mess about","muck about"],"consecutiveMisses":0},{"id":514,"formal":"outgrow","phrasal":"grow out of","example":"He grew out of his childhood fears","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":515,"formal":"give marked work back to its owner","phrasal":"hand back","example":"The teacher handed back the exams","box":0,"lastReview":null,"nextReview":null,"wrongCount":0,"correctCount":0,"consecutiveMisses":0},{"id":516,"formal":"submit homework or notice","phrasal":"hand in","example":"Hand in your essays by Friday","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["turn in"],"consecutiveMisses":0},{"id":517,"formal":"surrender it to someone","phrasal":"hand over","example":"Hand over the documents immediately","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":129,"consecutiveMisses":0},{"id":518,"formal":"loiter","phrasal":"hang around","example":"We hung around the mall for hours","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":519,"formal":"wait a moment","phrasal":"hang on","example":"Hang on — I'll be right back","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["hold on"],"phave":83,"consecutiveMisses":0,"sharedPrompt":["hold on"]},{"id":520,"formal":"spend time casually","phrasal":"hang out","example":"We hung out at the beach all day","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":86,"consecutiveMisses":0},{"id":521,"formal":"wear","phrasal":"have on","example":"She had on a beautiful red dress","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":522,"formal":"start the return journey","phrasal":"head back","example":"We should head back before it gets dark","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":523,"formal":"get news of something","phrasal":"hear about","example":"Did you hear about the merger?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["hear of"],"consecutiveMisses":0},{"id":524,"formal":"know that it exists","phrasal":"hear of","example":"I've never heard of that brand","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["hear about","come across"],"consecutiveMisses":0,"nextReview":null},{"id":525,"formal":"make food hot again","phrasal":"heat up","example":"Heat up the soup for lunch","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["warm up"],"consecutiveMisses":0},{"id":526,"formal":"assist","phrasal":"help out","example":"Can you help out with the event?","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":527,"formal":"resent","phrasal":"hold against","example":"Don't hold it against me — I tried my best","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":528,"formal":"put something off for now","phrasal":"hold off","example":"Let's hold off on the launch until Monday","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["hold up","put off"],"consecutiveMisses":0},{"id":529,"formal":"resist under pressure","phrasal":"hold out","example":"The soldiers held out for three more days","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":79,"bnc":52,"consecutiveMisses":0,"accepts":["hold on","dig in"]},{"id":530,"formal":"delay/rob","phrasal":"hold up","example":"Sorry I'm late — traffic held me up","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"phave":38,"bnc":50,"accepts":["hold off","stick up"]},{"id":531,"formal":"join two devices together","phrasal":"hook up","example":"Can you hook up the printer to my laptop?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["plug in"],"consecutiveMisses":0},{"id":532,"formal":"rush","phrasal":"hurry up","example":"Hurry up or we'll miss the flight","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":533,"formal":"refuse to abandon the attempt","phrasal":"keep at","example":"Keep at it and you'll get better","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["keep on","stick to"],"consecutiveMisses":0},{"id":534,"formal":"maintain distance","phrasal":"keep away","example":"Keep away from the edge of the cliff","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["step away"],"consecutiveMisses":0,"twins":["stay away"]},{"id":535,"formal":"suppress","phrasal":"keep down","example":"Keep your voice down in the library","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["hold down","bring down"],"consecutiveMisses":0,"nextReview":null},{"id":536,"formal":"stop someone doing something","phrasal":"keep from","example":"I couldn't keep from laughing","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":537,"formal":"stay clear of an area","phrasal":"keep off","example":"Keep off the grass — it was just seeded","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["stay off"],"consecutiveMisses":0,"nextReview":null},{"id":538,"formal":"not depart from a plan","phrasal":"keep to","example":"Let's keep to the original plan","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["stick to"],"consecutiveMisses":0,"nextReview":null},{"id":539,"formal":"maintain pace","phrasal":"keep up","example":"She walks so fast I can't keep up","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":57,"consecutiveMisses":0},{"id":540,"formal":"put your feet up","phrasal":"kick back","example":"Let's kick back and watch a movie","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":541,"formal":"stop working","phrasal":"knock off","example":"We knocked off early on Friday","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["wrap up","pack up"],"consecutiveMisses":0,"nextReview":null},{"id":542,"formal":"render unconscious","phrasal":"knock out","example":"The boxer knocked him out in round 3","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":543,"formal":"topple with a blow","phrasal":"knock over","example":"The dog knocked over the lamp","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":544,"formal":"be aware of","phrasal":"know about","example":"Do you know about the new policy?","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":545,"formal":"establish","phrasal":"lay down","example":"The manager laid down the new rules","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":109,"consecutiveMisses":0},{"id":546,"formal":"dismiss from work","phrasal":"lay off","example":"The company laid off 200 workers","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["let go"],"consecutiveMisses":0},{"id":547,"formal":"precede","phrasal":"lead up to","example":"The events leading up to the crisis","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":548,"formal":"abandon for good","phrasal":"leave behind","example":"Don't leave anyone behind","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null,"accepts":["give up"]},{"id":549,"formal":"omit","phrasal":"leave out","example":"You left out the most important detail","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["miss out"],"consecutiveMisses":0},{"id":551,"formal":"allow entry","phrasal":"let in","example":"Let me in — it's freezing outside","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":552,"formal":"share a secret","phrasal":"let in on","example":"She let me in on the surprise","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["fill in on","clue in on"],"consecutiveMisses":0,"nextReview":null},{"id":553,"formal":"excuse from punishment","phrasal":"let off","example":"The judge let him off with a warning","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":554,"formal":"open the door and release an animal","phrasal":"let out","example":"School lets out at 3 PM","box":0,"lastReview":null,"nextReview":null,"wrongCount":0,"correctCount":0,"consecutiveMisses":0},{"id":555,"formal":"decrease in intensity","phrasal":"let up","example":"The rain finally let up around noon","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":556,"formal":"lounge","phrasal":"lie around","example":"We just lay around the house all Sunday","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["laze around","sit around"],"consecutiveMisses":0,"nextReview":null},{"id":558,"formal":"illuminate","phrasal":"light up","example":"Her face lit up when she saw the gift","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":559,"formal":"become less serious","phrasal":"lighten up","example":"Lighten up — it was just a joke","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":560,"formal":"queue","phrasal":"line up","example":"Everyone lined up outside the store","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":71,"consecutiveMisses":0},{"id":561,"formal":"accept and stop fighting it","phrasal":"live with","example":"I can live with that decision","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["put up with"],"consecutiveMisses":0,"nextReview":null},{"id":562,"formal":"secure","phrasal":"lock in","example":"We locked in a great interest rate","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":563,"formal":"deny someone entry","phrasal":"lock out","example":"I locked myself out of the house","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":564,"formal":"explore","phrasal":"look around","example":"Let's look around the old town","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":52,"bnc":85,"consecutiveMisses":0,"nextReview":null,"twins":["look round"],"accepts":["roam around","wander around"]},{"id":565,"formal":"examine closely","phrasal":"look at","example":"Look at this data — something's off","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["check out","look over"],"consecutiveMisses":0,"nextReview":null},{"id":566,"formal":"regard as beneath you","phrasal":"look down on","example":"She looks down on people without degrees","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":567,"formal":"anticipate","phrasal":"look forward to","example":"I'm looking forward to the weekend","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":568,"formal":"be careful","phrasal":"look out","example":"Look out — there's a car coming!","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":46,"bnc":48,"consecutiveMisses":0},{"id":569,"formal":"give it a read-through","phrasal":"look over","example":"Can you look over my resume?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":570,"formal":"check a fact in a reference","phrasal":"look up","example":"Look up the definition online","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":20,"bnc":26,"consecutiveMisses":0},{"id":571,"formal":"be fortunate","phrasal":"luck out","example":"We lucked out with the weather today","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":572,"formal":"steer toward a destination","phrasal":"make for","example":"We made for the exit as soon as we could","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["go towards","head towards"],"consecutiveMisses":0},{"id":573,"formal":"interpret","phrasal":"make of","example":"What do you make of his behavior?","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["think of"],"consecutiveMisses":0,"nextReview":null},{"id":574,"formal":"discern","phrasal":"make out","example":"I can barely make out the sign from here","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":104,"bnc":65,"consecutiveMisses":0},{"id":575,"formal":"get something wrong","phrasal":"mess up","example":"I really messed up the presentation","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["screw up"],"consecutiveMisses":0,"nextReview":null},{"id":576,"formal":"confuse","phrasal":"mix up","example":"I always mix up their names","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":578,"formal":"leave a residence","phrasal":"move out","example":"She moved out after college","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":131,"bnc":89,"consecutiveMisses":0,"nextReview":null},{"id":579,"formal":"reduce options","phrasal":"narrow down","example":"We narrowed it down to three candidates","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":580,"formal":"become available","phrasal":"open up","example":"A new position just opened up","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":48,"consecutiveMisses":0},{"id":581,"formal":"repay","phrasal":"pay back","example":"I'll pay you back by Friday","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":582,"formal":"bear consequences","phrasal":"pay for","example":"You'll pay for that mistake","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":583,"formal":"settle what you owe","phrasal":"pay up","example":"Pay up — you lost the bet","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":584,"formal":"bully","phrasal":"pick on","example":"Stop picking on your little brother","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":585,"formal":"select","phrasal":"pick out","example":"She picked out the perfect dress","box":0,"lastReview":null,"nextReview":null,"wrongCount":0,"correctCount":0,"phave":125,"bnc":75,"accepts":["go for","pick up"],"consecutiveMisses":0},{"id":586,"formal":"collect","phrasal":"pick up","example":"I'll pick you up at the airport","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":2,"bnc":4,"accepts":["pick out"],"consecutiveMisses":0},{"id":588,"formal":"arrange things in good time","phrasal":"plan ahead","example":"Always plan ahead for unexpected costs","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["think ahead"],"consecutiveMisses":0,"nextReview":null},{"id":589,"formal":"prepare for","phrasal":"plan for","example":"We need to plan for the worst case","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["figure on"]},{"id":590,"formal":"intend","phrasal":"plan on","example":"I plan on staying until Friday","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":591,"formal":"connect to the mains","phrasal":"plug in","example":"Plug in your phone — the battery is low","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["hook up"]},{"id":592,"formal":"choke a pipe with debris","phrasal":"plug up","example":"Something plugged up the drain","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["clog up","block up"]},{"id":593,"formal":"all of it indicates","phrasal":"point to","example":"All evidence points to the same conclusion","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":594,"formal":"achieve despite difficulty","phrasal":"pull off","example":"Somehow she pulled off the impossible","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"accepts":["go through with"],"consecutiveMisses":0},{"id":595,"formal":"withdraw from a deal","phrasal":"pull out","example":"The investor pulled out at the last minute","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":39,"consecutiveMisses":0,"nextReview":null,"twins":["bail out"],"accepts":["back out"]},{"id":596,"formal":"stop vehicle at side","phrasal":"pull over","example":"The cop pulled us over for speeding","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":597,"formal":"recover from a serious illness","phrasal":"pull through","example":"He was critical but pulled through","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["come through"],"consecutiveMisses":0},{"id":598,"formal":"record your arrival on the machine","phrasal":"punch in","example":"Don't forget to punch in when you arrive","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["clock in"],"consecutiveMisses":0},{"id":599,"formal":"store","phrasal":"put away","example":"Put away your toys before dinner","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":600,"formal":"return an object to its shelf","phrasal":"put back","example":"Put the book back on the shelf","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"phave":96,"bnc":57,"consecutiveMisses":0,"accepts":["put away"]},{"id":601,"formal":"belittle a person","phrasal":"put down","example":"She's always putting him down in front of others","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":58,"bnc":32,"consecutiveMisses":0,"nextReview":null,"accepts":["run down"]},{"id":602,"formal":"invest effort/time","phrasal":"put in","example":"He put in 12 hours yesterday","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":149,"bnc":78,"consecutiveMisses":0,"nextReview":null},{"id":603,"formal":"extinguish a fire","phrasal":"put out","example":"Firefighters put out the blaze quickly","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":51,"bnc":47,"accepts":["bring out"],"consecutiveMisses":0,"nextReview":null},{"id":605,"formal":"present for consideration","phrasal":"put to","example":"Let me put a question to you","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":606,"formal":"assemble","phrasal":"put together","example":"We put together a great team","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":607,"formal":"incite","phrasal":"put up to","example":"Someone put him up to it","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":608,"formal":"overcharge","phrasal":"rip off","example":"That restaurant totally ripped us off","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":609,"formal":"tear to pieces","phrasal":"rip up","example":"She ripped up the letter and threw it away","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["tear up"]},{"id":610,"formal":"eliminate possibility","phrasal":"rule out","example":"We can't rule out foul play","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":123,"consecutiveMisses":0},{"id":611,"formal":"come upon by chance","phrasal":"run across","example":"I ran across some old photos","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["come across"],"nextReview":null,"consecutiveMisses":0},{"id":612,"formal":"be very busy","phrasal":"run around","example":"I've been running around all day","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":613,"formal":"speak badly of your own work","phrasal":"run down","example":"Stop running down your own work","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["put down"],"consecutiveMisses":0},{"id":614,"formal":"encounter unexpectedly","phrasal":"run into","example":"I ran into my ex at the supermarket","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["bump into"],"consecutiveMisses":0},{"id":615,"formal":"deplete","phrasal":"run out","example":"We ran out of coffee this morning","box":0,"lastReview":null,"nextReview":null,"consecutiveMisses":0,"correctCount":0,"wrongCount":0,"phave":103},{"id":616,"formal":"exceed time/hit with vehicle","phrasal":"run over","example":"The meeting ran over by thirty minutes","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":617,"formal":"accumulate","phrasal":"run up","example":"She ran up a huge credit card bill","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["build up"],"nextReview":null,"consecutiveMisses":0},{"id":619,"formal":"ruin something important","phrasal":"screw up","example":"I really screwed up the interview","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["mess up"],"consecutiveMisses":0},{"id":620,"formal":"attend to arranging it","phrasal":"see about","example":"I'll see about getting us a table","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["take care of"],"consecutiveMisses":0,"nextReview":null},{"id":621,"formal":"betray principles","phrasal":"sell out","example":"He sold out to the highest bidder","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":622,"formal":"assemble or organise something new","phrasal":"set up","example":"We set up the meeting for Tuesday","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":11,"bnc":3,"consecutiveMisses":0},{"id":623,"formal":"become calm/established","phrasal":"settle down","example":"Settle down — class is starting","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":139,"consecutiveMisses":0},{"id":624,"formal":"accept reluctantly","phrasal":"settle for","example":"Don't settle for less than you deserve","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":625,"formal":"display proudly","phrasal":"show off","example":"He's always showing off his new car","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":626,"formal":"cut the water or gas at the valve","phrasal":"shut off","example":"Shut off the lights when you leave","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["switch off"],"consecutiveMisses":0,"nextReview":null},{"id":627,"formal":"stop talking, rudely put","phrasal":"shut up","example":"I wish he'd just shut up for a minute","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":105,"consecutiveMisses":0,"accepts":["be quiet"]},{"id":628,"formal":"take a seat","phrasal":"sit down","example":"Please sit down — we need to talk","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":22,"bnc":21,"consecutiveMisses":0},{"id":629,"formal":"enter secretly","phrasal":"sneak in","example":"They snuck in through the back door","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":630,"formal":"leave secretly","phrasal":"sneak out","example":"She snuck out of the party early","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":631,"formal":"resolve","phrasal":"sort out","example":"We need to sort out this mess","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":136,"accepts":["straighten out","work out"],"consecutiveMisses":0},{"id":632,"formal":"lose focus","phrasal":"space out","example":"Sorry, I totally spaced out for a second","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"nextReview":null},{"id":633,"formal":"wait idly","phrasal":"stand around","example":"We stood around for an hour waiting","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":634,"formal":"represent","phrasal":"stand for","example":"What does this acronym stand for?","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":635,"formal":"rise to feet","phrasal":"stand up","example":"Everyone stood up when the judge entered","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":30,"consecutiveMisses":0,"nextReview":null},{"id":636,"formal":"open a session or event","phrasal":"start off","example":"Let's start off with introductions","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["kick off"],"consecutiveMisses":0},{"id":637,"formal":"begin a career or journey","phrasal":"start out","example":"We started out early to beat traffic","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":91,"accepts":["set off"],"consecutiveMisses":0,"nextReview":null,"twins":["start off"]},{"id":638,"formal":"found a business","phrasal":"start up","example":"She started up her own business last year","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["set up"],"nextReview":null,"consecutiveMisses":0},{"id":639,"formal":"keep clear of a substance","phrasal":"stay off","example":"Stay off social media during work hours","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["cut out","give up"],"nextReview":null,"consecutiveMisses":0},{"id":640,"formal":"remain outside","phrasal":"stay out","example":"The kids stayed out past curfew","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":641,"formal":"remain awake","phrasal":"stay up","example":"I stayed up until 3 AM finishing it","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":642,"formal":"tread on","phrasal":"step on","example":"Don't step on the wet paint","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":643,"formal":"linger a while longer","phrasal":"stick around","example":"Stick around — the best part is coming","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":644,"formal":"protrude/be noticeable","phrasal":"stick out","example":"That bright shirt really sticks out","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":645,"formal":"hold to a plan","phrasal":"stick to","example":"Stick to the budget no matter what","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["keep at","keep to"],"nextReview":null,"consecutiveMisses":0},{"id":646,"formal":"rob at gunpoint","phrasal":"stick up","example":"Two men stuck up the convenience store","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["hold up"],"consecutiveMisses":0},{"id":647,"formal":"stay loyal to","phrasal":"stick with","example":"I'm sticking with my original choice","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["stand by"],"nextReview":null,"consecutiveMisses":0},{"id":648,"formal":"break a journey briefly","phrasal":"stop off","example":"Let's stop off for gas on the way","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["stop by"]},{"id":649,"formal":"stay briefly during journey","phrasal":"stop over","example":"We stopped over in Dubai for a night","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":650,"formal":"resolve/correct","phrasal":"straighten out","example":"I need to straighten out this billing error","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["sort out"],"nextReview":null,"consecutiveMisses":0},{"id":651,"formal":"press the button on a device","phrasal":"switch off","example":"Switch off your phones during the movie","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["shut off"],"nextReview":null,"consecutiveMisses":0},{"id":652,"formal":"retract","phrasal":"take back","example":"I take back what I said — you were right","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":72,"bnc":49,"consecutiveMisses":0},{"id":653,"formal":"absorb, or be fooled","phrasal":"take in","example":"It took a while to take in all the info","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":134,"bnc":96,"consecutiveMisses":0,"accepts":["con into"]},{"id":654,"formal":"remove/bring outside","phrasal":"take out","example":"Let's take out the trash","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":24,"bnc":30,"consecutiveMisses":0},{"id":655,"formal":"direct anger at","phrasal":"take out on","example":"Don't take your frustration out on me","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":656,"formal":"assume control","phrasal":"take over","example":"She took over as CEO in January","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"phave":37,"bnc":12},{"id":657,"formal":"accept an offer","phrasal":"take up on","example":"I'll take you up on that lunch invite","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":658,"formal":"condescend","phrasal":"talk down to","example":"Don't talk down to me — I understand perfectly","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":659,"formal":"persuade","phrasal":"talk into","example":"She talked me into buying the expensive one","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":660,"formal":"dissuade","phrasal":"talk out of","example":"I talked him out of quitting his job","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":661,"formal":"reprimand","phrasal":"talk to","example":"The boss talked to him about being late","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":662,"formal":"demolish","phrasal":"tear down","example":"They tore down the old building","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":663,"formal":"rip a strip away from something","phrasal":"tear off","example":"Tear off the label before recycling","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":664,"formal":"distinguish","phrasal":"tell apart","example":"I can't tell the twins apart","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":665,"formal":"inform against","phrasal":"tell on","example":"My sister always told on me","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":666,"formal":"turn something over in your mind","phrasal":"think about","example":"Think about what I said before deciding","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["think over"],"nextReview":null,"consecutiveMisses":0},{"id":667,"formal":"see the next move coming","phrasal":"think ahead","example":"You need to think ahead in this business","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["plan ahead"],"consecutiveMisses":0},{"id":668,"formal":"invent","phrasal":"think up","example":"She thought up a brilliant marketing idea","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["come up with"],"nextReview":null,"consecutiveMisses":0},{"id":669,"formal":"discard","phrasal":"throw away","example":"Don't throw away those receipts","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["throw out"],"consecutiveMisses":0},{"id":670,"formal":"discard/expel","phrasal":"throw out","example":"They threw out all the expired food","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":85,"accepts":["kick out","throw away"],"consecutiveMisses":0,"nextReview":null},{"id":671,"formal":"vomit","phrasal":"throw up","example":"The kid threw up on the bus","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":672,"formal":"find after searching","phrasal":"track down","example":"The police tracked down the suspect","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":673,"formal":"exchange for credit","phrasal":"trade in","example":"I traded in my old car for a new one","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":674,"formal":"deceive into doing","phrasal":"trick into","example":"They tricked him into revealing the password","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["con into"]},{"id":675,"formal":"test","phrasal":"try out","example":"Try out the new software before buying","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":676,"formal":"reverse direction/improve","phrasal":"turn around","example":"The company turned around after new management","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":40,"bnc":62,"accepts":["turn round"],"consecutiveMisses":0},{"id":677,"formal":"submit work by a deadline","phrasal":"turn in","example":"Turn in your assignments by Monday","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["hand in"]},{"id":678,"formal":"transform","phrasal":"turn into","example":"The project turned into a nightmare","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":679,"formal":"deactivate","phrasal":"turn off","example":"Turn off the TV and go to sleep","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":106,"bnc":87,"consecutiveMisses":0},{"id":680,"formal":"flip/transfer","phrasal":"turn over","example":"Turn over the page for more info","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":67,"bnc":72,"consecutiveMisses":0,"nextReview":null,"accepts":["turn around"]},{"id":681,"formal":"appear/increase","phrasal":"turn up","example":"He turned up two hours late with no excuse","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":70,"bnc":34,"consecutiveMisses":0,"accepts":["go up"]},{"id":682,"formal":"consume the last of it","phrasal":"use up","example":"We used up all the printer paper","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":683,"formal":"become conscious","phrasal":"wake up","example":"I wake up at dawn every day","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":35,"consecutiveMisses":0},{"id":684,"formal":"loosen your muscles before effort","phrasal":"warm up","example":"Let's warm up before the workout","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["heat up"]},{"id":685,"formal":"remove by washing","phrasal":"wash off","example":"Wash off that mud before coming inside","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":686,"formal":"rinse your hands before eating","phrasal":"wash up","example":"Go wash up — dinner's ready","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["clean up"],"consecutiveMisses":0},{"id":687,"formal":"be cautious","phrasal":"watch out","example":"Watch out for icy roads tonight","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"twins":["look out"]},{"id":688,"formal":"erode/exhaust","phrasal":"wear down","example":"The constant arguing wore her down","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["burn out","wear out"],"nextReview":null,"consecutiveMisses":0},{"id":689,"formal":"diminish gradually","phrasal":"wear off","example":"The painkillers are wearing off","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":690,"formal":"use it until it is finished","phrasal":"wear out","example":"These shoes are completely worn out","box":0,"lastReview":null,"nextReview":null,"wrongCount":0,"correctCount":0,"accepts":["fall apart","wear down"],"consecutiveMisses":0},{"id":691,"formal":"clean surface","phrasal":"wipe off","example":"Wipe off the table before setting it","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":692,"formal":"destroy completely","phrasal":"wipe out","example":"The flood wiped out the entire village","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":693,"formal":"clean spill","phrasal":"wipe up","example":"Wipe up that juice before it stains","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":694,"formal":"squeeze it into the schedule","phrasal":"work in","example":"I'll try to work in a meeting tomorrow","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":695,"formal":"exercise/resolve","phrasal":"work out","example":"Things always work out in the end","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":29,"bnc":17,"accepts":["sort out"],"consecutiveMisses":0},{"id":696,"formal":"gather your nerve gradually","phrasal":"work up","example":"I can't work up the courage to ask","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"accepts":["build up"],"consecutiveMisses":0},{"id":697,"formal":"close zipper","phrasal":"zip up","example":"Zip up your jacket — it's cold out","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":698,"formal":"produce a printed copy","phrasal":"print out","example":"Can you print out the report for the meeting?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":699,"formal":"justify it","phrasal":"account for","example":"How do you account for the missing funds?","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":700,"formal":"play up now and then, not fail outright","phrasal":"act up","example":"My computer has been acting up all morning","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"accepts":["break down"],"consecutiveMisses":0},{"id":701,"formal":"make sense","phrasal":"add up","example":"His story just doesn't add up","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":702,"formal":"inquire from many people","phrasal":"ask around","example":"I'll ask around and see if anyone knows","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":703,"formal":"rescue financially","phrasal":"bail out","example":"The government bailed out the failing bank","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":704,"formal":"cause to happen","phrasal":"bring about","example":"The new policy brought about major changes","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":107,"bnc":44,"consecutiveMisses":0,"accepts":["lead to"]},{"id":705,"formal":"refresh knowledge","phrasal":"brush up on","example":"I need to brush up on my French before the trip","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":706,"formal":"fasten seatbelt","phrasal":"buckle up","example":"Buckle up — we're about to take off","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":707,"formal":"register at arrival","phrasal":"check in","example":"We checked in at the hotel around noon","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":708,"formal":"become happier","phrasal":"cheer up","example":"Cheer up — things will get better soon","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":709,"formal":"tidy","phrasal":"clean up","example":"We need to clean up before the guests arrive","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":65,"accepts":["wash up"],"consecutiveMisses":0},{"id":710,"formal":"reduce consumption","phrasal":"cut down on","example":"I'm trying to cut down on sugar","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":711,"formal":"create a document","phrasal":"draw up","example":"The lawyer drew up the contract overnight","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":712,"formal":"visit briefly","phrasal":"drop by","example":"Feel free to drop by anytime you're in the area","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["drop in"],"consecutiveMisses":0},{"id":713,"formal":"dine at a restaurant","phrasal":"eat out","example":"Let's eat out tonight — I don't feel like cooking","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":714,"formal":"disintegrate","phrasal":"fall apart","example":"The old book was falling apart in my hands","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["come apart","grow apart","wear out"],"consecutiveMisses":0},{"id":715,"formal":"use as last resort","phrasal":"fall back on","example":"At least you have savings to fall back on","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["go back to"]},{"id":716,"formal":"do what you promised","phrasal":"follow through","example":"He never follows through on his commitments","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":717,"formal":"manage with minimum","phrasal":"get by","example":"She barely gets by on her salary","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":718,"formal":"dispose of something you own","phrasal":"get rid of","example":"We need to get rid of this old furniture","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":719,"formal":"get the green light and start","phrasal":"go ahead","example":"Go ahead — I'll catch up with you later","box":0,"lastReview":null,"wrongCount":0,"nextReview":null,"correctCount":0,"phave":32,"consecutiveMisses":0},{"id":720,"formal":"continue what you were saying","phrasal":"go on","example":"Please go on — I'm listening","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":1,"bnc":1,"consecutiveMisses":0},{"id":721,"formal":"drift away from each other over years","phrasal":"grow apart","example":"They grew apart after college","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0,"accepts":["fall apart"]},{"id":722,"formal":"mature","phrasal":"grow up","example":"He needs to grow up and take responsibility","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"phave":10,"consecutiveMisses":0,"nextReview":null},{"id":723,"formal":"restrain","phrasal":"hold back","example":"She held back her tears during the speech","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":118,"bnc":77,"consecutiveMisses":0,"accepts":["hold in"]},{"id":724,"formal":"expel","phrasal":"kick out","example":"They kicked him out of the club for fighting","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["throw out"],"nextReview":null,"consecutiveMisses":0},{"id":725,"formal":"cause it","phrasal":"lead to","example":"Poor planning led to the project's failure","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0,"accepts":["bring about"]},{"id":727,"formal":"faint","phrasal":"pass out","example":"She passed out from the heat","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"consecutiveMisses":0},{"id":728,"formal":"decline an opportunity","phrasal":"pass up","example":"I couldn't pass up such a great deal","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"nextReview":null,"consecutiveMisses":0},{"id":729,"formal":"accommodate","phrasal":"put up","example":"We can put you up for the night","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":43,"bnc":33,"consecutiveMisses":0},{"id":730,"formal":"stay loyal through trouble","phrasal":"stand by","example":"She stood by him through the whole ordeal","box":0,"lastReview":null,"correctCount":0,"wrongCount":0,"accepts":["stick with"],"nextReview":null,"consecutiveMisses":0},{"id":731,"formal":"selectively remove","phrasal":"weed out","example":"The HR team uses three interview rounds to weed out candidates who can't handle pressure.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"consecutiveMisses":0,"wrongCount":0},{"id":732,"formal":"be left with none","phrasal":"run out of","example":"We almost ran out of avatar shots during the Andromeda shoot.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":733,"formal":"consider carefully","phrasal":"think over","example":"I'll think over your offer this weekend and get back to you Monday.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"accepts":["think about"],"consecutiveMisses":0},{"id":734,"formal":"release / launch","phrasal":"bring out","example":"Apple is rumored to bring out a new MacBook with M5 silicon next month.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":81,"bnc":54,"consecutiveMisses":0,"accepts":["put out"]},{"id":735,"formal":"get a quick opinion before committing","phrasal":"run by","example":"Can I run this idea by you before I send the email?","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":736,"formal":"leave a situation behind","phrasal":"move on","example":"After the breakup she decided to move on and focus on her work.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":50,"bnc":55,"consecutiveMisses":0},{"id":737,"formal":"record in writing","phrasal":"write down","example":"Write down the key points before you forget them.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":119,"consecutiveMisses":0},{"id":738,"formal":"begin a journey; trigger","phrasal":"set off","example":"We set off at dawn to avoid the traffic.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":101,"bnc":46,"accepts":["start out"],"consecutiveMisses":0},{"id":739,"formal":"start (a hobby/activity)","phrasal":"take up","example":"He decided to take up painting last year.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"phave":41,"bnc":19,"accepts":["follow up"],"consecutiveMisses":0},{"id":740,"formal":"be clearly noticeable","phrasal":"stand out","example":"The red coat stands out in every window display.","box":0,"correctCount":0,"lastReview":null,"nextReview":null,"wrongCount":0,"phave":111,"consecutiveMisses":0},{"id":741,"formal":"propose","phrasal":"put forward","example":"He put forward a bold new plan at the meeting.","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":742,"formal":"expand into a new area","phrasal":"branch out","example":"The brand decided to branch out into handbags","box":0,"lastReview":null,"correctCount":0,"nextReview":null,"wrongCount":0,"consecutiveMisses":0},{"id":743,"formal":"recall earlier years","phrasal":"look back","example":"Looking back, I should have taken that job.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":34,"bnc":38,"consecutiveMisses":0,"accepts":["think back"]},{"id":744,"formal":"turn your eyes downward","phrasal":"look down","example":"Don't look down — we're very high up.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":42,"bnc":39,"consecutiveMisses":0},{"id":745,"formal":"recruit outside help","phrasal":"bring in","example":"They brought in a consultant to fix the process.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":47,"bnc":37,"consecutiveMisses":0},{"id":746,"formal":"reverse a journey","phrasal":"turn back","example":"The weather closed in, so we turned back.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":62,"bnc":56,"consecutiveMisses":0,"twins":["turn around"],"accepts":["turn away"]},{"id":747,"formal":"a car stopping at the kerb","phrasal":"pull up","example":"A taxi pulled up outside the hotel.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":63,"accepts":["pull over"],"consecutiveMisses":0},{"id":748,"formal":"depart on a long trip","phrasal":"set out","example":"They set out at dawn for the coast.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":64,"bnc":18,"consecutiveMisses":0,"twins":["set off","head out"]},{"id":749,"formal":"close a business or system for good","phrasal":"shut down","example":"The plant shut down after forty years.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":66,"consecutiveMisses":0,"twins":["close down"]},{"id":750,"formal":"finish somewhere you did not plan","phrasal":"wind up","example":"We wound up staying an extra night.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":69,"accepts":["end up"],"consecutiveMisses":0},{"id":751,"formal":"set it out clearly, on paper","phrasal":"lay out","example":"She laid out the whole plan on one page.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":73,"consecutiveMisses":0,"accepts":["set out"]},{"id":752,"formal":"live through something hard","phrasal":"go through","example":"He went through a rough divorce last year.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":76,"bnc":73,"consecutiveMisses":0,"accepts":["get through"]},{"id":753,"formal":"effort that finally rewards you","phrasal":"pay off","example":"All that extra practice paid off.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":78,"consecutiveMisses":0},{"id":754,"formal":"withdraw from a position","phrasal":"pull back","example":"The company pulled back from the deal.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":82,"consecutiveMisses":0,"twins":["pull out","bail out"],"accepts":["turn back","fall back"]},{"id":755,"formal":"grow steadily over time","phrasal":"build up","example":"Traffic builds up after five o'clock.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":84,"accepts":["work up"],"consecutiveMisses":0},{"id":756,"formal":"name a wrong out loud","phrasal":"call out","example":"She called out the mistake in front of everyone.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":92,"consecutiveMisses":0},{"id":757,"formal":"raise yourself upright in bed","phrasal":"sit up","example":"He sat up in bed and rubbed his eyes.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":93,"bnc":61,"consecutiveMisses":0,"accepts":["get up"]},{"id":758,"formal":"dispatch to a lot of people","phrasal":"send out","example":"We sent out the invitations yesterday.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":97,"consecutiveMisses":0,"accepts":["send off"]},{"id":759,"formal":"pause and take a wider view","phrasal":"step back","example":"Let's step back and look at the whole picture.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":108,"consecutiveMisses":0,"twins":["stand back"]},{"id":760,"formal":"topple something powerful","phrasal":"bring down","example":"The scandal brought down the government.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":110,"bnc":68,"consecutiveMisses":0,"accepts":["take down"]},{"id":761,"formal":"how something is progressing","phrasal":"come along","example":"How is the new website coming along?","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":112,"bnc":60,"consecutiveMisses":0,"twins":["come on"]},{"id":762,"formal":"unfold to its end","phrasal":"play out","example":"Let's see how the negotiation plays out.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":113,"accepts":["come off"],"consecutiveMisses":0},{"id":763,"formal":"leave in protest","phrasal":"walk out","example":"He walked out of the meeting furious.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":116,"consecutiveMisses":0},{"id":764,"formal":"return to live where you were","phrasal":"move back","example":"They moved back to Sofia last year.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":120,"bnc":91,"consecutiveMisses":0},{"id":765,"formal":"do nothing while it happens","phrasal":"sit back","example":"You can't just sit back and watch this happen.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":122,"bnc":76,"consecutiveMisses":0,"accepts":["sit by","stand by","sit around"]},{"id":766,"formal":"rise to a higher position","phrasal":"move up","example":"She moved up to head of sales in two years.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":124,"bnc":99,"consecutiveMisses":0,"accepts":["get ahead"]},{"id":767,"formal":"remove from a height","phrasal":"take down","example":"They took down the scaffolding this morning.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":126,"bnc":81,"consecutiveMisses":0},{"id":768,"formal":"politely decline an offer","phrasal":"pass on","example":"I'll pass on dessert, thanks.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":133,"consecutiveMisses":0,"accepts":["turn down"]},{"id":769,"formal":"put a heavy load down","phrasal":"set down","example":"He set down the box and stretched his back.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":135,"bnc":98,"twins":["put down","lay down"],"consecutiveMisses":0},{"id":770,"formal":"change your mind eventually","phrasal":"come around","example":"She came around to my point of view.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":140,"accepts":["come round","give in"],"bnc":64,"consecutiveMisses":0},{"id":771,"formal":"write the details on a form","phrasal":"fill in","example":"Fill in your details at the top of the page.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":141,"accepts":["fill out"],"consecutiveMisses":0},{"id":772,"formal":"as matters proceed","phrasal":"go along","example":"We made the rules up as we went along.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":144,"bnc":84,"consecutiveMisses":0},{"id":773,"formal":"begin tackling a task","phrasal":"set about","example":"She set about cleaning the entire flat.","box":0,"lastReview":null,"nextReview":null,"correctCount":0,"wrongCount":0,"phave":150,"bnc":86,"accepts":["go about","get down to"],"consecutiveMisses":0}],"stats":{"totalSessions":0,"totalQuestions":0,"totalCorrect":0},"boxDistribution":{"0":455,"1":0,"2":0,"3":0,"4":0,"5":0},"currentStreak":0,"sessionHistory":[]};
+/* ============================================================
+   Particle — 431 phrasal verbs on your Leitner boxes.
+   Data shape is identical to knowledge-quest's phrasal-verbs-data.json,
+   so anything drilled here exports straight back to it.
+   ============================================================ */
+const FILLED = new Set(["play"]);
+const ICONS = {
+  grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/>',
+  bolt:'<path d="M13 2.6 4.8 13.8H11l-1 7.6 8.4-11.4H12l1-7.4Z"/>',
+  flame:'<path d="M12 21.4c3.2 0 5.8-2.5 5.8-5.7 0-4.1-3.2-5.3-3.2-9.4 0 0-3 1.6-3 5.2 0-1.6-1.1-2.7-1.1-2.7-2.1 1.7-4.3 3.3-4.3 6.9 0 3.2 2.6 5.7 5.8 5.7Z"/>',
+  book:'<path d="M4.5 5.8A2.6 2.6 0 0 1 7.1 3.2H20v14.4H7.1a2.6 2.6 0 0 0-2.6 2.6Z"/><path d="M4.5 20.2a2.6 2.6 0 0 1 2.6-2.6H20v3.2H7.1a2.6 2.6 0 0 1-2.6-2.6Z"/>',
+  clock:'<circle cx="12" cy="12" r="8.6"/><path d="M12 6.9v5.3l3.3 2"/>',
+  dot:'<circle cx="12" cy="12" r="3"/>',
+  trophy:'<path d="M7.4 4.2h9.2v4.6a4.6 4.6 0 1 1-9.2 0V4.2Z"/><path d="M7.4 5.8H5a1.8 1.8 0 0 0 0 3.6h2.4M16.6 5.8H19a1.8 1.8 0 0 1 0 3.6h-2.4"/><path d="M12 13.4v3.6M8.6 20.4h6.8l-.7-3.4H9.3l-.7 3.4Z"/>',
+  chart:'<path d="M4.5 20.5V11"/><path d="M11 20.5V4.5"/><path d="M17.5 20.5v-6"/><path d="M2.5 20.5h19"/>',
+  cog:'<circle cx="12" cy="12" r="3.2"/><path d="M19.4 14.5a1.7 1.7 0 0 0 .35 1.87l.06.07a2 2 0 1 1-2.83 2.83l-.06-.07a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.35l-.07.06a2 2 0 1 1-2.83-2.83l.07-.06a1.7 1.7 0 0 0 .34-1.88 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.35-1.87l-.06-.07a2 2 0 1 1 2.83-2.83l.06.07a1.7 1.7 0 0 0 1.88.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.07a2 2 0 1 1 2.83 2.83l-.06.07a1.7 1.7 0 0 0-.35 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.4 9.3a2.7 2.7 0 0 1 5.25.9c0 1.8-2.65 2.3-2.65 4.05"/><path d="M12 17.6h.01"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  moon:'<path d="M20.5 14.6A8.7 8.7 0 0 1 9.4 3.5a8.7 8.7 0 1 0 11.1 11.1Z"/>',
+  sun:'<circle cx="12" cy="12" r="4.1"/><path d="M12 2.4v2.1M12 19.5v2.1M4.4 4.4l1.5 1.5M18.1 18.1l1.5 1.5M2.4 12h2.1M19.5 12h2.1M4.4 19.6l1.5-1.5M18.1 5.9l1.5-1.5"/>',
+  play:'<path d="M7.5 4.8v14.4L19.5 12 7.5 4.8Z"/>',
+  export:'<path d="M12 15.4V3.2"/><path d="m8 7.2 4-4 4 4"/><path d="M4.5 15v3.3a2.7 2.7 0 0 0 2.7 2.7h9.6a2.7 2.7 0 0 0 2.7-2.7V15"/>',
+  import:'<path d="M12 3.2v12.2"/><path d="m8 11.4 4 4 4-4"/><path d="M4.5 15v3.3a2.7 2.7 0 0 0 2.7 2.7h9.6a2.7 2.7 0 0 0 2.7-2.7V15"/>',
+  trash:'<path d="M4 6.8h16"/><path d="M10 11v6.2M14 11v6.2"/><path d="m6.2 6.8 1 12.1a2.1 2.1 0 0 0 2.1 1.9h5.4a2.1 2.1 0 0 0 2.1-1.9l1-12.1"/><path d="M9.2 6.8V5.1a2 2 0 0 1 2-2h1.6a2 2 0 0 1 2 2v1.7"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.6"/><path d="m20 20-4.5-4.5"/>',
+  check:'<path d="m5.2 12.6 4.6 4.6L19 7.6"/>',
+  x:'<path d="M6.2 6.2 17.8 17.8M17.8 6.2 6.2 17.8"/>',
+  arrow:'<path d="M4.6 12h14.2"/><path d="m13 6.2 6 5.8-6 5.8"/>',
+  layers:'<path d="m12 3.2 8.6 4.6L12 12.4 3.4 7.8 12 3.2Z"/><path d="m3.4 12.4 8.6 4.6 8.6-4.6"/><path d="m3.4 16.8 8.6 4.6 8.6-4.6"/>',
+  seed:'<path d="M12 20.8V9.6"/><path d="M12 12.6c-3.4 0-5.6-2.1-5.6-5.6 3.4 0 5.6 2.1 5.6 5.6Z"/><path d="M12 15.4c3.4 0 5.6-2.1 5.6-5.6-3.4 0-5.6 2.1-5.6 5.6Z"/>',
+  target:'<circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>',
+  up:'<path d="M12 18.8V5.6"/><path d="m6.4 11.2 5.6-5.6 5.6 5.6"/>'
+};
+function ico(n,s){s=s||18;const f=FILLED.has(n);return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" aria-hidden="true" '+(f?'fill="currentColor" stroke="none"':'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"')+'>'+(ICONS[n]||'')+'</svg>';}
+
+const KIND=(SEED&&SEED.kind)||"verbs";           // "verbs" or "phrases"
+const IS_PHRASES=KIND==="phrases";
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const DAY=86400000;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const C=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const pct=(a,b)=>b>0?Math.round(a/b*100):0;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const norm=s=>String(s).toLowerCase().replace(/[^a-z\s']/g," ").replace(/\s+/g," ").trim();
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d;};
+const shortDate=s=>{const d=new Date(s+"T00:00:00");return d.getDate()+" "+MON[d.getMonth()];};
+function fmtGap(ms){const d=ms/DAY;if(d<1)return"today";if(d<2)return"tomorrow";if(d<14)return Math.round(d)+" days";if(d<70)return Math.round(d/7)+" weeks";return Math.round(d/30)+" months";}
+
+/* ---- the signature mark ---- */
+function pvHTML(v){
+  const t=v.phrasal||v.term||"";
+  if(IS_PHRASES){
+    /* a formulaic expression has no particle to separate; the last word carries
+       the accent so the shape of the phrase still reads at a glance */
+    const w=t.split(" ");
+    if(w.length<2) return '<span class="pv"><span class="stem">'+esc(t)+'</span></span>';
+    return '<span class="pv"><span class="stem">'+esc(w.slice(0,-1).join(" "))+'</span> <span class="part">'+esc(w[w.length-1])+'</span></span>';
+  }
+  const p=t.split(" ");
+  return '<span class="pv"><span class="stem">'+esc(p[0])+'</span> <span class="part">'+esc(p.slice(1).join(" "))+'</span></span>';
+}
+const IRREG={beat:["beat","beats","beating","beaten"],bite:["bite","bites","biting","bit","bitten"],fight:["fight","fights","fighting","fought"],have:["have","has","having","had"],lie:["lie","lies","lying","lay","lain"],light:["light","lights","lighting","lit","lighted"],sneak:["sneak","sneaks","sneaking","snuck","sneaked"],tear:["tear","tears","tearing","tore","torn"],lead:["lead","leads","leading","led"],go:["go","goes","going","went","gone"],come:["come","comes","coming","came"],take:["take","takes","taking","took","taken"],give:["give","gives","giving","gave","given"],get:["get","gets","getting","got","gotten"],make:["make","makes","making","made"],put:["put","puts","putting"],find:["find","finds","finding","found"],bring:["bring","brings","bringing","brought"],break:["break","breaks","breaking","broke","broken"],hold:["hold","holds","holding","held"],run:["run","runs","running","ran"],sit:["sit","sits","sitting","sat"],stand:["stand","stands","standing","stood"],wake:["wake","wakes","waking","woke","woken"],hang:["hang","hangs","hanging","hung"],cut:["cut","cuts","cutting"],let:["let","lets","letting"],keep:["keep","keeps","keeping","kept"],pay:["pay","pays","paying","paid"],set:["set","sets","setting"],throw:["throw","throws","throwing","threw","thrown"],grow:["grow","grows","growing","grew","grown"],lay:["lay","lays","laying","laid"],leave:["leave","leaves","leaving","left"],think:["think","thinks","thinking","thought"],write:["write","writes","writing","wrote","written"],fall:["fall","falls","falling","fell","fallen"],eat:["eat","eats","eating","ate","eaten"],catch:["catch","catches","catching","caught"],deal:["deal","deals","dealing","dealt"],draw:["draw","draws","drawing","drew","drawn"],blow:["blow","blows","blowing","blew","blown"],build:["build","builds","building","built"],buy:["buy","buys","buying","bought"],feel:["feel","feels","feeling","felt"],hear:["hear","hears","hearing","heard"],lose:["lose","loses","losing","lost"],meet:["meet","meets","meeting","met"],read:["read","reads","reading"],ride:["ride","rides","riding","rode","ridden"],sell:["sell","sells","selling","sold"],send:["send","sends","sending","sent"],speak:["speak","speaks","speaking","spoke","spoken"],spend:["spend","spends","spending","spent"],stick:["stick","sticks","sticking","stuck"],tell:["tell","tells","telling","told"],wear:["wear","wears","wearing","wore","worn"],win:["win","wins","winning","won"],do:["do","does","doing","did","done"],see:["see","sees","seeing","saw","seen"],stumble:["stumble","stumbles","stumbling","stumbled"]};
+function verbForms(v){
+  let out;
+  if(IRREG[v]) out=IRREG[v].slice();
+  else{
+    /* -s becomes -es after a sibilant, so "piss" gives "pisses", not "pisss" */
+    out=[v,/(s|sh|ch|x|z|o)$/.test(v)?v+"es":v+"s",v+"ed"];
+    if(/e$/.test(v)) out.push(v.slice(0,-1)+"ing",v+"d");
+    else if(/[^aeiou]y$/.test(v)) out.push(v.slice(0,-1)+"ied",v.slice(0,-1)+"ies",v+"ing");
+    else out.push(v+"ing",v+v.slice(-1)+"ing",v+v.slice(-1)+"ed");
+  }
+  return out.sort((a,b)=>b.length-a.length);
+}
+/* locate the phrasal verb inside its example sentence */
+function locate(text,v){
+  const parts=v.phrasal.split(" ");
+  const forms=verbForms(parts[0]);
+  const tail=parts.slice(1).map(w=>w.replace(/[^a-z]/gi,"")).join("\\s+");
+  const re=new RegExp("\\b("+forms.join("|")+")\\b((?:\\s+[\\w']+){0,3}?)\\s+("+tail+")\\b","i");
+  const m=String(text).match(re);
+  if(!m) return null;
+  return {whole:m[0],index:text.indexOf(m[0]),stem:m[1],mid:m[2]||"",tail:m[3]};
+}
+function markExample(text,v){
+  const f=locate(text,v);
+  if(!f) return esc(text);
+  return esc(text.slice(0,f.index))
+    +'<span class="pv"><span class="stem">'+esc(f.stem)+'</span>'+esc(f.mid)+' <span class="part">'+esc(f.tail)+'</span></span>'
+    +esc(text.slice(f.index+f.whole.length));
+}
+
+/* ============================================================
+   STATE — mirrors phrasal-verbs-data.json
+   ============================================================ */
+const KEY="particle."+KIND+".v1";   /* the two decks must not share a slot */
+let storageOK=true;
+function freshFromSeed(){return JSON.parse(JSON.stringify(SEED));}
+/* The page is a read surface: rounds are run in chat and this file is rebuilt
+   afterwards. So the published data always wins — comparing dates was not
+   enough, because two rebuilds on the same day tie and the stale copy sticks.
+   Only the viewer's own choices survive a republish. */
+function load(){
+  const fresh=freshFromSeed();
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){
+      const s=JSON.parse(raw)||{};
+      if(s.prefs) fresh.prefs=Object.assign(fresh.prefs||{},s.prefs);
+      const keep=["masteredIsFinal","masteredRecheckDays"];
+      if(s.settings) keep.forEach(k=>{ if(s.settings[k]!==undefined) fresh.settings[k]=s.settings[k]; });
+    }
+  }catch(e){ storageOK=false; }
+  return fresh;
+}
+function save(){
+  if(!storageOK)return;
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); }
+  catch(e){ storageOK=false; toast("This browser is blocking storage — your settings will not be remembered"); }
+}
+let S=load();
+S.prefs=Object.assign({roundSize:30,sideDrill:1,acceptSyn:true,theme:null},S.prefs||{});
+if(S.settings.masteredIsFinal===undefined)S.settings.masteredIsFinal=true;
+if(S.settings.masteredRecheckDays===undefined)S.settings.masteredRecheckDays=0;
+/* anything already sitting in Box 5 is finished under this rule, including
+   verbs imported from an older file that still carry a review date */
+if(S.settings.masteredIsFinal)S.verbs.forEach(v=>{
+  if(v.box===5&&!v.retired){v.retired=true;v.nextReview=null;}
+});
+const IV=()=>S.settings.boxIntervals;
+const BOXNAMES=["Not started","1 day","3 days","7 days","14 days","Mastered"];
+
+const byId=id=>S.verbs.find(v=>v.id===id);
+function isDue(v,t){return !!v.nextReview && !v.retired && v.nextReview.slice(0,10)<=iso(t||today());}
+function dueList(){const t=today();return S.verbs.filter(v=>isDue(v,t)).sort((a,b)=>a.nextReview<b.nextReview?-1:1);}
+function neverSeen(){return S.verbs.filter(v=>!v.lastReview);}
+function dragons(){return S.verbs.filter(v=>(v.wrongCount||0)>=2||(v.consecutiveMisses||0)>=2).sort((a,b)=>(b.wrongCount||0)-(a.wrongCount||0));}
+function boxCounts(){const c=[0,0,0,0,0,0];S.verbs.forEach(v=>c[v.box]++);return c;}
+/* the 150 most frequent phrasal verbs in COCA (Garnier & Schmitt). Finishing
+   these is the point; the other 300-odd are the long tail. */
+/* the part of the deck that carries the weight: for verbs the corpus top 150,
+   for the phrase list the 100 most frequent expressions in it */
+/* Two nested measures, and they were being reported separately without saying
+   so: the top 100 sits INSIDE the core 150. The 100 is the goal — it covers
+   more than half of all phrasal verb use — and the 150 is the full core. */
+const rankOf=v=>IS_PHRASES?v.pos:v.phave;
+const core=()=>S.verbs.filter(v=>rankOf(v));
+const top100=()=>S.verbs.filter(v=>rankOf(v)&&rankOf(v)<=100);
+const coreDone=()=>core().filter(v=>v.box===5).length;
+const top100Done=()=>top100().filter(v=>v.box===5).length;
+
+/* Leitner, as Ivaylo actually runs it: right moves up one box, wrong moves
+   down one — not back to the floor. Verified against 13 demotions in the
+   nightly backups (1→0, 2→1, 3→2, 4→3), every one a single step, and every
+   new review date matching the new box's interval. */
+const finalAt5=()=>S.settings.masteredIsFinal!==false;
+
+
+/* switching the rule reshapes every verb already sitting in Box 5, not just
+   the ones mastered from now on */
+function applyMasteryRule(isFinal,days){
+  S.settings.masteredIsFinal=isFinal;
+  if(days!=null)S.settings.masteredRecheckDays=days;
+  const cycle=S.settings.masteredRecheckDays||0;
+  S.verbs.forEach(v=>{
+    if(v.box!==5)return;
+    if(isFinal){v.retired=true;v.nextReview=null;}
+    else{
+      delete v.retired;
+      v.nextReview=(cycle>0&&v.lastReview)
+        ?iso(new Date(new Date(v.lastReview+"T00:00:00").getTime()+cycle*DAY)):null;
+    }
+  });
+  save();
+}
+const retiredList=()=>S.verbs.filter(v=>v.retired);
+
+/* ============================================================
+   CHARTS
+   ============================================================ */
+function topRound(x,y,w,h,r){r=Math.min(r,h,w/2);if(h<=0.5)return"";return "M"+x+" "+(y+h)+" L"+x+" "+(y+r)+" Q"+x+" "+y+" "+(x+r)+" "+y+" L"+(x+w-r)+" "+y+" Q"+(x+w)+" "+y+" "+(x+w)+" "+(y+r)+" L"+(x+w)+" "+(y+h)+" Z";}
+function ticks(peak,divs){divs=divs||3;const need=Math.max(1,peak)/divs;const pow=Math.pow(10,Math.floor(Math.log10(need)));const c=[1,2,2.5,5,10];let step=pow*10;for(const k of c)if(k*pow>=need){step=k*pow;break;}return{max:step*divs,step,divs};}
+function smooth(pts,t){if(pts.length<2)return"";t=t===undefined?0.3:t;let d="M"+pts[0][0]+" "+pts[0][1];for(let i=0;i<pts.length-1;i++){const p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;d+=" C"+(p1[0]+(p2[0]-p0[0])*t/2).toFixed(1)+" "+(p1[1]+(p2[1]-p0[1])*t/2).toFixed(1)+","+(p2[0]-(p3[0]-p1[0])*t/2).toFixed(1)+" "+(p2[1]-(p3[1]-p1[1])*t/2).toFixed(1)+","+p2[0].toFixed(1)+" "+p2[1].toFixed(1);}return d;}
+function svgW(el){return Math.max(280,Math.round(el.getBoundingClientRect().width||el.parentNode.getBoundingClientRect().width-20));}
+function tipOn(t,x,y,h){t.innerHTML=h;t.style.left=x+"px";t.style.top=(y-12)+"px";t.classList.add("on");}
+function tipOff(t){t.classList.remove("on");}
+function emptyNote(w,txt){const o=w.querySelector(".chart-empty");if(o)o.remove();if(!txt)return;const e=document.createElement("div");e.className="chart-empty";e.innerHTML='<span>'+esc(txt)+'</span>';w.appendChild(e);}
+
+function renderBars(){
+  const svg=$("#barChart"),wrap=$("#barWrap"),tip=$("#barTip");
+  const hist=(S.sessionHistory||[]).slice(-20);
+  const W=svgW(svg),H=214,pad={t:14,r:12,b:26,l:34};
+  const tk=ticks(Math.max(5,Math.max(0,...hist.map(h=>h.questions||0))*1.1),3),max=tk.max;
+  const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+  const band=pw/Math.max(1,hist.length),bw=Math.min(26,band*0.56);
+  const good=C("--c-good"),bad=C("--c-bad"),bd=C("--border"),ink3=C("--ink-3");
+  const Y=v=>pad.t+ph-(v/max)*ph;
+  let g='<defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="'+bad+'" opacity="0.28"/><line x1="0" y1="0" x2="0" y2="5" stroke="'+bad+'" stroke-width="2.6"/></pattern></defs>';
+  for(let t=0;t<=tk.divs;t++){const v=tk.step*t,y=Y(v);
+    g+='<line x1="'+pad.l+'" y1="'+y.toFixed(1)+'" x2="'+(W-pad.r)+'" y2="'+y.toFixed(1)+'" stroke="'+bd+'" stroke-width="1"/>';
+    g+='<text x="'+(pad.l-8)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="end" font-size="10.5" font-family="'+C("--font-mono")+'" fill="'+ink3+'">'+Math.round(v)+'</text>';}
+  hist.forEach((h,k)=>{
+    const x=pad.l+band*k+(band-bw)/2,base=pad.t+ph;
+    const c=h.correct||0,w=(h.questions||0)-c;
+    const hc=(c/max)*ph,hw=(w/max)*ph;
+    if(c>0)g+='<path d="'+topRound(x,base-hc,bw,hc,w>0?0:4)+'" fill="'+good+'"/>';
+    if(w>0)g+='<path d="'+topRound(x,base-hc-hw-(c>0?2:0),bw,hw,4)+'" fill="url(#hatch)" stroke="'+bad+'" stroke-width="1"/>';
+    if(k%3===0||k===hist.length-1)g+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" font-family="'+C("--font-mono")+'" fill="'+ink3+'">'+shortDate(h.date)+'</text>';
+    g+='<rect x="'+(pad.l+band*k)+'" y="'+pad.t+'" width="'+band+'" height="'+ph+'" fill="transparent" class="bh" data-k="'+k+'"/>';
+  });
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("height",H);svg.innerHTML=g;
+  emptyNote(wrap,hist.length?"":"No rounds logged yet");
+  $$(".bh",svg).forEach(el=>{
+    el.addEventListener("mouseenter",()=>{const h=hist[+el.dataset.k],r=svg.getBoundingClientRect();
+      tipOn(tip,(+el.getAttribute("x")+band/2)*(r.width/W),Y(h.questions||0)*(r.height/H),
+        '<div class="tip-title">Round '+h.session+' · '+shortDate(h.date)+'</div>'
+        +'<div class="tip-row"><span class="dot" style="background:'+good+'"></span>Correct<b>'+(h.correct||0)+'</b></div>'
+        +'<div class="tip-row"><span class="dot" style="background:'+bad+'"></span>Missed<b>'+((h.questions||0)-(h.correct||0))+'</b></div>'
+        +'<div class="tip-row" style="border-top:1px solid '+bd+';margin-top:5px;padding-top:5px">Accuracy<b>'+(h.pct!=null?h.pct:pct(h.correct||0,h.questions||0))+'%</b></div>');});
+    el.addEventListener("mouseleave",()=>tipOff(tip));
+  });
+}
+function renderAcc(){
+  const svg=$("#accChart"),wrap=$("#accWrap"),tip=$("#accTip");
+  if(!svg)return;
+  const hist=(S.sessionHistory||[]);
+  const W=svgW(svg),H=250,pad={t:16,r:16,b:26,l:42};
+  const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+  const X=k=>pad.l+(hist.length<2?pw/2:k*pw/(hist.length-1));
+  const Y=v=>pad.t+ph-(v/100)*ph;
+  const series=C("--c-series"),bd=C("--border"),ink3=C("--ink-3");
+  let g='<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+series+'" stop-opacity="0.2"/><stop offset="100%" stop-color="'+series+'" stop-opacity="0"/></linearGradient></defs>';
+  [0,25,50,75,100].forEach(v=>{const y=Y(v);
+    g+='<line x1="'+pad.l+'" y1="'+y.toFixed(1)+'" x2="'+(W-pad.r)+'" y2="'+y.toFixed(1)+'" stroke="'+bd+'" stroke-width="1"/>';
+    g+='<text x="'+(pad.l-9)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="end" font-size="10.5" font-family="'+C("--font-mono")+'" fill="'+ink3+'">'+v+'%</text>';});
+  if(hist.length){
+    const pts=hist.map((h,k)=>[X(k),Y(h.pct!=null?h.pct:pct(h.correct||0,h.questions||1))]);
+    const d=smooth(pts);
+    g+='<path d="'+d+' L'+pts[pts.length-1][0]+' '+(pad.t+ph)+' L'+pts[0][0]+' '+(pad.t+ph)+' Z" fill="url(#ag)"/>';
+    g+='<path d="'+d+'" fill="none" stroke="'+series+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+    g+='<rect x="'+pad.l+'" y="'+pad.t+'" width="'+pw+'" height="'+ph+'" fill="transparent" id="ah"/>';
+    g+='<g id="ahov" opacity="0"><line y1="'+pad.t+'" y2="'+(pad.t+ph)+'" stroke="'+ink3+'" stroke-width="1" stroke-dasharray="3 3"/><circle r="5" fill="'+series+'" stroke="'+C("--surface")+'" stroke-width="2"/></g>';
+  }
+  const step=Math.max(1,Math.round(hist.length/6));
+  hist.forEach((h,k)=>{if((hist.length-1-k)%step===0)g+='<text x="'+X(k).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" font-family="'+C("--font-mono")+'" fill="'+ink3+'">'+shortDate(h.date)+'</text>';});
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("height",H);svg.innerHTML=g;
+  emptyNote(wrap,hist.length?"":"No rounds logged yet");
+  const hit=svg.querySelector("#ah"),hov=svg.querySelector("#ahov");
+  if(hit)hit.addEventListener("mousemove",ev=>{
+    const r=svg.getBoundingClientRect(),sx=(ev.clientX-r.left)*(W/r.width);
+    const k=clamp(Math.round((sx-pad.l)/(pw/Math.max(1,hist.length-1))),0,hist.length-1);
+    const h=hist[k],px=X(k),py=Y(h.pct!=null?h.pct:pct(h.correct||0,h.questions||1));
+    hov.setAttribute("opacity","1");
+    hov.querySelector("line").setAttribute("x1",px);hov.querySelector("line").setAttribute("x2",px);
+    hov.querySelector("circle").setAttribute("cx",px);hov.querySelector("circle").setAttribute("cy",py);
+    tipOn(tip,px*(r.width/W)+8,py*(r.height/H)+6,
+      '<div class="tip-title">Round '+h.session+' · '+shortDate(h.date)+'</div>'
+      +'<div class="tip-row">Accuracy<b>'+(h.pct!=null?h.pct:pct(h.correct||0,h.questions||1))+'%</b></div>'
+      +'<div class="tip-row">Questions<b>'+(h.questions||0)+'</b></div>');
+  });
+  if(hit)hit.addEventListener("mouseleave",()=>{hov.setAttribute("opacity","0");tipOff(tip);});
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+function kpi(o){
+  return '<div class="kpi"><div class="kpi-top"><span class="kpi-label">'+esc(o.label)+'</span>'
+    +'<span class="kpi-chip" style="background:'+o.bg+';color:'+o.fg+'">'+ico(o.icon,15)+'</span></div>'
+    +'<div class="kpi-value">'+o.value+'</div><div class="kpi-foot">'+esc(o.foot)+'</div></div>';
+}
+function renderDash(){
+  const c=boxCounts(),due=dueList(),st=S.stats||{};
+  const hist=S.sessionHistory||[];
+  const last=hist.length?hist[hist.length-1]:null;
+  $("#stamp").textContent=(S.lastUpdated?"Snapshot of "+shortDate(S.lastUpdated):"No snapshot date")
+    +(last?" · after round "+last.session+" on "+shortDate(last.date):"")
+    +(S.settings.masteredIsFinal?" · Box 5 is the finish line":"");
+  const q=hist.reduce((a,h)=>a+(h.questions||0),0),ok=hist.reduce((a,h)=>a+(h.correct||0),0);
+  $("#kpis").innerHTML=
+     kpi({label:"Top 100",icon:"target",bg:C("--accent-soft"),fg:C("--accent-ink"),
+        value:top100Done()+"/100",
+        foot:"the goal — over half of everything you hear"})
+    +kpi({label:IS_PHRASES?"Full list":"Core 150",icon:"layers",bg:C("--info-soft"),fg:C("--info"),
+        value:coreDone()+"/"+core().length,
+        foot:"the top 100 sits inside this"})
+    +kpi({label:"Due now",icon:"clock",bg:C("--warn-soft"),fg:C("--warn"),value:due.length,foot:due.length?"oldest waiting since "+shortDate(due[0].nextReview.slice(0,10)):"all caught up"})
+    +kpi({label:"Mastered",icon:"trophy",bg:C("--good-soft"),fg:C("--c-good"),value:c[5],foot:pct(c[5],S.verbs.length)+"% of the deck"})
+    +kpi({label:"Accuracy",icon:"target",bg:C("--info-soft"),fg:C("--info"),value:q?pct(ok,q)+"%":"—",foot:q?ok+" right of "+q+" logged":"no rounds logged"})
+    +kpi({label:"Rounds",icon:"chart",bg:C("--surface-3"),fg:C("--ink-2"),value:st.totalSessions||hist.length,foot:hist.length+" of them logged"})
+    +kpi({label:"Streak",icon:"flame",bg:C("--bad-soft"),fg:C("--c-bad"),value:S.currentStreak||0,foot:st.bestStreak?"best run "+st.bestStreak+" days":"—"});
+
+  const total=S.verbs.length;
+  $("#mastery").innerHTML=c.map((n,b)=>n?'<span style="flex:'+n+';background:var(--b'+b+')" title="Box '+b+': '+n+'">'+(n/total>0.045?n:"")+'</span>':"").join("");
+  $("#masteryLegend").innerHTML=c.map((n,b)=>'<span class="leg"><span class="dot" style="background:var(--b'+b+')"></span>Box '+b+': '+BOXNAMES[b]+' · '+n+'</span>').join("");
+  $("#mastSub").textContent=c[0]+" not started · "+(total-c[0]-c[5])+" in flight · "+c[5]+" mastered"
+    +"  ·  top 100: "+top100Done()+" done  ·  core "+core().length+": "+coreDone()+" done";
+  $("#mastBadge").textContent=pct(c[5],total)+"% mastered";
+
+  $("#boxes").innerHTML=c.map((n,b)=>{
+    const list=S.verbs.filter(v=>v.box===b);
+    const show=list.slice(0,b===0?14:18);
+    return '<div class="boxcard"><h4><span class="dot" style="background:var(--b'+b+')"></span>Box '+b+'<span class="n">'+n+'</span></h4>'
+      +'<div class="iv">'+(b===0?"New or missed — comes straight back"
+          :b===5?(finalAt5()?"Finished — never asked again"
+                            :(S.settings.masteredRecheckDays>0?"Re-checked after "+S.settings.masteredRecheckDays+" days":"Not being checked"))
+          :"Review after "+IV()[b]+" day"+(IV()[b]===1?"":"s"))+'</div>'
+      +'<div class="chips">'+show.map(v=>'<span class="chip-v">'+esc(v.phrasal)+'</span>').join("")
+      +(list.length>show.length?'<span class="chip-v chip-more" data-box="'+b+'">+'+(list.length-show.length)+' more</span>':'')+'</div></div>';
+  }).join("");
+  $$(".chip-more").forEach(el=>el.addEventListener("click",()=>{LIB.filter=el.dataset.box;LIB.q="";go("library",el.dataset.box);}));
+
+  const preview=[];
+  const d=due.slice(0,5);
+  d.forEach(v=>preview.push({v,tag:"Due",cls:"badge-warn"}));
+  if(preview.length<5)neverSeen().slice(0,5-preview.length).forEach(v=>preview.push({v,tag:"New",cls:"badge-info"}));
+  $("#queueSub").textContent=due.length?due.length+" due · round of "+Math.min(S.prefs.roundSize,Math.max(due.length,S.prefs.roundSize)):"nothing due — the round will be new verbs";
+  $("#queue").innerHTML=preview.length?preview.map(p=>
+     '<div style="display:flex;align-items:center;gap:11px;padding:10px 9px;border-radius:10px">'
+    +'<span class="dot" style="width:8px;height:8px;background:var(--b'+p.v.box+')"></span>'
+    +'<span style="flex:1;min-width:0"><span style="font-size:13.5px;font-weight:500">'+pvHTML(p.v)+'</span>'
+    +'<span style="display:block;font-size:11.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(p.v.formal)+'</span></span>'
+    +'<span class="badge '+p.cls+'">'+p.tag+'</span></div>').join("")
+    :'<div class="empty" style="padding:26px 16px"><div class="empty-mark">'+ico("check",20)+'</div><h3>All caught up</h3><p>Nothing is due.</p></div>';
+
+  renderBars();
+}
+
+/* ============================================================
+   OTHER VIEWS
+   ============================================================ */
+const LIB={filter:"all",q:"",open:null};
+function libMatch(v){
+  const f=LIB.filter;
+  if(f==="due"&&!isDue(v))return false;
+  if(f==="mid"&&(v.box===0||v.box===5))return false;
+  if(f==="amb"&&!(v.sharedPrompt||[]).length)return false;
+  if(f==="done"&&!v.retired)return false;
+  if(f==="core"&&!(IS_PHRASES?v.pos<=100:v.phave))return false;
+  if(/^[0-5]$/.test(f)&&v.box!==+f)return false;
+  if(LIB.q&&!((v.phrasal+" "+v.formal).toLowerCase().includes(LIB.q)))return false;
+  return true;
+}
+function renderLibrary(){
+  const rows=S.verbs.filter(libMatch);
+  $("#libBody").innerHTML=rows.length?rows.map(v=>{
+    const due=isDue(v);
+    const nxt=v.nextReview?(due?'<span style="color:var(--c-bad)">due now</span>':"in "+fmtGap(new Date(v.nextReview+"T00:00:00")-today())):"—";
+    let det="";
+    if(LIB.open===v.id){
+      det='<tr class="detail"><td colspan="6"><div class="detail-inner">'
+        +'<div class="detail-ex">'+markExample(v.example,v)+'</div>'
+        +((v.sharedPrompt||[]).length?'<div class="side-note">'+ico("layers",13)+'“'+esc(v.formal)+'” also fits: '+v.sharedPrompt.map(esc).join(", ")+'</div>':'')
+        +((v.alsoKnownAs||[]).length?'<div class="side-note">'+ico("check",13)+'Also accepted: '+v.alsoKnownAs.map(esc).join(", ")+'</div>':'')
+        +'</div></td></tr>';
+    }
+    return '<tr class="clickable" data-id="'+v.id+'">'
+      +'<td style="white-space:nowrap">'+pvHTML(v)+'</td>'
+      +'<td style="color:var(--ink-2)">'+esc(v.formal)
+      +(IS_PHRASES
+          ?(v.pos<=100?' <span class="badge badge-accent" style="font-size:10px" title="position in the list">#'+v.pos+'</span>':'')
+          :(v.phave?' <span class="badge badge-accent" style="font-size:10px" title="rank in the 150 most frequent">#'+v.phave+'</span>':''))
+      +((v.sharedPrompt||[]).length?' <span class="badge" style="font-size:10px">shared</span>':'')+'</td>'
+      +'<td><span class="badge" style="background:var(--b'+v.box+');color:'+(v.box===0?'var(--ink-2)':'#fff')+'">Box '+v.box+'</span></td>'
+      +'<td class="num">'+(v.correctCount||0)+'</td>'
+      +'<td class="num">'+(v.wrongCount||0)+'</td>'
+      +'<td style="font-size:12.5px;color:var(--ink-3);white-space:nowrap">'+nxt+'</td></tr>'+det;
+  }).join(""):'<tr><td colspan="6"><div class="empty" style="padding:36px 18px"><div class="empty-mark">'+ico("search",20)+'</div><h3>Nothing matches</h3><p>Try another search or clear the filter.</p></div></td></tr>';
+  $$("#libBody tr.clickable").forEach(tr=>tr.addEventListener("click",()=>{const id=+tr.dataset.id;LIB.open=LIB.open===id?null:id;renderLibrary();}));
+}
+function renderDragons(){
+  const d=dragons();
+  $("#dragBody").innerHTML=d.length?d.map(v=>
+     '<tr><td style="white-space:nowrap">'+pvHTML(v)+'</td><td style="color:var(--ink-2)">'+esc(v.formal)+'</td>'
+    +'<td class="num" style="color:var(--c-bad);font-weight:600">'+(v.wrongCount||0)+'</td>'
+    +'<td class="num">'+(v.correctCount||0)+'</td>'
+    +'<td><span class="badge" style="background:var(--b'+v.box+');color:'+(v.box===0?'var(--ink-2)':'#fff')+'">Box '+v.box+'</span></td>'
+    +'<td style="font-size:12.5px;color:var(--ink-3)">'+(v.nextReview?(isDue(v)?"due now":"in "+fmtGap(new Date(v.nextReview+"T00:00:00")-today())):"—")+'</td></tr>').join("")
+    :'<tr><td colspan="6"><div class="empty" style="padding:36px 18px"><div class="empty-mark">'+ico("check",20)+'</div><h3>No dragons</h3><p>A verb lands here after you miss it twice.</p></div></td></tr>';
+}
+function renderSessions(){
+  const h=S.sessionHistory||[],st=S.stats||{};
+  const q=h.reduce((a,x)=>a+(x.questions||0),0),ok=h.reduce((a,x)=>a+(x.correct||0),0);
+  const miss=st.sessionsMissingFromLog||[];
+  $("#sessKpis").innerHTML=
+     kpi({label:"Rounds run",icon:"chart",bg:C("--accent-soft"),fg:C("--accent-ink"),value:st.totalSessions||h.length,foot:h.length+" written to the log"})
+    +kpi({label:"Questions",icon:"layers",bg:C("--info-soft"),fg:C("--info"),value:q,foot:st.totalQuestions&&st.totalQuestions!==q?"the running counter says "+st.totalQuestions:"summed from the log"})
+    +kpi({label:"Accuracy",icon:"target",bg:C("--good-soft"),fg:C("--c-good"),value:q?pct(ok,q)+"%":"—",foot:ok+" right"})
+    +kpi({label:"Best round",icon:"trophy",bg:C("--warn-soft"),fg:C("--warn"),value:h.length?Math.max(...h.map(x=>x.pct!=null?x.pct:0))+"%":"—",foot:"single round high"})
+    +kpi({label:"Missing",icon:"x",bg:C("--bad-soft"),fg:C("--c-bad"),value:miss.length,foot:miss.length?"rounds "+miss.join(", ")+" were never logged":"nothing unaccounted for"})
+    +kpi({label:"Streak",icon:"flame",bg:C("--surface-3"),fg:C("--ink-2"),value:S.currentStreak||0,foot:st.bestStreak?"best "+st.bestStreak:"—"});
+  $("#logSub").textContent=h.length+" rounds recorded"+(miss.length?" · "+miss.length+" missing and unrecoverable":"");
+  $("#logBody").innerHTML=h.slice().reverse().map(x=>
+     '<tr><td class="num">'+x.session+'</td><td style="white-space:nowrap">'+shortDate(x.date)+'</td>'
+    +'<td class="num">'+(x.questions||0)+'</td><td class="num">'+(x.correct||0)+'</td>'
+    +'<td class="num" style="color:'+((x.pct||0)>=75?'var(--c-good)':(x.pct||0)>=60?'var(--warn)':'var(--c-bad)')+';font-weight:600">'+(x.pct!=null?x.pct+"%":"—")+'</td>'
+    +'<td style="font-size:12px;color:var(--ink-3);max-width:420px">'+esc(x.note||"")+'</td></tr>').join("");
+  renderAcc();
+}
+function renderSettings(){
+  $("#setLen").value=S.prefs.roundSize;
+  $("#setSide").value=S.prefs.sideDrill;
+  $("#setSyn").checked=!!S.prefs.acceptSyn;
+  const b5=S.verbs.filter(v=>v.box===5),fin=finalAt5();
+  $("#setFinal").checked=fin;
+  $("#setFinalSub").textContent=fin
+    ? "On. Reaching Box 5 is mastery — the verb leaves the deck and is never asked again. "
+      +retiredList().length+" verbs are finished."
+    : "Off. Box 5 verbs keep coming back on the cycle below. "
+      +b5.filter(v=>isDue(v)).length+" of "+b5.length+" are waiting right now.";
+  $("#setB5").value=S.settings.masteredRecheckDays||0;
+  $("#setB5").disabled=fin;
+  $("#setB5Sub").textContent=fin
+    ? "Not in use while mastered verbs are finished for good."
+    : "Days before a Box 5 verb comes back to be re-proved. 0 means it is never checked.";
+}
+
+/* ============================================================
+   EXPORT — the exact shape knowledge-quest reads
+   ============================================================ */
+function download(name,obj){
+  const b=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+function exportAll(){
+  const c=boxCounts();
+  const box={};c.forEach((n,b)=>box[String(b)]=n);
+  const hist=S.sessionHistory||[];
+  const out={
+    lastUpdated:iso(today()),
+    settings:S.settings,
+    verbs:S.verbs,
+    stats:Object.assign({},S.stats,{
+      totalVerbs:S.verbs.length,mastered:c[5],inProgress:c[1]+c[2]+c[3]+c[4],notStarted:c[0],
+      boxDistribution:box,sessionsLogged:hist.length,
+      questionsFromLog:hist.reduce((a,h)=>a+(h.questions||0),0),
+      correctFromLog:hist.reduce((a,h)=>a+(h.correct||0),0)
+    }),
+    boxDistribution:box,
+    currentStreak:S.currentStreak||0
+  };
+  download("phrasal-verbs-data.json",out);
+  download("progress-data.json",{totalSessions:out.stats.totalSessions,lastUpdated:iso(today()),
+    stats:{totalQuestions:out.stats.questionsFromLog,overallAccuracy:pct(out.stats.correctFromLog,out.stats.questionsFromLog),currentStreak:S.currentStreak||0},
+    sessionHistory:hist,boxes:{"0":S.verbs.filter(v=>v.box===0).map(v=>v.phrasal),"5":S.verbs.filter(v=>v.box===5).map(v=>v.phrasal)}});
+  toast("Two files downloaded — drop them into command-center/english/");
+}
+
+/* ============================================================
+   CHROME
+   ============================================================ */
+let current="dash";
+const VIEWS={dash:{t:"Dashboard",i:"grid"},dragons:{t:"Dragons",i:"flame"},library:{t:"Verb library",i:"book"},sessions:{t:"Sessions",i:"chart"},settings:{t:"Settings",i:"cog"},help:{t:"How this works",i:"help"}};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),2600);}
+function refreshChrome(){
+  const c=boxCounts(),due=dueList();
+  $("#navDue2").textContent=due.length;
+  $("#navAll").textContent=S.verbs.length;
+  $("#navNew").textContent=c[0];
+  $("#navMast").textContent=c[5];
+  $("#navDrag").textContent=dragons().length;
+  const p=pct(c[5],S.verbs.length);
+  $("#mePct").textContent=p+"%";
+  const ranks=[[0,"Getting started"],[10,"Early days"],[25,"Building up"],[45,"Getting there"],[65,"Strong"],[85,"Near fluent"]];
+  let rank=ranks[0][1];ranks.forEach(r=>{if(p>=r[0])rank=r[1];});
+  $("#meRank").textContent=rank;
+  $("#meSub").textContent=c[5]+" of "+S.verbs.length+(IS_PHRASES?" expressions":" verbs")+" mastered";
+}
+function setTheme(m){
+  document.documentElement.setAttribute("data-theme",m);
+  S.prefs.theme=m;save();
+  $("#themeBtn").innerHTML=ico(m==="dark"?"sun":"moon",16);
+  const d=$("#missDot");
+  if(d)d.style.background="repeating-linear-gradient(45deg,"+C("--c-bad")+" 0 2px,transparent 2px 4.6px),"+C("--bad-soft");
+}
+function renderView(){
+  if(current==="dash")renderDash();
+  else if(current==="dragons")renderDragons();
+  else if(current==="library")renderLibrary();
+  else if(current==="sessions")renderSessions();
+  else if(current==="settings")renderSettings();
+}
+function go(view,filter){
+  if(!VIEWS[view])view="dash";
+  current=view;
+  if(view==="library"&&filter){LIB.filter=filter;LIB.open=null;
+    $$(".chip[data-lib]").forEach(ch=>ch.setAttribute("aria-pressed",String(ch.dataset.lib===filter)));}
+  Object.keys(VIEWS).forEach(v=>{const el=$("#view-"+v);if(el)el.hidden=v!==view;});
+  $$(".nav-item").forEach(b=>{
+    const on=b.dataset.view===view&&(!b.dataset.filter||b.dataset.filter===LIB.filter);
+    on?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current");});
+  $("#pageTitle").textContent=VIEWS[view].t;
+  $("#pageIcon").innerHTML=ico(VIEWS[view].i,16);
+  if(location.hash!=="#/"+view)history.replaceState(null,"","#/"+view);
+  $("#sidebar").classList.remove("open");
+  const sc=$(".scrim");if(sc)sc.remove();
+  renderView();window.scrollTo(0,0);
+}
+
+(function init(){
+  const bs=$("#brandSub"); if(bs) bs.textContent = IS_PHRASES ? "Everyday expressions" : "Phrasal verb trainer";
+  const od=$("#otherDeckName"); if(od) od.textContent = IS_PHRASES ? "Phrasal verbs" : "Everyday expressions";
+  const al=$("#navAllLabel"); if(al) al.textContent = IS_PHRASES ? "All expressions" : "All verbs";
+  if(IS_PHRASES){
+    VIEWS.library.t="Expression library";
+    const th=document.querySelector('#view-library thead th'); if(th) th.textContent="Expression";
+    const th2=document.querySelectorAll('#view-library thead th')[1]; if(th2) th2.textContent="In use";
+  }
+  const ol=$("#otherDeck");
+  if(ol && (!ol.getAttribute("href") || ol.getAttribute("href").indexOf("__OTHER")===0)) ol.style.display="none";
+
+  $$("[data-ico]").forEach(el=>el.innerHTML=ico(el.dataset.ico,el.closest(".nav-item")?17:16));
+  setTheme(S.prefs.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
+
+  $$(".nav-item").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view,b.dataset.filter)));
+  $("#themeBtn").addEventListener("click",()=>{setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");renderView();});
+  $("#exportBtn").addEventListener("click",exportAll);
+  $("#exportBtn2").addEventListener("click",exportAll);
+  $("#menuBtn").addEventListener("click",()=>{
+    const sb=$("#sidebar");sb.classList.toggle("open");
+    if(sb.classList.contains("open")){const s=document.createElement("div");s.className="scrim";
+      s.addEventListener("click",()=>{sb.classList.remove("open");s.remove();});document.body.appendChild(s);}
+    else{const s=$(".scrim");if(s)s.remove();}});
+  if(IS_PHRASES)$("#libSearch").placeholder="Search an expression";
+  $("#libSearch").addEventListener("input",e=>{LIB.q=e.target.value.trim().toLowerCase();LIB.open=null;renderLibrary();});
+  $$(".chip[data-lib]").forEach(ch=>ch.addEventListener("click",()=>{
+    LIB.filter=ch.dataset.lib;LIB.open=null;
+    $$(".chip[data-lib]").forEach(o=>o.setAttribute("aria-pressed",String(o===ch)));renderLibrary();}));
+
+  const bind=(sel,key,lo,hi)=>$(sel).addEventListener("change",()=>{
+    S.prefs[key]=clamp(parseInt($(sel).value,10)||lo,lo,hi);$(sel).value=S.prefs[key];save();refreshChrome();toast("Saved");});
+  bind("#setLen","roundSize",5,60);bind("#setSide","sideDrill",0,5);
+  $("#setSyn").addEventListener("change",()=>{S.prefs.acceptSyn=$("#setSyn").checked;save();toast("Saved");});
+  $("#setFinal").addEventListener("change",()=>{
+    const on=$("#setFinal").checked;
+    applyMasteryRule(on,null);renderSettings();refreshChrome();
+    toast(on?"Box 5 is the finish line — mastered verbs will not be asked again"
+            :"Mastered verbs are back in circulation");});
+  $("#setB5").addEventListener("change",()=>{
+    const d=clamp(parseInt($("#setB5").value,10)||0,0,365);
+    applyMasteryRule(false,d);renderSettings();refreshChrome();
+    toast(d===0?"Mastered verbs will not be checked":"Mastered verbs now return every "+d+" days");});
+  $("#resetBtn").addEventListener("click",()=>{
+    if(!confirm("Throw away everything drilled in this browser and go back to the 2026-07-24 snapshot?"))return;
+    const prefs=S.prefs;S=freshFromSeed();S.prefs=prefs;save();refreshChrome();renderView();toast("Back to the published snapshot");});
+
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){go("dash");return;}
+  });
+  let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{
+    if(current==="dash")renderBars();if(current==="sessions")renderAcc();},140);});
+
+  if(!storageOK)setTimeout(()=>toast("This browser blocks saving for local files — export before you close it"),900);
+  refreshChrome();
+  go((location.hash||"").replace("#/","")||"dash");
+})();
+
+</script>
+

@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Particle — phrasal verbs on Leitner boxes</title>
+<style>
+:root{
+  --bg:#F4F4F2; --surface:#FFFFFF; --surface-2:#FAFAF9; --surface-3:#F1F1EE;
+  --border:#E6E6E1; --border-strong:#D7D7D1;
+  --ink:#18181B; --ink-2:#57575E; --ink-3:#8E8E96;
+  --accent:#6366F1; --accent-ink:#4F46E5; --accent-soft:#EEEFFE;
+  --c-series:#6366F1; --c-good:#0D9488; --c-bad:#E11D48;
+  --good-soft:#E4F4F2; --bad-soft:#FDEAEF; --warn:#B45309; --warn-soft:#FBF0DF;
+  --info:#2563EB; --info-soft:#E7EEFD;
+  /* Leitner ramp: one hue, light→dark, box 0 is the odd one out (not started) */
+  --b0:#C9C9C4; --b1:#C7CBF7; --b2:#A5ABF2; --b3:#818CF8; --b4:#6366F1; --b5:#0D9488;
+  --shadow-sm:0 1px 2px rgba(24,24,27,.05);
+  --shadow:0 1px 2px rgba(24,24,27,.05), 0 10px 26px -14px rgba(24,24,27,.18);
+  --r:10px; --r-lg:14px; --r-xl:18px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+  --font-display:"New York",ui-serif,Georgia,serif;
+  --font-mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sidebar:266px;
+}
+[data-theme="dark"]{
+  --bg:#0F0F12; --surface:#1C1C20; --surface-2:#232329; --surface-3:#2A2A31;
+  --border:#2C2C33; --border-strong:#3B3B44;
+  --ink:#F3F3F4; --ink-2:#A2A2AB; --ink-3:#75757F;
+  --accent:#818CF8; --accent-ink:#A5B4FC; --accent-soft:#25253A;
+  --c-series:#6366F1; --c-good:#11A897; --c-bad:#F43F5E;
+  --good-soft:#14312F; --bad-soft:#3A1723; --warn:#F0B23E; --warn-soft:#33270F;
+  --info:#60A5FA; --info-soft:#16233F;
+  --b0:#3A3A42; --b1:#3E4272; --b2:#4B51A8; --b3:#5A62D4; --b4:#6366F1; --b5:#11A897;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 26px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none;padding:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* the signature: verb and particle are always visibly separate */
+.pv{white-space:nowrap}
+.pv .stem{color:var(--ink)}
+.pv .part{color:var(--accent-ink);font-weight:600}
+[data-theme="dark"] .pv .part{color:var(--accent)}
+
+.app{display:flex;min-height:100vh;padding:10px;gap:10px}
+.sidebar{width:var(--sidebar);flex:0 0 var(--sidebar);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;position:sticky;top:10px;height:calc(100vh - 20px)}
+.brand{display:flex;align-items:center;gap:10px;padding:18px 18px 14px}
+.brand-mark{width:30px;height:30px;border-radius:9px;flex:0 0 30px;background:linear-gradient(145deg,#7C83F7,#4F46E5);display:grid;place-items:center;color:#fff;box-shadow:0 2px 6px rgba(79,70,229,.35)}
+.brand-name{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.brand-sub{font-size:11px;color:var(--ink-3);margin-top:-2px}
+.nav{flex:1;overflow-y:auto;padding:4px 10px 10px}
+.nav-label{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:14px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border-radius:7px;color:var(--ink-2);font-size:13.5px;font-weight:500;text-align:left;transition:background .12s,color .12s}
+.nav-item:hover{background:var(--surface-3);color:var(--ink)}
+.nav-item[aria-current="page"]{background:var(--surface-3);color:var(--ink);font-weight:600}
+.nav-item .ico{color:var(--ink-3);flex:0 0 18px}
+.nav-item[aria-current="page"] .ico{color:var(--accent-ink)}
+.nav-item .count{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--ink-3);background:var(--surface-3);padding:1px 6px;border-radius:20px}
+.nav-item[aria-current="page"] .count{background:var(--surface);color:var(--ink-2)}
+.me{margin:10px;padding:9px 10px;border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:center;gap:10px;background:var(--surface-2)}
+.avatar{width:28px;height:28px;border-radius:8px;flex:0 0 28px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-ink);font-family:var(--font-mono);font-size:11px;font-weight:600}
+.me-name{font-size:13px;font-weight:600;line-height:1.2}
+.me-sub{font-size:11px;color:var(--ink-3)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.topbar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:12px;padding:11px 14px;position:sticky;top:10px;z-index:30}
+.page-icon{width:30px;height:30px;border-radius:9px;flex:0 0 30px;display:grid;place-items:center;background:var(--surface-3);color:var(--ink-2)}
+.page-title{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:9px;border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-2);font-size:13px;font-weight:500;white-space:nowrap;transition:background .12s,border-color .12s,color .12s}
+.btn:hover{background:var(--surface-3);color:var(--ink)}
+.btn .ico{color:var(--ink-3)}
+.btn-icon{padding:7px;width:32px;justify-content:center}
+.btn-primary{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff;font-weight:600}
+.btn-primary:hover{background:#4338CA;border-color:#4338CA;color:#fff}
+.btn-primary .ico{color:rgba(255,255,255,.85)}
+[data-theme="dark"] .btn-primary{background:#4F46E5;border-color:#4F46E5}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.content{padding:0 0 10px;display:flex;flex-direction:column;gap:10px}
+.view[hidden]{display:none}
+.grid{display:grid;gap:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm)}
+.card-head{display:flex;align-items:flex-start;gap:12px;padding:15px 17px 0}
+.card-title{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.card-sub{font-size:12px;color:var(--ink-3);margin-top:2px}
+.card-head-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:11.5px;font-weight:600;background:var(--surface-3);color:var(--ink-2);white-space:nowrap}
+.badge-good{background:var(--good-soft);color:var(--c-good)}
+.badge-bad{background:var(--bad-soft);color:var(--c-bad)}
+.badge-warn{background:var(--warn-soft);color:var(--warn)}
+.badge-info{background:var(--info-soft);color:var(--info)}
+.badge-accent{background:var(--accent-soft);color:var(--accent-ink)}
+
+.kpis{display:grid;grid-template-columns:repeat(7,1fr);overflow:hidden}
+.kpi{padding:15px 17px 16px;border-left:1px solid var(--border);min-width:0}
+.kpi:first-child{border-left:none}
+.kpi-top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.kpi-label{font-size:12.5px;color:var(--ink-2);font-weight:500}
+.kpi-chip{margin-left:auto;width:26px;height:26px;border-radius:8px;flex:0 0 26px;display:grid;place-items:center}
+.kpi-value{font-size:26px;font-weight:600;letter-spacing:-.025em;line-height:1.1;display:flex;align-items:baseline;gap:8px}
+.kpi-foot{font-size:11.5px;color:var(--ink-3);margin-top:5px}
+
+/* Leitner mastery bar */
+.mastery{display:flex;height:34px;border-radius:var(--r);overflow:hidden;margin:14px 17px 8px;gap:2px}
+.mastery span{display:grid;place-items:center;font-size:11.5px;font-weight:700;color:#fff;font-family:var(--font-mono);transition:flex-grow .5s cubic-bezier(.4,0,.2,1);min-width:0}
+.mastery span:first-child{border-radius:var(--r) 0 0 var(--r)}
+.mastery span:last-child{border-radius:0 var(--r) var(--r) 0}
+.mastery-legend{display:flex;flex-wrap:wrap;gap:14px;padding:0 17px 15px}
+.leg{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2);font-weight:500}
+.dot{width:9px;height:9px;border-radius:2.5px;flex:0 0 9px}
+
+.boxes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.boxcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.boxcard h4{margin:0;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+.boxcard .n{margin-left:auto;font-family:var(--font-mono);font-size:13px;font-weight:600}
+.boxcard .iv{font-size:11px;color:var(--ink-3);margin-top:-4px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip-v{font-size:11.5px;padding:3px 7px;border-radius:6px;background:var(--surface-3);color:var(--ink-2);white-space:nowrap}
+.chip-more{background:var(--accent-soft);color:var(--accent-ink);cursor:pointer;font-weight:600}
+
+.chart-wrap{position:relative;padding:6px 10px 12px}
+.chart-wrap svg{display:block;width:100%;overflow:visible}
+.tip{position:absolute;pointer-events:none;opacity:0;transform:translate(-50%,-100%);background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 10px;min-width:130px;z-index:20;transition:opacity .1s}
+.tip.on{opacity:1}
+.tip-title{font-size:11.5px;font-weight:600;margin-bottom:6px}
+.tip-row{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink-2);margin-top:3px}
+.tip-row b{margin-left:auto;font-family:var(--font-mono);font-weight:600;color:var(--ink)}
+.chart-empty{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.chart-empty span{font-size:12.5px;color:var(--ink-3);background:var(--surface);padding:6px 12px;border-radius:20px;border:1px solid var(--border)}
+
+.table-wrap{overflow-x:auto;padding:4px 6px 8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:10px 11px;white-space:nowrap;border-bottom:1px solid var(--border)}
+thead th.num,tbody td.num{text-align:right}
+tbody td{padding:11px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr.clickable{cursor:pointer}
+tbody tr.clickable:hover td{background:var(--surface-2)}
+td.num{font-family:var(--font-mono);font-size:12.5px}
+
+/* drill */
+.session{max-width:780px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:10px}
+.session-bar{display:flex;align-items:center;gap:12px;padding:13px 16px}
+.progress-track{flex:1;height:6px;border-radius:20px;background:var(--surface-3);overflow:hidden}
+.progress-fill{height:100%;background:var(--accent-ink);border-radius:20px;transition:width .3s}
+.session-count{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);white-space:nowrap}
+.drill{min-height:330px;display:flex;flex-direction:column;padding:28px 30px 24px;text-align:center;gap:18px}
+.drill-face{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px}
+.prompt-word{font-family:var(--font-display);font-size:clamp(32px,5vw,48px);font-weight:500;letter-spacing:-.02em;line-height:1.05}
+.prompt-label{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.sentence{font-size:19px;line-height:1.6;max-width:44ch;margin:0 auto;color:var(--ink-2)}
+.gap{display:inline-block;min-width:104px;border-bottom:2px solid var(--accent);color:var(--accent-ink);font-weight:600}
+.gap.filled{border-bottom-color:var(--border-strong)}
+.answer{width:100%;max-width:340px;margin:0 auto;display:block;padding:11px 14px;border-radius:var(--r);border:1px solid var(--border-strong);background:var(--surface-2);font-size:17px;text-align:center}
+.answer:focus{outline:none;border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px var(--accent-soft)}
+.verdict{display:flex;align-items:center;gap:9px;justify-content:center;padding:11px 15px;border-radius:var(--r);font-size:13.5px;font-weight:500;max-width:520px;margin:0 auto;text-align:left}
+.verdict-ok{background:var(--good-soft);color:var(--c-good)}
+.verdict-no{background:var(--bad-soft);color:var(--c-bad)}
+.verdict-syn{background:var(--warn-soft);color:var(--warn)}
+.movement{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:var(--font-mono);color:var(--ink-3);justify-content:center}
+.side-note{display:inline-flex;align-items:center;gap:7px;margin:0 auto;font-size:12px;color:var(--ink-2);background:var(--surface-3);padding:5px 11px;border-radius:20px}
+.drill-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.session-foot{display:flex;align-items:center;justify-content:center;gap:16px;padding:11px;font-size:11.5px;color:var(--ink-3)}
+.session-foot kbd,.drill kbd{font-family:var(--font-mono);font-size:10.5px;border:1px solid var(--border-strong);border-radius:5px;padding:1px 5px;background:var(--surface-2);color:var(--ink-2)}
+.mistakes{display:flex;flex-direction:column;gap:0}
+.mis{display:flex;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);text-align:left;align-items:flex-start}
+.mis:last-child{border-bottom:none}
+.mis-n{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);width:20px;flex:0 0 20px;padding-top:2px}
+.mis-body{flex:1;min-width:0}
+.mis-head{font-size:14px;font-weight:600;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.mis-you{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.mis-ex{font-size:13.5px;color:var(--ink-2);margin-top:7px;padding-left:11px;border-left:2px solid var(--border-strong);line-height:1.5}
+.mis-ex .pv .stem{color:var(--ink);font-weight:600}
+
+.filters{display:flex;align-items:center;gap:8px;padding:13px 15px;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:190px;max-width:330px}
+.search .ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
+.search input{width:100%;padding:8px 11px 8px 32px;border-radius:9px;border:1px solid var(--border-strong);background:var(--surface-2);font-size:13px}
+.search input:focus{outline:none;border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px var(--accent-soft)}
+.chip{padding:6px 11px;border-radius:20px;border:1px solid var(--border-strong);background:var(--surface);font-size:12.5px;font-weight:500;color:var(--ink-2)}
+.chip:hover{background:var(--surface-3);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+[data-theme="dark"] .chip[aria-pressed="true"]{color:#18181B}
+.detail{background:var(--surface-2)}
+.detail td{padding:0;border-bottom:1px solid var(--border)}
+.detail-inner{padding:4px 14px 16px;display:flex;flex-direction:column;gap:9px}
+.detail-ex{font-size:13.5px;color:var(--ink-2);line-height:1.5;padding-left:13px;border-left:2px solid var(--border-strong)}
+.detail-ex .pv .stem{color:var(--ink);font-weight:600}
+
+.empty{display:flex;flex-direction:column;align-items:center;gap:14px;padding:52px 24px;text-align:center}
+.empty-mark{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-ink)}
+.empty h3{margin:0;font-size:16px;font-weight:600}
+.empty p{margin:0;font-size:13.5px;color:var(--ink-3);max-width:44ch;line-height:1.5}
+.prose{padding:20px 24px 26px;max-width:68ch}
+.prose h3{font-size:14px;font-weight:600;margin:22px 0 7px}
+.prose h3:first-child{margin-top:0}
+.prose p{margin:0 0 10px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.prose ul{margin:0 0 10px;padding-left:18px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.prose li{margin-bottom:5px}
+.prose strong{color:var(--ink);font-weight:600}
+.set-row{display:flex;align-items:center;gap:16px;padding:15px 17px;border-bottom:1px solid var(--border)}
+.set-row:last-child{border-bottom:none}
+.set-body{flex:1;min-width:0}
+.set-title{font-size:13.5px;font-weight:600}
+.set-sub{font-size:12px;color:var(--ink-3);margin-top:2px;line-height:1.45}
+.set-row .btn,.set-row input{margin-left:auto;flex:0 0 auto}
+input.stepper{width:80px;padding:7px 10px;border-radius:9px;border:1px solid var(--border-strong);background:var(--surface-2);font-family:var(--font-mono);font-size:13px;text-align:center}
+.danger{color:var(--c-bad);border-color:var(--c-bad)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:13px;font-weight:500;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.2s;z-index:100}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.menu-btn{display:none}
+.dash-top{grid-template-columns:minmax(0,1fr) 372px}
+@media (max-width:1280px){.boxes{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1400px){.kpis{grid-template-columns:repeat(4,1fr)}.kpi:nth-child(5){border-left:none}.kpi:nth-child(n+5){border-top:1px solid var(--border)}}
+@media (max-width:1180px){
+  .dash-top{grid-template-columns:minmax(0,1fr)}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .kpi:nth-child(4){border-left:none}
+  .kpi:nth-child(n+4){border-top:1px solid var(--border)}
+}
+@media (max-width:860px){
+  .app{padding:8px;gap:8px}
+  .sidebar{position:fixed;left:8px;top:8px;z-index:60;transform:translateX(calc(-100% - 16px));transition:transform .22s ease}
+  .sidebar.open{transform:none;box-shadow:var(--shadow)}
+  .menu-btn{display:inline-flex}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi{border-left:none;border-top:1px solid var(--border)}
+  .kpi:nth-child(-n+2){border-top:none}
+  .kpi:nth-child(odd){border-right:1px solid var(--border)}
+  .boxes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hide-sm{display:none}
+  .drill{padding:22px 16px 20px}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:50}
+}
+@media (min-width:861px){.scrim{display:none}}
+@media (max-width:520px){.kpis{grid-template-columns:1fr}.kpi{border-right:none!important}.boxes{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V9a4 4 0 0 1 8 0v8"/><path d="M12 13h8"/><path d="m17 10 3 3-3 3"/></svg></div>
+      <div><div class="brand-name">Particle</div><div class="brand-sub" id="brandSub">Phrasal verb trainer</div></div>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item" data-view="dash"><span class="ico" data-ico="grid"></span>Dashboard</button>
+      <button class="nav-item" data-view="dragons"><span class="ico" data-ico="flame"></span>Dragons<span class="count" id="navDrag">0</span></button>
+      <div class="nav-label">Library</div>
+      <button class="nav-item" data-view="library" data-filter="all"><span class="ico" data-ico="book"></span><span id="navAllLabel">All verbs</span><span class="count" id="navAll">0</span></button>
+      <button class="nav-item" data-view="library" data-filter="due"><span class="ico" data-ico="clock"></span>Due now<span class="count" id="navDue2">0</span></button>
+      <button class="nav-item" data-view="library" data-filter="0"><span class="ico" data-ico="dot"></span>Not started<span class="count" id="navNew">0</span></button>
+      <button class="nav-item" data-view="library" data-filter="5"><span class="ico" data-ico="trophy"></span>Mastered<span class="count" id="navMast">0</span></button>
+      <div class="nav-label">The other deck</div>
+      <a class="nav-item" id="otherDeck" href="__OTHER_URL__" target="_blank" rel="noopener"><span class="ico" data-ico="arrow"></span><span id="otherDeckName">—</span></a>
+
+      <div class="nav-label">Record</div>
+      <button class="nav-item" data-view="sessions"><span class="ico" data-ico="chart"></span>Sessions</button>
+      <button class="nav-item" data-view="settings"><span class="ico" data-ico="cog"></span>Settings</button>
+      <button class="nav-item" data-view="help"><span class="ico" data-ico="help"></span>How this works</button>
+    </nav>
+    <div class="me">
+      <div class="avatar" id="mePct">—</div>
+      <div style="min-width:0"><div class="me-name" id="meRank">—</div><div class="me-sub" id="meSub">—</div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="btn btn-icon menu-btn" id="menuBtn" aria-label="Menu"><span class="ico" data-ico="menu"></span></button>
+      <div class="page-icon" id="pageIcon"><span class="ico" data-ico="grid"></span></div>
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="btn hide-sm" id="exportBtn"><span class="ico" data-ico="export"></span>Export</button>
+        <button class="btn btn-icon" id="themeBtn" aria-label="Theme"><span class="ico" data-ico="moon"></span></button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- DASHBOARD -->
+      <section class="view" id="view-dash">
+        <div class="card" id="stampCard" style="padding:11px 17px;display:flex;align-items:center;gap:10px">
+          <span class="dot" style="background:var(--c-good);width:8px;height:8px;border-radius:50%"></span>
+          <span style="font-size:12.5px;color:var(--ink-2)" id="stamp">—</span>
+        </div>
+        <div class="card kpis" id="kpis"></div>
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Mastery progress</div><div class="card-sub" id="mastSub">—</div></div>
+            <div class="card-head-right"><span class="badge badge-accent" id="mastBadge">—</span></div>
+          </div>
+          <div class="mastery" id="mastery"></div>
+          <div class="mastery-legend" id="masteryLegend"></div>
+        </div>
+        <div class="grid dash-top">
+          <div class="card">
+            <div class="card-head">
+              <div><div class="card-title">Questions per session</div><div class="card-sub">Last 20 rounds · correct against missed</div></div>
+              <div class="card-head-right">
+                <span class="leg"><span class="dot" style="background:var(--c-good)"></span>Correct</span>
+                <span class="leg"><span class="dot" id="missDot"></span>Missed</span>
+              </div>
+            </div>
+            <div class="chart-wrap" id="barWrap"><svg id="barChart" role="img" aria-label="Correct and missed per session"></svg><div class="tip" id="barTip"></div></div>
+          </div>
+          <div class="card" style="display:flex;flex-direction:column">
+            <div class="card-head"><div><div class="card-title">Up next</div><div class="card-sub" id="queueSub">—</div></div></div>
+            <div id="queue" style="padding:6px 8px 8px"></div>
+          </div>
+        </div>
+        <div class="grid boxes" id="boxes"></div>
+      </section>
+
+      <!-- DRAGONS -->
+      <section class="view" id="view-dragons" hidden>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Dragons</div><div class="card-sub">Verbs you have missed more than once. They get their own round so they don't clog the main one.</div></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Verb</th><th>Means</th><th class="num">Missed</th><th class="num">Right</th><th>Box</th><th>Next</th></tr></thead><tbody id="dragBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- LIBRARY -->
+      <section class="view" id="view-library" hidden>
+        <div class="card">
+          <div class="filters">
+            <div class="search"><span class="ico" data-ico="search"></span><input type="search" id="libSearch" placeholder="Search a verb or a meaning" aria-label="Search"></div>
+            <button class="chip" data-lib="all" aria-pressed="true">All</button>
+            <button class="chip" data-lib="due" aria-pressed="false">Due</button>
+            <button class="chip" data-lib="core" aria-pressed="false">Core 150</button>
+            <button class="chip" data-lib="0" aria-pressed="false">Not started</button>
+            <button class="chip" data-lib="mid" aria-pressed="false">In progress</button>
+            <button class="chip" data-lib="5" aria-pressed="false">Mastered</button>
+            <button class="chip" data-lib="done" aria-pressed="false">Finished</button>
+            <button class="chip" data-lib="amb" aria-pressed="false">Shared prompt</button>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Verb</th><th>Means</th><th>Box</th><th class="num">Right</th><th class="num">Wrong</th><th>Next review</th></tr></thead><tbody id="libBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- SESSIONS -->
+      <section class="view" id="view-sessions" hidden>
+        <div class="card kpis" id="sessKpis"></div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Accuracy over time</div><div class="card-sub">Every logged round since 31 January</div></div></div>
+          <div class="chart-wrap" id="accWrap"><svg id="accChart" role="img" aria-label="Accuracy per session"></svg><div class="tip" id="accTip"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Round log</div><div class="card-sub" id="logSub">—</div></div></div>
+          <div class="table-wrap"><table><thead><tr><th class="num">#</th><th>Date</th><th class="num">Questions</th><th class="num">Correct</th><th class="num">%</th><th>Note</th></tr></thead><tbody id="logBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view" id="view-settings" hidden>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Round format</div><div class="card-sub">The rules Claude follows when running a round with you in chat. Kept here so they travel with the data.</div></div></div>
+          <div style="height:12px"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Verbs per round</div><div class="set-sub">Due reviews first, then Box 0 to fill up.</div></div><input type="number" class="stepper" id="setLen" min="5" max="60" step="5"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Side-drill after a miss</div><div class="set-sub">Extra goes at a verb you just missed, while it is still fresh. They never change the box.</div></div><input type="number" class="stepper" id="setSide" min="0" max="5" step="1"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Box 5 means finished</div><div class="set-sub" id="setFinalSub">—</div></div><input type="checkbox" id="setFinal" style="width:20px;height:20px"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Re-check mastered verbs every</div><div class="set-sub" id="setB5Sub">—</div></div><input type="number" class="stepper" id="setB5" min="0" max="365" step="15"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Accept valid synonyms</div><div class="set-sub">36 prompts in this deck have more than one correct answer. With this on, a valid alternative counts as correct and you are told which one was the target.</div></div><input type="checkbox" id="setSyn" style="width:20px;height:20px"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Your progress</div><div class="card-sub">This page shows a snapshot. Rounds are run in chat and the snapshot is rebuilt afterwards.</div></div></div>
+          <div style="height:12px"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Export the data</div><div class="set-sub">Downloads phrasal-verbs-data.json and progress-data.json, the same shape any other tool reads.</div></div><button class="btn" id="exportBtn2"><span class="ico" data-ico="export"></span>Export</button></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Reload the snapshot</div><div class="set-sub">Clears anything cached in this browser and re-reads the published data.</div></div><button class="btn danger" id="resetBtn"><span class="ico" data-ico="trash"></span>Reset</button></div>
+        </div>
+      </section>
+
+      <!-- HELP -->
+      <section class="view" id="view-help" hidden>
+        <div class="card"><div class="prose">
+          <h3>What this is</h3>
+          <p>Your knowledge-quest phrasal verb trainer, rebuilt as one file you own. Same 431 verbs, same Leitner boxes, same drill format — but the practice happens here instead of in Telegram, and the data is repaired.</p>
+          <h3>The boxes</h3>
+          <p>Every verb sits in a box, and the box decides how long until you see it again: <strong>Box 0</strong> new or missed (comes straight back), <strong>1</strong> after a day, <strong>2</strong> after three, <strong>3</strong> after a week, <strong>4</strong> after two weeks, <strong>5</strong> after a month. Answer right and the verb moves up one box. Answer wrong and it moves down one — not all the way to the floor. A verb you have carried to Box 4 and then fumble goes back to Box 3, so you see it in a week rather than starting it over.</p>
+          <h3>When is a verb finished?</h3>
+          <p><strong>When it reaches Box 5.</strong> That is the whole rule. A verb that climbs all the way to Box 5 counts as mastered, leaves the deck, and is never asked again. Nothing to re-prove, no maintenance cycle.</p>
+          <p>Getting there takes five correct answers in a row with the gaps widening each time — a day, three days, a week, a fortnight. Miss it anywhere along the way and it drops a box and has to climb again.</p>
+          <p>One thing worth knowing, because it is measurable in your own history: over six months, <strong>23% of the verbs that first reached Box 5 were missed the very next time they came up</strong>. Under the old cycling rule those got caught and sent back down. Under this rule they do not — once a verb is in, it is in. If you later want a safety net, turn off <strong>Box 5 means finished</strong> in Settings and set a re-check cycle; the verbs already finished come straight back into circulation.</p>
+          <h3>The round</h3>
+          <p>Rounds are run with Claude in chat, not on this page. This page is where you see where you stand; after each round the data is updated and the page is republished at the same link.</p>
+          <ul>
+            <li>Thirty verbs. Due reviews first, then Box 0 to fill up.</li>
+            <li>Never only Box 0 — that would waste the spacing.</li>
+            <li>Miss one and you get an immediate side-drill on it, while the memory is fresh. The side-drill does not change the box.</li>
+            <li>Verbs you keep missing become <strong>dragons</strong> and get their own round.</li>
+            <li>Every round ends with the full mistakes list and a fresh sentence for each one.</li>
+          </ul>
+          <p>The settings on this page record that format, and they travel with the exported data.</p>
+          <h3>Why the prompt shows a sentence</h3>
+          <p>Thirty-six of the prompts in this deck have more than one right answer — <em>return</em> alone fits <span class="pv"><span class="stem">bring</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">come</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">get</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">give</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">go</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">hand</span> <span class="part">back</span></span> and <span class="pv"><span class="stem">head</span> <span class="part">back</span></span>. Asking on the bare word marks you wrong for knowing a second answer. So the prompt is the meaning <em>and</em> a sentence with a hole in it — the sentence decides which one fits. If you type a different valid verb, it says so instead of failing you.</p>
+          <h3>Moving the data</h3>
+          <p><strong>Settings &rarr; Export</strong> writes <code>phrasal-verbs-data.json</code> and <code>progress-data.json</code> in the shape any other tool reads, so nothing is trapped here.</p>
+        </div></div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+const SEED = /*__DATA__*/null/*__END__*/;
+/*__LOGIC__*/
+</script>
+</body>
+</html>
