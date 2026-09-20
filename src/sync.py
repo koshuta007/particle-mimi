@@ -27,7 +27,7 @@ def git(*args, check=True):
 ident = []
 if not git('config', 'user.email', check=False).stdout.strip():
     ident = ['-c', 'user.name=koshuta007',
-             '-c', 'user.email=koshuta007@users.noreply.github.com']
+             '-c', 'user.email=289376517+koshuta007@users.noreply.github.com']
 
 git('add', '-A')
 if git('status', '--porcelain').stdout.strip():
