@@ -49,7 +49,15 @@ if not ahead:
 r = git('push', '-q', 'origin', 'HEAD:main', check=False)
 if r.returncode:
     if not any(k in r.stderr for k in ('rejected', 'fetch first', 'non-fast-forward')):
-        sys.exit(f"git push се провали:\n{r.stderr.strip()}")
+        branch = git('rev-parse', '--abbrev-ref', 'HEAD').stdout.strip()
+        if branch in ('main', 'HEAD'):
+            sys.exit(f"git push се провали:\n{r.stderr.strip()}")
+        # облакът може да откаже директно качване в main — тогава поне клонът
+        # на сесията да замине, за да не се загуби рундът с изтичането на машината
+        git('push', '-q', '-u', 'origin', branch)
+        sys.exit(f"main отказа качването:\n{r.stderr.strip()}\n\n"
+                 f"Рундът е качен в клона `{branch}` вместо в main. Кажи на Клод на\n"
+                 f"лаптопа да го слее — дотогава телефонът и лаптопът са разминати.")
     # другото устройство е качило междувременно — вземи неговото, сложи
     # своето отгоре и пробвай пак
     r = git('pull', '--rebase', '-q', 'origin', 'main', check=False)
