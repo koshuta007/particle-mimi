@@ -62,7 +62,8 @@ function pvHTML(v){
   const p=t.split(" ");
   return '<span class="pv"><span class="stem">'+esc(p[0])+'</span> <span class="part">'+esc(p.slice(1).join(" "))+'</span></span>';
 }
-const IRREG={beat:["beat","beats","beating","beaten"],bite:["bite","bites","biting","bit","bitten"],fight:["fight","fights","fighting","fought"],have:["have","has","having","had"],lie:["lie","lies","lying","lay","lain"],light:["light","lights","lighting","lit","lighted"],sneak:["sneak","sneaks","sneaking","snuck","sneaked"],tear:["tear","tears","tearing","tore","torn"],lead:["lead","leads","leading","led"],go:["go","goes","going","went","gone"],come:["come","comes","coming","came"],take:["take","takes","taking","took","taken"],give:["give","gives","giving","gave","given"],get:["get","gets","getting","got","gotten"],make:["make","makes","making","made"],put:["put","puts","putting"],find:["find","finds","finding","found"],bring:["bring","brings","bringing","brought"],break:["break","breaks","breaking","broke","broken"],hold:["hold","holds","holding","held"],run:["run","runs","running","ran"],sit:["sit","sits","sitting","sat"],stand:["stand","stands","standing","stood"],wake:["wake","wakes","waking","woke","woken"],hang:["hang","hangs","hanging","hung"],cut:["cut","cuts","cutting"],let:["let","lets","letting"],keep:["keep","keeps","keeping","kept"],pay:["pay","pays","paying","paid"],set:["set","sets","setting"],throw:["throw","throws","throwing","threw","thrown"],grow:["grow","grows","growing","grew","grown"],lay:["lay","lays","laying","laid"],leave:["leave","leaves","leaving","left"],think:["think","thinks","thinking","thought"],write:["write","writes","writing","wrote","written"],fall:["fall","falls","falling","fell","fallen"],eat:["eat","eats","eating","ate","eaten"],catch:["catch","catches","catching","caught"],deal:["deal","deals","dealing","dealt"],draw:["draw","draws","drawing","drew","drawn"],blow:["blow","blows","blowing","blew","blown"],build:["build","builds","building","built"],buy:["buy","buys","buying","bought"],feel:["feel","feels","feeling","felt"],hear:["hear","hears","hearing","heard"],lose:["lose","loses","losing","lost"],meet:["meet","meets","meeting","met"],read:["read","reads","reading"],ride:["ride","rides","riding","rode","ridden"],sell:["sell","sells","selling","sold"],send:["send","sends","sending","sent"],speak:["speak","speaks","speaking","spoke","spoken"],spend:["spend","spends","spending","spent"],stick:["stick","sticks","sticking","stuck"],tell:["tell","tells","telling","told"],wear:["wear","wears","wearing","wore","worn"],win:["win","wins","winning","won"],do:["do","does","doing","did","done"],see:["see","sees","seeing","saw","seen"],stumble:["stumble","stumbles","stumbling","stumbled"]};
+/* the same table round.py and grade.py use — a form missing here is a sentence the page cannot blank */
+const IRREG={"beat":["beat","beats","beating","beaten"],"bite":["bite","bites","biting","bit","bitten"],"fight":["fight","fights","fighting","fought"],"have":["have","has","having","had"],"lie":["lie","lies","lying","lay","lain"],"light":["light","lights","lighting","lit","lighted"],"sneak":["sneak","sneaks","sneaking","snuck","sneaked"],"tear":["tear","tears","tearing","tore","torn"],"lead":["lead","leads","leading","led"],"wind":["wind","winds","winding","wound"],"go":["go","goes","going","went","gone"],"come":["come","comes","coming","came"],"take":["take","takes","taking","took","taken"],"give":["give","gives","giving","gave","given"],"get":["get","gets","getting","got","gotten"],"make":["make","makes","making","made"],"put":["put","puts","putting"],"find":["find","finds","finding","found"],"bring":["bring","brings","bringing","brought"],"break":["break","breaks","breaking","broke","broken"],"hold":["hold","holds","holding","held"],"run":["run","runs","running","ran"],"sit":["sit","sits","sitting","sat"],"stand":["stand","stands","standing","stood"],"wake":["wake","wakes","waking","woke","woken"],"hang":["hang","hangs","hanging","hung"],"cut":["cut","cuts","cutting"],"let":["let","lets","letting"],"keep":["keep","keeps","keeping","kept"],"pay":["pay","pays","paying","paid"],"set":["set","sets","setting"],"throw":["throw","throws","throwing","threw","thrown"],"grow":["grow","grows","growing","grew","grown"],"lay":["lay","lays","laying","laid"],"leave":["leave","leaves","leaving","left"],"think":["think","thinks","thinking","thought"],"write":["write","writes","writing","wrote","written"],"fall":["fall","falls","falling","fell","fallen"],"eat":["eat","eats","eating","ate","eaten"],"catch":["catch","catches","catching","caught"],"deal":["deal","deals","dealing","dealt"],"draw":["draw","draws","drawing","drew","drawn"],"blow":["blow","blows","blowing","blew","blown"],"build":["build","builds","building","built"],"buy":["buy","buys","buying","bought"],"feel":["feel","feels","feeling","felt"],"hear":["hear","hears","hearing","heard"],"lose":["lose","loses","losing","lost"],"meet":["meet","meets","meeting","met"],"read":["read","reads","reading"],"sell":["sell","sells","selling","sold"],"send":["send","sends","sending","sent"],"speak":["speak","speaks","speaking","spoke","spoken"],"spend":["spend","spends","spending","spent"],"stick":["stick","sticks","sticking","stuck"],"tell":["tell","tells","telling","told"],"wear":["wear","wears","wearing","wore","worn"],"win":["win","wins","winning","won"],"do":["do","does","doing","did","done"],"see":["see","sees","seeing","saw","seen"],"know":["know","knows","knowing","knew","known"],"drink":["drink","drinks","drinking","drank","drunk"],"drive":["drive","drives","driving","drove","driven"],"ride":["ride","rides","riding","rode","ridden"],"rise":["rise","rises","rising","rose","risen"],"shake":["shake","shakes","shaking","shook","shaken"],"sing":["sing","sings","singing","sang","sung"],"sleep":["sleep","sleeps","sleeping","slept"],"swear":["swear","swears","swearing","swore","sworn"],"teach":["teach","teaches","teaching","taught"],"understand":["understand","understands","understanding","understood"],"freeze":["freeze","freezes","freezing","froze","frozen"],"choose":["choose","chooses","choosing","chose","chosen"],"forget":["forget","forgets","forgetting","forgot","forgotten"],"hide":["hide","hides","hiding","hid","hidden"],"strike":["strike","strikes","striking","struck"],"swing":["swing","swings","swinging","swung"],"dig":["dig","digs","digging","dug"],"feed":["feed","feeds","feeding","fed"],"flee":["flee","flees","fleeing","fled"],"shoot":["shoot","shoots","shooting","shot"],"shut":["shut","shuts","shutting"],"split":["split","splits","splitting"],"spread":["spread","spreads","spreading"],"quit":["quit","quits","quitting"],"burst":["burst","bursts","bursting"],"stumble":["stumble","stumbles","stumbling","stumbled"]};
 function verbForms(v){
   let out;
   if(IRREG[v]) out=IRREG[v].slice();
@@ -99,10 +100,11 @@ function markExample(text,v){
 const KEY="particle."+KIND+".v1";   /* the two decks must not share a slot */
 let storageOK=true;
 function freshFromSeed(){return JSON.parse(JSON.stringify(SEED));}
-/* The page is a read surface: rounds are run in chat and this file is rebuilt
-   afterwards. So the published data always wins — comparing dates was not
-   enough, because two rebuilds on the same day tie and the stale copy sticks.
-   Only the viewer's own choices survive a republish. */
+/* Progress lives in THIS browser once a round has been answered here — the
+   page is the trainer now, not a read surface. The published data still
+   supplies the cards (sentences, meanings, synonyms), so a republished deck
+   updates every card without touching the boxes. Until the first answer the
+   published progress wins, so a fresh phone starts where the snapshot stands. */
 function load(){
   const fresh=freshFromSeed();
   try{
@@ -112,6 +114,16 @@ function load(){
       if(s.prefs) fresh.prefs=Object.assign(fresh.prefs||{},s.prefs);
       const keep=["masteredIsFinal","masteredRecheckDays"];
       if(s.settings) keep.forEach(k=>{ if(s.settings[k]!==undefined) fresh.settings[k]=s.settings[k]; });
+      if(s.drilled){
+        const mine={};(s.verbs||[]).forEach(v=>mine[v.id]=v);
+        fresh.verbs.forEach(v=>{const m=mine[v.id];if(!m)return;PROG.forEach(k=>{if(k in m)v[k]=m[k];else delete v[k];});});
+        fresh.sessionHistory=s.sessionHistory||fresh.sessionHistory;
+        fresh.stats=Object.assign({},fresh.stats,s.stats||{});
+        fresh.currentStreak=s.currentStreak||0;
+        if(s.lastUpdated)fresh.lastUpdated=s.lastUpdated;
+        fresh.round=s.round||null;
+        fresh.drilled=true;
+      }
     }
   }catch(e){ storageOK=false; }
   return fresh;
@@ -122,7 +134,7 @@ function save(){
   catch(e){ storageOK=false; toast("This browser is blocking storage — your settings will not be remembered"); }
 }
 let S=load();
-S.prefs=Object.assign({roundSize:30,sideDrill:1,acceptSyn:true,theme:null},S.prefs||{});
+S.prefs=Object.assign({roundSize:15,sideDrill:1,acceptSyn:true,theme:null},S.prefs||{});
 if(S.settings.masteredIsFinal===undefined)S.settings.masteredIsFinal=true;
 if(S.settings.masteredRecheckDays===undefined)S.settings.masteredRecheckDays=0;
 /* anything already sitting in Box 5 is finished under this rule, including
@@ -238,9 +250,14 @@ function renderAcc(){
     g+='<text x="'+(pad.l-9)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="end" font-size="10.5" font-family="'+C("--font-mono")+'" fill="'+ink3+'">'+v+'%</text>';});
   if(hist.length){
     const pts=hist.map((h,k)=>[X(k),Y(h.pct!=null?h.pct:pct(h.correct||0,h.questions||1))]);
-    const d=smooth(pts);
-    g+='<path d="'+d+' L'+pts[pts.length-1][0]+' '+(pad.t+ph)+' L'+pts[0][0]+' '+(pad.t+ph)+' Z" fill="url(#ag)"/>';
-    g+='<path d="'+d+'" fill="none" stroke="'+series+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+    if(pts.length>1){
+      const d=smooth(pts);
+      g+='<path d="'+d+' L'+pts[pts.length-1][0]+' '+(pad.t+ph)+' L'+pts[0][0]+' '+(pad.t+ph)+' Z" fill="url(#ag)"/>';
+      g+='<path d="'+d+'" fill="none" stroke="'+series+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+    }else{
+      /* one round is a point, not a curve — smooth() has nothing to draw yet */
+      g+='<circle cx="'+pts[0][0]+'" cy="'+pts[0][1]+'" r="5" fill="'+series+'"/>';
+    }
     g+='<rect x="'+pad.l+'" y="'+pad.t+'" width="'+pw+'" height="'+ph+'" fill="transparent" id="ah"/>';
     g+='<g id="ahov" opacity="0"><line y1="'+pad.t+'" y2="'+(pad.t+ph)+'" stroke="'+ink3+'" stroke-width="1" stroke-dasharray="3 3"/><circle r="5" fill="'+series+'" stroke="'+C("--surface")+'" stroke-width="2"/></g>';
   }
@@ -276,7 +293,7 @@ function renderDash(){
   const c=boxCounts(),due=dueList(),st=S.stats||{};
   const hist=S.sessionHistory||[];
   const last=hist.length?hist[hist.length-1]:null;
-  $("#stamp").textContent=(S.lastUpdated?"Snapshot of "+shortDate(S.lastUpdated):"No snapshot date")
+  $("#stamp").textContent=(S.drilled?"Progress saved in this browser":S.lastUpdated?"Snapshot of "+shortDate(S.lastUpdated):"No snapshot date")
     +(last?" · after round "+last.session+" on "+shortDate(last.date):"")
     +(S.settings.masteredIsFinal?" · Box 5 is the finish line":"");
   const q=hist.reduce((a,h)=>a+(h.questions||0),0),ok=hist.reduce((a,h)=>a+(h.correct||0),0);
@@ -447,14 +464,14 @@ function exportAll(){
   download("progress-data.json",{totalSessions:out.stats.totalSessions,lastUpdated:iso(today()),
     stats:{totalQuestions:out.stats.questionsFromLog,overallAccuracy:pct(out.stats.correctFromLog,out.stats.questionsFromLog),currentStreak:S.currentStreak||0},
     sessionHistory:hist,boxes:{"0":S.verbs.filter(v=>v.box===0).map(v=>v.phrasal),"5":S.verbs.filter(v=>v.box===5).map(v=>v.phrasal)}});
-  toast("Two files downloaded — drop them into command-center/english/");
+  toast("Два файла са свалени — пази ги; Import ги връща");
 }
 
 /* ============================================================
    CHROME
    ============================================================ */
 let current="dash";
-const VIEWS={dash:{t:"Dashboard",i:"grid"},dragons:{t:"Dragons",i:"flame"},library:{t:"Verb library",i:"book"},sessions:{t:"Sessions",i:"chart"},settings:{t:"Settings",i:"cog"},help:{t:"How this works",i:"help"}};
+const VIEWS={practice:{t:"Practice",i:"target"},dash:{t:"Dashboard",i:"grid"},dragons:{t:"Dragons",i:"flame"},library:{t:"Verb library",i:"book"},sessions:{t:"Sessions",i:"chart"},settings:{t:"Settings",i:"cog"},help:{t:"How this works",i:"help"}};
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),2600);}
 function refreshChrome(){
   const c=boxCounts(),due=dueList();
@@ -478,7 +495,8 @@ function setTheme(m){
   if(d)d.style.background="repeating-linear-gradient(45deg,"+C("--c-bad")+" 0 2px,transparent 2px 4.6px),"+C("--bad-soft");
 }
 function renderView(){
-  if(current==="dash")renderDash();
+  if(current==="practice")renderPractice();
+  else if(current==="dash")renderDash();
   else if(current==="dragons")renderDragons();
   else if(current==="library")renderLibrary();
   else if(current==="sessions")renderSessions();
@@ -520,6 +538,9 @@ function go(view,filter){
   $("#themeBtn").addEventListener("click",()=>{setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");renderView();});
   $("#exportBtn").addEventListener("click",exportAll);
   $("#exportBtn2").addEventListener("click",exportAll);
+  $("#importBtn").addEventListener("click",()=>$("#importFile").click());
+  $("#importFile").addEventListener("change",importFiles);
+  document.addEventListener("keydown",practiceKeys);
   $("#menuBtn").addEventListener("click",()=>{
     const sb=$("#sidebar");sb.classList.toggle("open");
     if(sb.classList.contains("open")){const s=document.createElement("div");s.className="scrim";
@@ -545,8 +566,8 @@ function go(view,filter){
     applyMasteryRule(false,d);renderSettings();refreshChrome();
     toast(d===0?"Mastered verbs will not be checked":"Mastered verbs now return every "+d+" days");});
   $("#resetBtn").addEventListener("click",()=>{
-    if(!confirm("Throw away everything drilled in this browser and go back to the 2026-07-24 snapshot?"))return;
-    const prefs=S.prefs;S=freshFromSeed();S.prefs=prefs;save();refreshChrome();renderView();toast("Back to the published snapshot");});
+    if(!confirm("Да изтрия ли всичко упражнявано в този браузър и да започна от нулата?"))return;
+    const prefs=S.prefs;S=freshFromSeed();S.prefs=prefs;PR.summary=null;save();refreshChrome();renderView();toast("От нулата");});
 
   document.addEventListener("keydown",e=>{
     if(e.key==="Escape"){go("dash");return;}
@@ -556,5 +577,5 @@ function go(view,filter){
 
   if(!storageOK)setTimeout(()=>toast("This browser blocks saving for local files — export before you close it"),900);
   refreshChrome();
-  go((location.hash||"").replace("#/","")||"dash");
+  go((location.hash||"").replace("#/","")||"practice");
 })();

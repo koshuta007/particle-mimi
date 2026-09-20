@@ -4,6 +4,9 @@ Builds the trainer from the template.
 
   index.html          dist/particle-verbs.html
 
+practice.js is inlined before logic.js on purpose: logic.js ends by rendering
+the first view, and the practice constants must already exist by then.
+
 dist/ is the same page with the document wrapper stripped, for publishing.
 Run from the folder root:  python3 src/build.py
 """
@@ -26,7 +29,8 @@ def emit(seed, out_html, out_artifact, other_url, title):
     data = json.dumps(seed, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
     html = open('src/template.html', encoding='utf-8').read()
     html = html.replace('/*__DATA__*/null/*__END__*/', data) \
-               .replace('/*__LOGIC__*/', open('src/logic.js', encoding='utf-8').read()) \
+               .replace('/*__LOGIC__*/', open('src/practice.js', encoding='utf-8').read()
+                                        + '\n' + open('src/logic.js', encoding='utf-8').read()) \
                .replace('__OTHER_URL__', other_url or '')
     # the publishing host reads the static <title>, not what the script sets later
     html = re.sub(r'<title>.*?</title>', '<title>' + title + '</title>', html, count=1, flags=re.S)
@@ -46,10 +50,8 @@ pv = json.load(open('data/phrasal-verbs-data.json'))
 pr = json.load(open('data/progress-data.json'))
 for v in pv['verbs']:
     v.pop('source', None)
-    # the page shows one sentence; the alternates are the round generator's
-    # business and would otherwise double the payload
-    v.pop('examples', None)
-    v.pop('exampleUses', None)
+    # the page runs the rounds now, so it carries every sentence: the practice
+    # view rotates through them the way round.py does
 seed_verbs = {"kind": "verbs", "lastUpdated": pv["lastUpdated"], "settings": pv["settings"],
               "verbs": pv["verbs"], "stats": pv["stats"],
               "boxDistribution": pv["boxDistribution"],

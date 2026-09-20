@@ -1,0 +1,10 @@
+{
+  "name": "Particle — phrasal verbs",
+  "short_name": "Particle",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F4F2",
+  "theme_color": "#6366F1",
+  "lang": "bg"
+}

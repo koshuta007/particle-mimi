@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F4F4F2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Particle">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Particle — phrasal verbs on Leitner boxes</title>
 <style>
 :root{
@@ -241,6 +246,23 @@ input.stepper{width:80px;padding:7px 10px;border-radius:9px;border:1px solid var
 }
 @media (min-width:861px){.scrim{display:none}}
 @media (max-width:520px){.kpis{grid-template-columns:1fr}.kpi{border-right:none!important}.boxes{grid-template-columns:1fr}}
+/* ---- practice ---- */
+.opts{display:grid;gap:8px;width:100%;max-width:440px;margin:0 auto}
+.opt{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:var(--r);border:1px solid var(--border-strong);background:var(--surface);font-size:16px;text-align:left;color:var(--ink);transition:background .12s,border-color .12s,opacity .12s}
+.opt:hover:not(:disabled){background:var(--surface-3)}
+.opt .key{font-family:var(--font-mono);font-size:11px;color:var(--ink-3);border:1px solid var(--border-strong);border-radius:5px;padding:1px 6px;flex:0 0 auto}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--good-soft);border-color:var(--c-good);color:var(--c-good)}
+.opt.no{background:var(--bad-soft);border-color:var(--c-bad);color:var(--c-bad)}
+.opt.ok .pv .stem,.opt.ok .pv .part,.opt.no .pv .stem,.opt.no .pv .part,.opt.ok .key,.opt.no .key{color:inherit;border-color:currentColor}
+.opt.dim{opacity:.5}
+.hint{font-size:14px;color:var(--ink-2)}
+.answer.ok{border-color:var(--c-good);background:var(--good-soft)}
+.sentence b,.drill .mis-ex b{color:var(--ink);font-weight:600}
+.drill .mis-ex div+div{margin-top:6px}
+.drill .verdict{width:100%;flex-wrap:wrap}
+.session-bar .btn-icon{margin-left:4px}
+@media (max-width:860px){.session-foot{display:none}.drill{min-height:0}.sentence{font-size:18px}}
 </style>
 </head>
 <body>
@@ -251,6 +273,8 @@ input.stepper{width:80px;padding:7px 10px;border-radius:9px;border:1px solid var
       <div><div class="brand-name">Particle</div><div class="brand-sub" id="brandSub">Phrasal verb trainer</div></div>
     </div>
     <nav class="nav" id="nav">
+      <div class="nav-label">Practice</div>
+      <button class="nav-item" data-view="practice"><span class="ico" data-ico="target"></span>Practice</button>
       <div class="nav-label">Overview</div>
       <button class="nav-item" data-view="dash"><span class="ico" data-ico="grid"></span>Dashboard</button>
       <button class="nav-item" data-view="dragons"><span class="ico" data-ico="flame"></span>Dragons<span class="count" id="navDrag">0</span></button>
@@ -285,8 +309,13 @@ input.stepper{width:80px;padding:7px 10px;border-radius:9px;border:1px solid var
     </header>
 
     <div class="content">
+      <!-- PRACTICE — rendered entirely by practice.js -->
+      <section class="view" id="view-practice">
+        <div class="session" id="practice"></div>
+      </section>
+
       <!-- DASHBOARD -->
-      <section class="view" id="view-dash">
+      <section class="view" id="view-dash" hidden>
         <div class="card" id="stampCard" style="padding:11px 17px;display:flex;align-items:center;gap:10px">
           <span class="dot" style="background:var(--c-good);width:8px;height:8px;border-radius:50%"></span>
           <span style="font-size:12.5px;color:var(--ink-2)" id="stamp">—</span>
@@ -361,47 +390,43 @@ input.stepper{width:80px;padding:7px 10px;border-radius:9px;border:1px solid var
       <!-- SETTINGS -->
       <section class="view" id="view-settings" hidden>
         <div class="card">
-          <div class="card-head"><div><div class="card-title">Round format</div><div class="card-sub">The rules Claude follows when running a round with you in chat. Kept here so they travel with the data.</div></div></div>
+          <div class="card-head"><div><div class="card-title">Round format</div><div class="card-sub">How a round on this page is built. Travels with the exported data.</div></div></div>
           <div style="height:12px"></div>
           <div class="set-row"><div class="set-body"><div class="set-title">Verbs per round</div><div class="set-sub">Due reviews first, then Box 0 to fill up.</div></div><input type="number" class="stepper" id="setLen" min="5" max="60" step="5"></div>
-          <div class="set-row"><div class="set-body"><div class="set-title">Side-drill after a miss</div><div class="set-sub">Extra goes at a verb you just missed, while it is still fresh. They never change the box.</div></div><input type="number" class="stepper" id="setSide" min="0" max="5" step="1"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Side-drill after a miss</div><div class="set-sub">After a miss, type the verb once while it is fresh. 0 turns it off. Never changes the box.</div></div><input type="number" class="stepper" id="setSide" min="0" max="5" step="1"></div>
           <div class="set-row"><div class="set-body"><div class="set-title">Box 5 means finished</div><div class="set-sub" id="setFinalSub">—</div></div><input type="checkbox" id="setFinal" style="width:20px;height:20px"></div>
           <div class="set-row"><div class="set-body"><div class="set-title">Re-check mastered verbs every</div><div class="set-sub" id="setB5Sub">—</div></div><input type="number" class="stepper" id="setB5" min="0" max="365" step="15"></div>
-          <div class="set-row"><div class="set-body"><div class="set-title">Accept valid synonyms</div><div class="set-sub">36 prompts in this deck have more than one correct answer. With this on, a valid alternative counts as correct and you are told which one was the target.</div></div><input type="checkbox" id="setSyn" style="width:20px;height:20px"></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Accept valid synonyms</div><div class="set-sub">When you type a different real phrasal verb that fits the sentence: with this on it is not a miss — you are told which one was wanted and the box stays put; with it off it counts as wrong.</div></div><input type="checkbox" id="setSyn" style="width:20px;height:20px"></div>
         </div>
         <div class="card">
-          <div class="card-head"><div><div class="card-title">Your progress</div><div class="card-sub">This page shows a snapshot. Rounds are run in chat and the snapshot is rebuilt afterwards.</div></div></div>
+          <div class="card-head"><div><div class="card-title">Your progress</div><div class="card-sub">Progress lives in this browser. Export it now and then as a backup; Import brings it back on another phone or after a wipe.</div></div></div>
           <div style="height:12px"></div>
-          <div class="set-row"><div class="set-body"><div class="set-title">Export the data</div><div class="set-sub">Downloads phrasal-verbs-data.json and progress-data.json, the same shape any other tool reads.</div></div><button class="btn" id="exportBtn2"><span class="ico" data-ico="export"></span>Export</button></div>
-          <div class="set-row"><div class="set-body"><div class="set-title">Reload the snapshot</div><div class="set-sub">Clears anything cached in this browser and re-reads the published data.</div></div><button class="btn danger" id="resetBtn"><span class="ico" data-ico="trash"></span>Reset</button></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Export the data</div><div class="set-sub">Downloads phrasal-verbs-data.json and progress-data.json. Keep them somewhere safe.</div></div><button class="btn" id="exportBtn2"><span class="ico" data-ico="export"></span>Export</button></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Import a backup</div><div class="set-sub">Reads the two exported files and restores that progress here.</div></div><button class="btn" id="importBtn"><span class="ico" data-ico="up"></span>Import</button><input type="file" id="importFile" accept=".json,application/json" multiple hidden></div>
+          <div class="set-row"><div class="set-body"><div class="set-title">Start over</div><div class="set-sub">Throws away every answer given in this browser and goes back to the published cards.</div></div><button class="btn danger" id="resetBtn"><span class="ico" data-ico="trash"></span>Reset</button></div>
         </div>
       </section>
 
       <!-- HELP -->
       <section class="view" id="view-help" hidden>
         <div class="card"><div class="prose">
-          <h3>What this is</h3>
-          <p>Your knowledge-quest phrasal verb trainer, rebuilt as one file you own. Same 431 verbs, same Leitner boxes, same drill format — but the practice happens here instead of in Telegram, and the data is repaired.</p>
-          <h3>The boxes</h3>
-          <p>Every verb sits in a box, and the box decides how long until you see it again: <strong>Box 0</strong> new or missed (comes straight back), <strong>1</strong> after a day, <strong>2</strong> after three, <strong>3</strong> after a week, <strong>4</strong> after two weeks, <strong>5</strong> after a month. Answer right and the verb moves up one box. Answer wrong and it moves down one — not all the way to the floor. A verb you have carried to Box 4 and then fumble goes back to Box 3, so you see it in a week rather than starting it over.</p>
-          <h3>When is a verb finished?</h3>
-          <p><strong>When it reaches Box 5.</strong> That is the whole rule. A verb that climbs all the way to Box 5 counts as mastered, leaves the deck, and is never asked again. Nothing to re-prove, no maintenance cycle.</p>
-          <p>Getting there takes five correct answers in a row with the gaps widening each time — a day, three days, a week, a fortnight. Miss it anywhere along the way and it drops a box and has to climb again.</p>
-          <p>One thing worth knowing, because it is measurable in your own history: over six months, <strong>23% of the verbs that first reached Box 5 were missed the very next time they came up</strong>. Under the old cycling rule those got caught and sent back down. Under this rule they do not — once a verb is in, it is in. If you later want a safety net, turn off <strong>Box 5 means finished</strong> in Settings and set a re-check cycle; the verbs already finished come straight back into circulation.</p>
-          <h3>The round</h3>
-          <p>Rounds are run with Claude in chat, not on this page. This page is where you see where you stand; after each round the data is updated and the page is republished at the same link.</p>
+          <h3>Какво е това</h3>
+          <p>Тренажор за английски фразеологични глаголи — 455 карти, подредени по това колко често се употребяват в истински английски. Първите 150 покриват около 83% от всичко, което ще чуеш; топ 100 е половината от всичко изговорено.</p>
+          <h3>Кутиите</h3>
+          <p>Всеки глагол седи в кутия, а кутията решава след колко време ще го видиш пак: <strong>кутия 0</strong> — нов или сгрешен, идва веднага; <strong>1</strong> — след ден; <strong>2</strong> — след три дни; <strong>3</strong> — след седмица; <strong>4</strong> — след две; <strong>5</strong> — след месец. Верен отговор качва глагола с една кутия. Грешен го сваля с една — не до дъното.</p>
+          <p><strong>Кутия 5 е край.</strong> Глаголът се брои за усвоен, излиза от тестето и повече не се пита.</p>
+          <h3>Упражненията</h3>
+          <p>Три вида, разбъркани — и трите питат за глагола: <strong>Избери глагола</strong> — изречение с дупка, значението и четири глагола; <strong>Коя частица?</strong> — изречението показва глагола, ти избираш частицата; <strong>Напиши глагола</strong> — изречение с дупка и празно поле.</p>
+          <p>Ниските кутии получават предимно избор, високите — предимно писане. Последната крачка към кутия 5 е винаги писане: глагол, който само си разпознавала, не се пенсионира.</p>
+          <p>При писане важи всяка форма на глагола (<em>picked up</em>, <em>picking up</em>), и допълнението може да е по средата (<em>picked the children up</em>). Ако напишеш друг истински фразеологичен глагол, който пасва на изречението, това не е грешка — казва ти се кой се търсеше и картата не мърда.</p>
+          <h3>Рундът</h3>
           <ul>
-            <li>Thirty verbs. Due reviews first, then Box 0 to fill up.</li>
-            <li>Never only Box 0 — that would waste the spacing.</li>
-            <li>Miss one and you get an immediate side-drill on it, while the memory is fresh. The side-drill does not change the box.</li>
-            <li>Verbs you keep missing become <strong>dragons</strong> and get their own round.</li>
-            <li>Every round ends with the full mistakes list and a fresh sentence for each one.</li>
+            <li>По 15 глагола. Драконите (сгрешени два и повече пъти) са начело, после дължимите повторения, после нови — най-честите първи.</li>
+            <li>Сгрешиш ли, виждаш верния отговор и още примери, и го написваш веднъж, докато е прясно.</li>
+            <li>Можеш да спреш по средата с ✕ — отговореното се брои, останалото чака.</li>
           </ul>
-          <p>The settings on this page record that format, and they travel with the exported data.</p>
-          <h3>Why the prompt shows a sentence</h3>
-          <p>Thirty-six of the prompts in this deck have more than one right answer — <em>return</em> alone fits <span class="pv"><span class="stem">bring</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">come</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">get</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">give</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">go</span> <span class="part">back</span></span>, <span class="pv"><span class="stem">hand</span> <span class="part">back</span></span> and <span class="pv"><span class="stem">head</span> <span class="part">back</span></span>. Asking on the bare word marks you wrong for knowing a second answer. So the prompt is the meaning <em>and</em> a sentence with a hole in it — the sentence decides which one fits. If you type a different valid verb, it says so instead of failing you.</p>
-          <h3>Moving the data</h3>
-          <p><strong>Settings &rarr; Export</strong> writes <code>phrasal-verbs-data.json</code> and <code>progress-data.json</code> in the shape any other tool reads, so nothing is trapped here.</p>
+          <h3>Прогресът</h3>
+          <p>Пази се в браузъра на този телефон — ако изтриеш данните на браузъра, отива си. <strong>Settings → Export</strong> сваля два файла; пази ги от време на време някъде (iCloud, Drive). <strong>Import</strong> ги връща на друг телефон или след изтриване.</p>
         </div></div>
       </section>
     </div>
